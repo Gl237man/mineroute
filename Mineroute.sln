@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binhl2JsWE", "Binhl2JsWE\Binhl2JsWE.csproj", "{CF8DDE97-CCC4-461B-BB50-2460719F155E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDF2MNET", "EDF2MNET\EDF2MNET.csproj", "{858BBB5F-562B-482C-ADF7-6C669252AFBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNetSynt", "MNetSynt\MNetSynt.csproj", "{8E774A0A-3D02-48EB-A126-371579B28941}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteUtils", "RouteUtils\RouteUtils.csproj", "{4DD0FC56-7B11-4524-B651-AD424449CBFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vqm2MNET", "vqm2MNET\vqm2MNET.csproj", "{F3ADA961-F326-42E7-8DBB-8A7542A67396}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4DD0FC56-7B11-4524-B651-AD424449CBFB}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4DD0FC56-7B11-4524-B651-AD424449CBFB}.Debug|x86.Build.0 = Debug|Any CPU
+		{4DD0FC56-7B11-4524-B651-AD424449CBFB}.Release|x86.ActiveCfg = Release|Any CPU
+		{4DD0FC56-7B11-4524-B651-AD424449CBFB}.Release|x86.Build.0 = Release|Any CPU
+		{858BBB5F-562B-482C-ADF7-6C669252AFBB}.Debug|x86.ActiveCfg = Debug|x86
+		{858BBB5F-562B-482C-ADF7-6C669252AFBB}.Debug|x86.Build.0 = Debug|x86
+		{858BBB5F-562B-482C-ADF7-6C669252AFBB}.Release|x86.ActiveCfg = Release|x86
+		{858BBB5F-562B-482C-ADF7-6C669252AFBB}.Release|x86.Build.0 = Release|x86
+		{8E774A0A-3D02-48EB-A126-371579B28941}.Debug|x86.ActiveCfg = Debug|x86
+		{8E774A0A-3D02-48EB-A126-371579B28941}.Debug|x86.Build.0 = Debug|x86
+		{8E774A0A-3D02-48EB-A126-371579B28941}.Release|x86.ActiveCfg = Release|x86
+		{8E774A0A-3D02-48EB-A126-371579B28941}.Release|x86.Build.0 = Release|x86
+		{CF8DDE97-CCC4-461B-BB50-2460719F155E}.Debug|x86.ActiveCfg = Debug|x86
+		{CF8DDE97-CCC4-461B-BB50-2460719F155E}.Debug|x86.Build.0 = Debug|x86
+		{CF8DDE97-CCC4-461B-BB50-2460719F155E}.Release|x86.ActiveCfg = Release|x86
+		{CF8DDE97-CCC4-461B-BB50-2460719F155E}.Release|x86.Build.0 = Release|x86
+		{F3ADA961-F326-42E7-8DBB-8A7542A67396}.Debug|x86.ActiveCfg = Debug|x86
+		{F3ADA961-F326-42E7-8DBB-8A7542A67396}.Debug|x86.Build.0 = Debug|x86
+		{F3ADA961-F326-42E7-8DBB-8A7542A67396}.Release|x86.ActiveCfg = Release|x86
+		{F3ADA961-F326-42E7-8DBB-8A7542A67396}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = vqm2MNET\vqm2MNET.csproj
+	EndGlobalSection
+EndGlobal
