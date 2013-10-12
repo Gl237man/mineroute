@@ -1,40 +1,34 @@
-//TestFile
+// Copyright (C) 1991-2013 Altera Corporation
+// Your use of Altera Corporation's design tools, logic functions 
+// and other software and tools, and its AMPP partner logic 
+// functions, and any output files from any of the foregoing 
+// (including device programming or simulation files), and any 
+// associated documentation or information are expressly subject 
+// to the terms and conditions of the Altera Program License 
+// Subscription Agreement, Altera MegaCore Function License 
+// Agreement, or other applicable license agreement, including, 
+// without limitation, that your use is for the sole purpose of 
+// programming logic devices manufactured by Altera and sold by 
+// Altera or its authorized distributors.  Please refer to the 
+// applicable agreement for further details.
 
-module 	tm (
-	OutByte,
-	full,
-	clk,
-	reset);
-output 	[7:0] OutByte;
-output 	full;
-input 	clk;
-input 	reset;
-wire \OutByte[0]~8 ;
-wire \OutByte[0]~reg0 ;
-wire \OutByte[0]~9 ;
-wire \OutByte[1]~10 ;
-wire \OutByte[1]~reg0 ;
-wire \OutByte[1]~11 ;
-wire \OutByte[2]~12 ;
-wire \OutByte[2]~reg0 ;
-wire \OutByte[2]~13 ;
-wire \OutByte[3]~14 ;
-wire \OutByte[3]~reg0 ;
-wire \OutByte[3]~15 ;
-wire \OutByte[4]~16 ;
-wire \OutByte[4]~reg0 ;
-wire \OutByte[4]~17 ;
-wire \OutByte[5]~18 ;
-wire \OutByte[5]~reg0 ;
-wire \OutByte[5]~19 ;
-wire \OutByte[6]~20 ;
-wire \OutByte[6]~reg0 ;
-wire \OutByte[6]~21 ;
-wire \OutByte[7]~22 ;
-wire \OutByte[7]~reg0 ;
-wire \Equal0~0 ;
-wire \Equal0~1 ;
-wire \Equal0~2 ;
+// VENDOR "Altera"
+// PROGRAM "Quartus II 64-Bit"
+// VERSION "Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition"
+
+// DATE "10/12/2013 12:49:52"
+
+module 	test (
+	sig1,
+	sig2,
+	sig4,
+	sig3);
+input 	[1:0] sig1;
+input 	[1:0] sig2;
+input 	[1:0] sig4;
+output 	[1:0] sig3;
+wire \sig3~0 ;
+wire \sig3~1 ;
 
 
 wire gnd;
@@ -44,164 +38,24 @@ assign gnd = 1'b0;
 assign vcc = 1'b1;
 
 
-cycloneii_lcell_comb \OutByte[0]~8_I (
-	.dataa(\OutByte[0]~reg0 ),
-	.datad(vcc),
-	.combout(\OutByte[0]~8 ),
-	.cout(\OutByte[0]~9 ));
-defparam \OutByte[0]~8_I .sum_lutc_input = "datac";
-defparam \OutByte[0]~8_I .lut_mask = "55AA";
+cycloneii_lcell_comb \sig3~0_I (
+	.datab(sig4[0]),
+	.datac(sig2[0]),
+	.datad(sig1[0]),
+	.combout(\sig3~0 ));
+defparam \sig3~0_I .sum_lutc_input = "datac";
+defparam \sig3~0_I .lut_mask = "FCCC";
 
-cycloneii_lcell_ff \OutByte[0]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[0]~8 ),
-	.sclr(reset),
-	.regout(\OutByte[0]~reg0 ));
+cycloneii_lcell_comb \sig3~1_I (
+	.datab(sig1[1]),
+	.datac(sig4[1]),
+	.datad(sig2[1]),
+	.combout(\sig3~1 ));
+defparam \sig3~1_I .sum_lutc_input = "datac";
+defparam \sig3~1_I .lut_mask = "FCF0";
 
-cycloneii_lcell_comb \OutByte[1]~10_I (
-	.dataa(\OutByte[1]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[0]~9 ),
-	.combout(\OutByte[1]~10 ),
-	.cout(\OutByte[1]~11 ));
-defparam \OutByte[1]~10_I .sum_lutc_input = "cin";
-defparam \OutByte[1]~10_I .lut_mask = "5A5F";
+assign sig3[0] = \sig3~0 ;
 
-cycloneii_lcell_ff \OutByte[1]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[1]~10 ),
-	.sclr(reset),
-	.regout(\OutByte[1]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[2]~12_I (
-	.dataa(\OutByte[2]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[1]~11 ),
-	.combout(\OutByte[2]~12 ),
-	.cout(\OutByte[2]~13 ));
-defparam \OutByte[2]~12_I .sum_lutc_input = "cin";
-defparam \OutByte[2]~12_I .lut_mask = "A50A";
-
-cycloneii_lcell_ff \OutByte[2]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[2]~12 ),
-	.sclr(reset),
-	.regout(\OutByte[2]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[3]~14_I (
-	.dataa(\OutByte[3]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[2]~13 ),
-	.combout(\OutByte[3]~14 ),
-	.cout(\OutByte[3]~15 ));
-defparam \OutByte[3]~14_I .sum_lutc_input = "cin";
-defparam \OutByte[3]~14_I .lut_mask = "5A5F";
-
-cycloneii_lcell_ff \OutByte[3]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[3]~14 ),
-	.sclr(reset),
-	.regout(\OutByte[3]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[4]~16_I (
-	.dataa(\OutByte[4]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[3]~15 ),
-	.combout(\OutByte[4]~16 ),
-	.cout(\OutByte[4]~17 ));
-defparam \OutByte[4]~16_I .sum_lutc_input = "cin";
-defparam \OutByte[4]~16_I .lut_mask = "A50A";
-
-cycloneii_lcell_ff \OutByte[4]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[4]~16 ),
-	.sclr(reset),
-	.regout(\OutByte[4]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[5]~18_I (
-	.dataa(\OutByte[5]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[4]~17 ),
-	.combout(\OutByte[5]~18 ),
-	.cout(\OutByte[5]~19 ));
-defparam \OutByte[5]~18_I .sum_lutc_input = "cin";
-defparam \OutByte[5]~18_I .lut_mask = "5A5F";
-
-cycloneii_lcell_ff \OutByte[5]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[5]~18 ),
-	.sclr(reset),
-	.regout(\OutByte[5]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[6]~20_I (
-	.dataa(\OutByte[6]~reg0 ),
-	.datad(vcc),
-	.cin(\OutByte[5]~19 ),
-	.combout(\OutByte[6]~20 ),
-	.cout(\OutByte[6]~21 ));
-defparam \OutByte[6]~20_I .sum_lutc_input = "cin";
-defparam \OutByte[6]~20_I .lut_mask = "A50A";
-
-cycloneii_lcell_ff \OutByte[6]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[6]~20 ),
-	.sclr(reset),
-	.regout(\OutByte[6]~reg0 ));
-
-cycloneii_lcell_comb \OutByte[7]~22_I (
-	.dataa(\OutByte[7]~reg0 ),
-	.cin(\OutByte[6]~21 ),
-	.combout(\OutByte[7]~22 ));
-defparam \OutByte[7]~22_I .sum_lutc_input = "cin";
-defparam \OutByte[7]~22_I .lut_mask = "5A5A";
-
-cycloneii_lcell_ff \OutByte[7]~reg0_I (
-	.clk(clk),
-	.datain(\OutByte[7]~22 ),
-	.sclr(reset),
-	.regout(\OutByte[7]~reg0 ));
-
-cycloneii_lcell_comb \Equal0~0_I (
-	.dataa(\OutByte[0]~reg0 ),
-	.datab(\OutByte[1]~reg0 ),
-	.datac(\OutByte[2]~reg0 ),
-	.datad(\OutByte[3]~reg0 ),
-	.combout(\Equal0~0 ));
-defparam \Equal0~0_I .sum_lutc_input = "datac";
-defparam \Equal0~0_I .lut_mask = "8000";
-
-cycloneii_lcell_comb \Equal0~1_I (
-	.dataa(\OutByte[4]~reg0 ),
-	.datab(\OutByte[5]~reg0 ),
-	.datac(\OutByte[6]~reg0 ),
-	.datad(\OutByte[7]~reg0 ),
-	.combout(\Equal0~1 ));
-defparam \Equal0~1_I .sum_lutc_input = "datac";
-defparam \Equal0~1_I .lut_mask = "8000";
-
-cycloneii_lcell_comb \Equal0~2_I (
-	.dataa(\Equal0~0 ),
-	.datab(\Equal0~1 ),
-	.combout(\Equal0~2 ));
-defparam \Equal0~2_I .sum_lutc_input = "datac";
-defparam \Equal0~2_I .lut_mask = "8888";
-
-assign OutByte[0] = \OutByte[0]~reg0 ;
-
-assign OutByte[1] = \OutByte[1]~reg0 ;
-
-assign OutByte[2] = \OutByte[2]~reg0 ;
-
-assign OutByte[3] = \OutByte[3]~reg0 ;
-
-assign OutByte[4] = \OutByte[4]~reg0 ;
-
-assign OutByte[5] = \OutByte[5]~reg0 ;
-
-assign OutByte[6] = \OutByte[6]~reg0 ;
-
-assign OutByte[7] = \OutByte[7]~reg0 ;
-
-assign full = \Equal0~2 ;
+assign sig3[1] = \sig3~1 ;
 
 endmodule
