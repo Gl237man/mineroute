@@ -1,0 +1,14 @@
+vendor_name = ModelSim
+source_file = 1, /home/gl237/mineroute/mineroute/TestQuartusProject/test.v
+source_file = 1, /home/gl237/mineroute/mineroute/TestQuartusProject/db/test.cbx.xml
+design_name = test
+instance = comp, \sig4[0]~I\, sig4[0], test, 1
+instance = comp, \sig2[0]~I\, sig2[0], test, 1
+instance = comp, \sig1[0]~I\, sig1[0], test, 1
+instance = comp, \sig3~0\, sig3~0, test, 1
+instance = comp, \sig1[1]~I\, sig1[1], test, 1
+instance = comp, \sig4[1]~I\, sig4[1], test, 1
+instance = comp, \sig2[1]~I\, sig2[1], test, 1
+instance = comp, \sig3~1\, sig3~1, test, 1
+instance = comp, \sig3[0]~I\, sig3[0], test, 1
+instance = comp, \sig3[1]~I\, sig3[1], test, 1

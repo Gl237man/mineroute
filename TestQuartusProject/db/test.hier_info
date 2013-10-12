@@ -1,0 +1,11 @@
+|test
+sig1[0] => sig3.IN0
+sig1[1] => sig3.IN0
+sig2[0] => sig3.IN1
+sig2[1] => sig3.IN1
+sig4[0] => sig3.IN1
+sig4[1] => sig3.IN1
+sig3[0] <= sig3.DB_MAX_OUTPUT_PORT_TYPE
+sig3[1] <= sig3.DB_MAX_OUTPUT_PORT_TYPE
+
+
