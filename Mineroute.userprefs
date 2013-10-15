@@ -8,11 +8,15 @@
       <File FileName="MNetSynt/Main.cs" Line="32" Column="14" />
       <File FileName="RouteUtils/Node.cs" Line="79" Column="20" />
       <File FileName="../old/Mineroute/Mineroute/RouteUtils/Node.cs" Line="4" Column="19" />
-      <File FileName="vqm2MNET/Main.cs" Line="25" Column="18" />
+      <File FileName="vqm2MNET/Main.cs" Line="9" Column="3" />
+      <File FileName="vqm2MNET/test.vqm" Line="31" Column="15" />
+      <File FileName="vqm2MNET/Cell.cs" Line="23" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/home/gl237/mineroute/mineroute/vqm2MNET/Main.cs" line="17" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
 </Properties>
