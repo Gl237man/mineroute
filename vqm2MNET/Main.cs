@@ -5,7 +5,9 @@ namespace vqm2MNET
 {
     class Program
     {
-		List<Cell> Cells;
+
+
+
 
         static void Main(string[] args)
         {

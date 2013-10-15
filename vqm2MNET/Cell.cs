@@ -10,6 +10,7 @@ namespace vqm2MNET
 
 	public class Cell
 	{
+		public string Name;
 		public CellType CelType;
 		public string dataa;
 		public string datab;
@@ -24,7 +25,6 @@ namespace vqm2MNET
 		public Cell (CellType CType)
 		{
 			CelType = CType;
-
 		}
 	}
 }

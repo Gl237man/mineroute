@@ -37,6 +37,9 @@
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Cell.cs" />
+    <Compile Include="Wire.cs" />
+    <Compile Include="Connection.cs" />
+    <Compile Include="Module.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

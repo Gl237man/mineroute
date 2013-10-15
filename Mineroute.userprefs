@@ -1,6 +1,6 @@
 ﻿<Properties GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="vqm2MNET/Main.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="vqm2MNET/Cell.cs">
     <Files>
       <File FileName="Binhl2JsWE/Main.cs" Line="2" Column="34" />
       <File FileName="EDF2MNET/Main.cs" Line="2" Column="34" />
@@ -10,12 +10,15 @@
       <File FileName="../old/Mineroute/Mineroute/RouteUtils/Node.cs" Line="4" Column="19" />
       <File FileName="vqm2MNET/Main.cs" Line="9" Column="3" />
       <File FileName="vqm2MNET/test.vqm" Line="31" Column="15" />
-      <File FileName="vqm2MNET/Cell.cs" Line="23" Column="3" />
+      <File FileName="vqm2MNET/Cell.cs" Line="27" Column="20" />
+      <File FileName="vqm2MNET/Wire.cs" Line="2" Column="1" />
+      <File FileName="vqm2MNET/Connection.cs" Line="16" Column="4" />
+      <File FileName="vqm2MNET/Module.cs" Line="12" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/home/gl237/mineroute/mineroute/vqm2MNET/Main.cs" line="17" />
+      <Breakpoint file="/home/gl237/mineroute/mineroute/vqm2MNET/Main.cs" line="19" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
