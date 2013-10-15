@@ -9,5 +9,5 @@ cp ./vqm2MNET/bin/Debug/*.exe ./test/
 cp ./MNetSynt/bin/Debug/*.exe ./test/
 cp ./EDF2MNET/bin/Debug/*.exe ./test/
 cp ./RouteUtils/bin/Debug/*.dll ./test/
-export LD_LIBRARY_PATH=$ALTERA_BIN
+export LD_LIBRARY_PATH=$(ALTERA_BIN)
 $(ALTERA_BIN)quartus_cdb $(MINEROUTE_PATH)TestQuartusProject/test -vqm=$(MINEROUTE_PATH)test/test.vqm
