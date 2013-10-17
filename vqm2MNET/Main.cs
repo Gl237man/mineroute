@@ -26,6 +26,12 @@ namespace vqm2MNET
 		case "module":
 			module.Name = Params[1];
 			break;
+		case "wire":
+				Wire TWire = new Wire();
+				TWire.Name = Params[1];
+				module.Wires.Add(TWire);
+			break;
+
 		case "input":
 			if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
 			{
