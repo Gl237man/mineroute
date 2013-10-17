@@ -9,8 +9,10 @@ namespace vqm2MNET
 		public string Name;
 		public List<Cell> Cells;
 		public List<Wire> Wires;
+		public List<IOPort> Ports;
 		public Module ()
 		{
+			
 		}
 	}
 }
