@@ -9,5 +9,5 @@ Synthesis minecraft redstone schemes from verilog and ALTERA quartus IDE for Sim
 
 Версия 0.01 alpha
 
-Появилас поддержка Нетлистов EDF!
+Появилась поддержка Нетлистов EDF!
 
