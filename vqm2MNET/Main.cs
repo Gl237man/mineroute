@@ -27,39 +27,39 @@ namespace vqm2MNET
 			module.Name = Params[1];
 			break;
 		case "input":
-            if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
-            {
-                Params[1] = Params[1].Replace("[", "").Replace("]", "");
-                string[] SubDat = Params[1].Split(':');
-                int SFrom = Convert.ToInt32(SubDat[1]);
-                int STo = Convert.ToInt32(SubDat[0]);
-                for (int i = SFrom; i <= STo; i++)
-                {
-                    module.Ports.Add(new IOPort() { Name = Params[2]+"["+i.ToString()+"]", Ptype = PortType.IN });
-                }
-            }
-            else
-            {
-                module.Ports.Add(new IOPort() { Name = Params[1], Ptype = PortType.IN });
-            }
+			if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
+			{
+				Params[1] = Params[1].Replace("[", "").Replace("]", "");
+				string[] SubDat = Params[1].Split(':');
+				int SFrom = Convert.ToInt32(SubDat[1]);
+				int STo = Convert.ToInt32(SubDat[0]);
+				for (int i = SFrom; i <= STo; i++)
+				{
+					module.Ports.Add(new IOPort() { Name = Params[2]+"["+i.ToString()+"]", Ptype = PortType.IN });
+				}
+			}
+			else
+			{
+				module.Ports.Add(new IOPort() { Name = Params[1], Ptype = PortType.IN });
+			}
 			break;
-        case "output":
-            if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
-            {
-                Params[1] = Params[1].Replace("[", "").Replace("]", "");
-                string[] SubDat = Params[1].Split(':');
-                int SFrom = Convert.ToInt32(SubDat[1]);
-                int STo = Convert.ToInt32(SubDat[0]);
-                for (int i = SFrom; i <= STo; i++)
-                {
-                    module.Ports.Add(new IOPort() { Name = Params[2] + "[" + i.ToString() + "]", Ptype = PortType.OUT });
-                }
-            }
-            else
-            {
-                module.Ports.Add(new IOPort() { Name = Params[1], Ptype = PortType.OUT });
-            }
-            break;
+		case "output":
+			if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
+			{
+				Params[1] = Params[1].Replace("[", "").Replace("]", "");
+				string[] SubDat = Params[1].Split(':');
+				int SFrom = Convert.ToInt32(SubDat[1]);
+				int STo = Convert.ToInt32(SubDat[0]);
+				for (int i = SFrom; i <= STo; i++)
+				{
+					module.Ports.Add(new IOPort() { Name = Params[2] + "[" + i.ToString() + "]", Ptype = PortType.OUT });
+				}
+			}
+			else
+			{
+				module.Ports.Add(new IOPort() { Name = Params[1], Ptype = PortType.OUT });
+			}
+			break;
 		default:
 			break;
 		}
