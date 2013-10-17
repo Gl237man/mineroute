@@ -26,6 +26,17 @@ namespace vqm2MNET
 		case "module":
 			module.Name = Params[1];
 			break;
+		case "input":
+			if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
+			{
+				Params[1] = Params[1].Replace("[","").Params[1].Replace("]","");
+				string[] SubDat = Params[1].Split(':');
+				int SFrom = Convert.ToInt32(SubDat[1]);
+				int STo = Convert.ToInt32(SubDat[0]);
+				
+			}
+			//module.Name = Params[1];
+			break;
 		default:
 			break;
 		}
