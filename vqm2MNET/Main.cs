@@ -42,7 +42,7 @@ namespace vqm2MNET
             {
                 if (!InFileData[i].Trim().StartsWith(@"//"))
                 {
-                    if (!(InFileData[i].Trim() == ""))
+                    if (InFileData[i].Trim() != "")
                     {
                         string ts1 = InFileData[i].Trim();
 
