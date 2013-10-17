@@ -7,31 +7,30 @@ namespace vqm2MNET
     {
 	static Module module;
 	static void Main (string[] args)
+	{
+		module = new Module();
+		string InFileName = "test.vqm";
+		string[] InFileData = System.IO.File.ReadAllLines (InFileName);
+		string[] CleanStrings = ClearData (InFileData);
+		for (int i=0; i<CleanStrings.Length; i++) 
 		{
-			module = new Module();
-			string InFileName = "test.vqm";
-			string[] InFileData = System.IO.File.ReadAllLines (InFileName);
-			string[] CleanStrings = ClearData (InFileData);
-			for (int i=0; i<CleanStrings.Length; i++) 
-			{
-				ProccessString(CleanStrings[i]);
-			}
-
+			ProccessString(CleanStrings[i]);
+		}
         }
 
-		static void ProccessString (string str)
+	static void ProccessString (string str)
+	{
+		string[] Params = str.Split(' ');
+		switch (Params[0]) 
 		{
-			string[] Params = str.Split(' ');
-			switch (Params[0]) 
-			{
-			case "module":
-				module.Name = Params[1];
-				break;
-			default:
-				break;
-			}
-			//Метод не окончен!
+		case "module":
+			module.Name = Params[1];
+			break;
+		default:
+			break;
 		}
+		//Метод не окончен!
+	}
 
         private static string[] ClearData(string[] InFileData)
         {
