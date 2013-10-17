@@ -50,7 +50,6 @@ namespace vqm2MNET
                         {
                             if (ts1.Substring(j, 1) == ";")
                             {
-                                //tstr += ";";
                                 CleanList.Add(tstr.Replace("\t","").Replace("\\",""));
                                 tstr = "";
                             }
