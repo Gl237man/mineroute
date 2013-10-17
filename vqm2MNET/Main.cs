@@ -5,8 +5,8 @@ namespace vqm2MNET
 {
     class Program
     {
-		static Module module;
-        static void Main (string[] args)
+	static Module module;
+	static void Main (string[] args)
 		{
 			module = new Module();
 			string InFileName = "test.vqm";
@@ -30,7 +30,7 @@ namespace vqm2MNET
 			default:
 				break;
 			}
-//			throw new NotImplementedException ();
+			//Метод не окончен!
 		}
 
         private static string[] ClearData(string[] InFileData)
