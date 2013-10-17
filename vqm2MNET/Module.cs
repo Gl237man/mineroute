@@ -12,7 +12,9 @@ namespace vqm2MNET
 		public List<IOPort> Ports;
 		public Module ()
 		{
-			
+			Cells = new List<Cell>();
+			Wires = new List<Wire>();
+			Ports = new List<IOPort>();
 		}
 	}
 }
