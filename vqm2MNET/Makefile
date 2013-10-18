@@ -55,7 +55,12 @@ VQM2MNET = $(BUILD_DIR)/vqm2mnet
 
 FILES = \
 	Main.cs \
-	AssemblyInfo.cs 
+	AssemblyInfo.cs \
+	Cell.cs \
+	Wire.cs \
+	Connection.cs \
+	Module.cs \
+	IOPort.cs 
 
 DATA_FILES = 
 
