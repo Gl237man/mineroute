@@ -10,7 +10,7 @@ namespace vqm2MNET
 
 		public Wire ()
 		{
-
+			Connections = new List<Connection>();
 		}
 	}
 }

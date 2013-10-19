@@ -23,8 +23,28 @@ namespace vqm2MNET
 		string[] Params = str.Split(' ');
 		switch (Params[0]) 
 		{
+		case "assign":
+				for (int i=0;i<module.Wires.Count;i++)
+				{
+					if (Params[1] == module.Wires[i].Name)
+					{
+						switch (Params[3]) 
+						{
+						case "1'b0":
+							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = "Const0"});
+							break;
+						case "1'b1":
+							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = "Const1"});
+							break;
+						default:
+							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = Params[3]});
+							break;
+						}
+					}
+				}
+			break;
 		case "module":
-			module.Name = Params[1];
+				module.Name = Params[1];
 			break;
 		case "wire":
 				Wire TWire = new Wire();
