@@ -28,6 +28,7 @@ namespace vqm2MNET
 				{
 					if (Params[1] == module.Wires[i].Name)
 					{
+
 						switch (Params[3]) 
 						{
 						case "1'b0":
