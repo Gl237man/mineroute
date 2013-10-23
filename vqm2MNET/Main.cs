@@ -23,7 +23,19 @@ namespace vqm2MNET
 		string[] Params = str.Split(' ');
 		switch (Params[0]) 
 		{
+        case "assign1":
+
+                break;
 		case "assign":
+                //Assign Ports
+			for (int i = 0; i < module.Ports.Count; i++)
+			{
+				if (Params[1] == module.Ports[i].Name)
+				{
+					module.Ports[i].Connection = Params[3];
+				}
+			}
+                //Assign Wires
 				for (int i=0;i<module.Wires.Count;i++)
 				{
 					if (Params[1] == module.Wires[i].Name)
