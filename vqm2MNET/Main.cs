@@ -3,6 +3,17 @@ using System.Collections.Generic;
 
 namespace vqm2MNET
 {
+    class NetLink
+    {
+        public string From;
+        public string To;
+    }
+    class Node
+    {
+        public string NodeType;
+        public string NodeName;
+    }
+
     class Program
     {
 	static Module module;
@@ -16,6 +27,59 @@ namespace vqm2MNET
 		{
 			ProccessString(CleanStrings[i]);
 		}
+        List<Node> Nodes = new List<Node>();
+        List<NetLink> Links = new List<NetLink>();
+        //Заполнение констант
+        FillConst(Nodes);
+        //Заполнение портов
+        FillPorts(Nodes);
+        //Заполнение ячеек
+        FillCells(Nodes);
+        //Заполнение Соеденений
+        for (int i = 0; i < module.Cells.Count; i++)
+        {
+
+        }
+        //Выгрузка
+
+    }
+
+    private static void FillConst(List<Node> Nodes)
+    {
+        Nodes.Add(new Node() { NodeName = "Const0", NodeType = "GND" });
+        Nodes.Add(new Node() { NodeName = "Const1", NodeType = "VCC" });
+    }
+
+    private static void FillCells(List<Node> Nodes)
+    {
+        for (int i = 0; i < module.Cells.Count; i++)
+        {
+            Node node = new Node();
+            node.NodeName = module.Cells[i].Name;
+            switch (module.Cells[i].CelType)
+            {
+                case CellType.cycloneii_lcell_comb:
+                    node.NodeType = "C2LUT_" + module.Cells[i].lut_mask + "_" + module.Cells[i].sum_lutc_input;
+                    break;
+                case CellType.cycloneii_lcell_ff:
+                    node.NodeType = "TRIG_D";
+                    break;
+                default:
+                    break;
+            }
+            Nodes.Add(node);
+        }
+    }
+
+    private static void FillPorts(List<Node> Nodes)
+    {
+        for (int i = 0; i < module.Ports.Count; i++)
+        {
+            Node node = new Node();
+            node.NodeName = module.Ports[i].Name;
+            node.NodeType = module.Ports[i].Ptype == PortType.IN ? "INPort" : "OUTPort";
+            Nodes.Add(node);
+        }
     }
 
 	static void ProccessString (string str)
@@ -66,22 +130,26 @@ namespace vqm2MNET
                 //Assign Wires
 				for (int i=0;i<module.Wires.Count;i++)
 				{
-					if (Params[1] == module.Wires[i].Name)
-					{
+                    if (Params[3] == module.Wires[i].Name)
+                    {
+                        module.Wires[i].Connections.Add(new Connection() { Direction = direction.To, CPoint = Params[1] });
+                    }
+                    if (Params[1] == module.Wires[i].Name)
+                    {
 
-						switch (Params[3]) 
-						{
-						case "1'b0":
-							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = "Const0"});
-							break;
-						case "1'b1":
-							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = "Const1"});
-							break;
-						default:
-							module.Wires[i].Connections.Add(new Connection(){Direction = direction.From, CPoint = Params[3]});
-							break;
-						}
-					}
+                        switch (Params[3])
+                        {
+                            case "1'b0":
+                                module.Wires[i].Connections.Add(new Connection() { Direction = direction.From, CPoint = "Const0" });
+                                break;
+                            case "1'b1":
+                                module.Wires[i].Connections.Add(new Connection() { Direction = direction.From, CPoint = "Const1" });
+                                break;
+                            default:
+                                module.Wires[i].Connections.Add(new Connection() { Direction = direction.From, CPoint = Params[3] });
+                                break;
+                        }
+                    }
 				}
 			break;
 		case "module":
@@ -130,7 +198,6 @@ namespace vqm2MNET
 		default:
 			break;
 		}
-		//Метод не окончен!
 	}
 
     private static string GetSubParamCell(string pdata, string pname)
