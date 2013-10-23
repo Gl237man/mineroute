@@ -23,18 +23,46 @@ namespace vqm2MNET
 		string[] Params = str.Split(' ');
 		switch (Params[0]) 
 		{
-        case "assign1":
-
+            case "defparam":
+                for (int i = 0; i < module.Cells.Count; i++)
+                {
+                    if (module.Cells[i].Name == Params[1])
+                    {
+                        switch (Params[2])
+                        {
+                            case ".sum_lutc_input":
+                                module.Cells[i].sum_lutc_input = Params[4].Trim(new char[] { '"' });
+                                break;
+                            case ".lut_mask":
+                                module.Cells[i].lut_mask = Params[4].Trim(new char[] { '"' });
+                                break;
+                            default:
+                                throw new Exception("Свойство "+ Params[2] +" не обрабатывается");
+                                //break;
+                        }
+                    }
+                }
+                break;
+            case "cycloneii_lcell_comb":
+                Cell cell = new Cell(CellType.cycloneii_lcell_comb);
+                cell.Name = Params[1];
+                cell.dataa = GetSubParamCell(Params[2], "dataa");
+                cell.datab = GetSubParamCell(Params[2], "datab");
+                cell.datac = GetSubParamCell(Params[2], "datac");
+                cell.datad = GetSubParamCell(Params[2], "datad");
+                cell.combout = GetSubParamCell(Params[2], "combout");
+                cell.cin = GetSubParamCell(Params[2], "cin"); // Надо проверить на других тестовых примерах
+                module.Cells.Add(cell);
                 break;
 		case "assign":
                 //Assign Ports
-			for (int i = 0; i < module.Ports.Count; i++)
-			{
-				if (Params[1] == module.Ports[i].Name)
-				{
-					module.Ports[i].Connection = Params[3];
-				}
-			}
+                for (int i = 0; i < module.Ports.Count; i++)
+                {
+                    if (Params[1] == module.Ports[i].Name)
+                    {
+                        module.Ports[i].Connection = Params[3];
+                    }
+                }
                 //Assign Wires
 				for (int i=0;i<module.Wires.Count;i++)
 				{
@@ -104,6 +132,20 @@ namespace vqm2MNET
 		}
 		//Метод не окончен!
 	}
+
+    private static string GetSubParamCell(string pdata, string pname)
+    {
+        string[] Params = pdata.Split(',');
+        for (int i = 0; i < Params.Length; i++)
+        {
+            Params[i] = Params[i].Trim(new char[] { '(', ')', '.' }).Replace("(", " ");
+        }
+        for (int i = 0; i < Params.Length; i++)
+        {
+            if (Params[i].Split(' ')[0] == pname) return Params[i].Split(' ')[1];
+        }
+        return null;
+    }
 
         private static string[] ClearData(string[] InFileData)
         {
