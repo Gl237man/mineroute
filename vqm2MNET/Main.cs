@@ -21,8 +21,13 @@ namespace vqm2MNET
         static Module module;
         static void Main(string[] args)
         {
+            string InFile = "test";
+            if (args.Length == 1)
+            {
+                InFile = args[0];
+            }
             module = new Module();
-            string InFileName = "test.vqm";
+            string InFileName = InFile + ".vqm";
             string[] InFileData = System.IO.File.ReadAllLines(InFileName);
             string[] CleanStrings = ClearData(InFileData);
             for (int i = 0; i < CleanStrings.Length; i++)
@@ -48,7 +53,19 @@ namespace vqm2MNET
             FillDup(Nodes);
             //Выгрузка
 
-            
+            string OutFileName = InFile + ".MNET";
+            string Ofile = "";
+
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                Ofile += "NODE:" + Nodes[i].NodeType + ":" + Nodes[i].NodeName + "\r\n";
+            }
+
+            for (int i = 0; i < Links.Count; i++)
+            {
+                Ofile += "WIRE:" + Links[i].FromDev + "-" + Links[i].FromPort + ":" + Links[i].ToDev + "-" + Links[i].ToPort + "\r\n";
+            }
+            System.IO.File.WriteAllText(OutFileName, Ofile);
         }
 
         private static void FillDup(List<Node> Nodes)
