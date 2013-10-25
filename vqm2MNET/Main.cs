@@ -53,6 +53,10 @@ namespace vqm2MNET
             FillDup(Nodes);
             //Выгрузка
 
+			Console.WriteLine("Nodes {0}",Nodes.Count);
+			Console.WriteLine("Cells {0}",module.Cells.Count);
+			Console.WriteLine("Wires {0}",Links.Count);
+
             string OutFileName = InFile + ".MNET";
             string Ofile = "";
 

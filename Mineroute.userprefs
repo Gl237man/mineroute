@@ -2,13 +2,14 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
   <MonoDevelop.Ide.Workbench ActiveDocument="vqm2MNET/Main.cs">
     <Files>
-      <File FileName="vqm2MNET/Main.cs" Line="10" Column="3" />
+      <File FileName="vqm2MNET/Main.cs" Line="44" Column="6" />
       <File FileName="vqm2MNET/test.vqm" Line="30" Column="1" />
+      <File FileName="vqm2MNET/Wire.cs" Line="11" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore>
-      <Breakpoint file="/home/gl237/mineroute/mineroute/vqm2MNET/Main.cs" line="19" />
+      <Breakpoint file="/home/gl237/mineroute/mineroute/vqm2MNET/Main.cs" line="69" />
     </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
