@@ -40,6 +40,64 @@ namespace vqm2MNET
             //Заполнение DupСоеденений
             //FillDup(Nodes);
             //Заполнение Соеденений
+            FillLinkCell(Links);
+            FillLinkPorts(Links);
+            WireOptimize(Links);
+            //Выгрузка
+            
+        }
+
+        private static void WireOptimize(List<NetLink> Links)
+        {
+            for (int i = 0; i < module.Wires.Count; i++)
+            {
+
+            }
+        }
+
+
+        private static void FillLinkPorts(List<NetLink> Links)
+        {
+            for (int i = 0; i < module.Ports.Count; i++)
+            {
+                string ConnectionName = module.Ports[i].Connection;
+                string CellName = module.Ports[i].Name;
+                PortType Ptype = module.Ports[i].Ptype;
+                if (ConnectionName != null)
+                {
+                    if (IsWire(ConnectionName))
+                    {
+                        NetLink Nl = new NetLink();
+                        switch (Ptype)
+                        {
+                            case PortType.IN:
+                                if (!WireConnectionExist(ConnectionName, CellName))
+                                    module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.From });
+                                Nl.FromDev = CellName;
+                                Nl.FromPort = "O0";
+                                Nl.ToDev = ConnectionName;
+                                Nl.ToPort = "I" + (GetWireConnetionNum(ConnectionName, CellName)).ToString();
+                                Links.Add(Nl);
+                                break;
+                            case PortType.OUT:
+                                if (!WireConnectionExist(ConnectionName, CellName))
+                                    module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.To });
+                                Nl.FromDev = ConnectionName;
+                                Nl.FromPort = "O" + (GetWireConnetionNum(ConnectionName, CellName)).ToString();
+                                Nl.ToDev = CellName;
+                                Nl.ToPort = "I0";
+                                Links.Add(Nl);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static void FillLinkCell(List<NetLink> Links)
+        {
             for (int i = 0; i < module.Cells.Count; i++)
             {
                 AddInCellLink(Links, module.Cells[i].dataa, module.Cells[i].Name, "dataa");
@@ -50,8 +108,6 @@ namespace vqm2MNET
                 AddOutCellLink(Links, module.Cells[i].combout, module.Cells[i].Name, "combout");
                 AddOutCellLink(Links, module.Cells[i].cout, module.Cells[i].Name, "cout");
             }
-            //Выгрузка
-
         }
 
         private static void AddOutCellLink(List<NetLink> Links, string ConnectionName, string CellName, string PortName)
@@ -70,15 +126,37 @@ namespace vqm2MNET
 
                 if (IsWire(ConnectionName))
                 {
-                    module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.From });
+                    if (!WireConnectionExist(ConnectionName,CellName))
+                        module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.From });
                     NetLink Nl = new NetLink();
                     Nl.FromDev = CellName;
                     Nl.FromPort = PortName;
                     Nl.ToDev = ConnectionName;
-                    Nl.ToPort = "I" + (GetWireInConnetionNum(ConnectionName) - 1).ToString();
+                    Nl.ToPort = "I" + (GetWireConnetionNum(ConnectionName, CellName)).ToString();
                     Links.Add(Nl);
                 }
             }
+        }
+
+        private static object GetWireConnetionNum(string ConnectionName, string CellName)
+        {
+            int WirNum = GetIdWireByName(ConnectionName);
+            int Onum = 0;
+            for (int i = 0; i < module.Wires[WirNum].Connections.Count; i++)
+            {
+                if (module.Wires[WirNum].Connections[i].CPoint == CellName) Onum = i;
+            }
+            return Onum;
+            
+        }
+
+        private static bool WireConnectionExist(string ConnectionName, string CellName)
+        {
+            for (int i = 0; i < module.Wires[GetIdWireByName(ConnectionName)].Connections.Count; i++)
+            {
+                if (module.Wires[GetIdWireByName(ConnectionName)].Connections[i].CPoint == CellName) return true;
+            }
+            return false;
         }
 
         private static int GetWireInConnetionNum(string ConnectionName)
@@ -110,7 +188,8 @@ namespace vqm2MNET
                 }
                 if (IsWire(ConnectionName))
                 {
-                    module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.To });
+                    if (WireConnectionExist(ConnectionName, CellName))
+                        module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.To });
                     NetLink Nl = new NetLink();
                     Nl.FromDev = ConnectionName;
                     Nl.FromPort = "O" + (GetWireOutConnetionNum(ConnectionName) - 1).ToString();
