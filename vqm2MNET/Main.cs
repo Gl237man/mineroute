@@ -42,17 +42,61 @@ namespace vqm2MNET
             //Заполнение Соеденений
             FillLinkCell(Links);
             FillLinkPorts(Links);
-            WireOptimize(Links);
+            //Удаление пустых и односложных Wire
+            while (WireOptimize(Links)) { }
+
+            FillDup(Nodes);
             //Выгрузка
+
             
         }
 
-        private static void WireOptimize(List<NetLink> Links)
+        private static void FillDup(List<Node> Nodes)
         {
             for (int i = 0; i < module.Wires.Count; i++)
             {
-
+                Node N = new Node();
+                N.NodeName = module.Wires[i].Name;
+                N.NodeType = "DUP" + GetWireOutConnetionNum(module.Wires[i].Name);
             }
+        }
+
+        private static bool WireOptimize(List<NetLink> Links)
+        {
+            for (int i = 0; i < module.Wires.Count; i++)
+            {
+                int InPortNum = GetWireInConnetionNum(module.Wires[i].Name);
+                int OutPortNum = GetWireOutConnetionNum(module.Wires[i].Name);
+                if (InPortNum == 1 && OutPortNum == 1)
+                {
+                    NetLink NNL= new NetLink();
+                    for (int j = 0; j < Links.Count; j++)
+                    {
+                        if (Links[j].ToDev == module.Wires[i].Name)
+                        {
+                            NNL.FromDev = Links[j].FromDev;
+                            NNL.FromPort = Links[j].FromPort;
+                            Links.RemoveAt(j);
+                        }
+                    }
+                    for (int j = 0; j < Links.Count; j++)
+                    {
+                        if (Links[j].FromDev == module.Wires[i].Name)
+                        {
+                            NNL.ToDev = Links[j].ToDev;
+                            NNL.ToPort = Links[j].ToPort;
+                            Links.RemoveAt(j);
+                        }
+                    }
+                    Links.Add(NNL);
+                }
+                if ((InPortNum + OutPortNum) < 3)
+                {
+                    module.Wires.RemoveAt(i); 
+                    return true;
+                }
+            }
+            return false;
         }
 
 
