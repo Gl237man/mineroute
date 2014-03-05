@@ -22,6 +22,10 @@ namespace vqm2MNET
 		public string lut_mask;
 		public string sum_lutc_input;
 
+		public string clk;
+		public string datain;
+		public string regout;
+
 		public Cell (CellType CType)
 		{
 			CelType = CType;

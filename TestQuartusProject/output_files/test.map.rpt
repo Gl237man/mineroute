@@ -1,5 +1,5 @@
 Analysis & Synthesis report for test
-Wed Mar  5 20:07:19 2014
+Wed Mar  5 21:09:03 2014
 Quartus II 32-bit Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
 
 
@@ -41,7 +41,7 @@ applicable agreement for further details.
 +--------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                         ;
 +------------------------------------+-------------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Wed Mar  5 20:07:19 2014           ;
+; Analysis & Synthesis Status        ; Successful - Wed Mar  5 21:09:03 2014           ;
 ; Quartus II 32-bit Version          ; 13.0.1 Build 232 06/12/2013 SP 1 SJ Web Edition ;
 ; Revision Name                      ; test                                            ;
 ; Top-level Entity Name              ; test                                            ;
@@ -232,13 +232,13 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 Info: *******************************************************************
 Info: Running Quartus II 32-bit Analysis & Synthesis
     Info: Version 13.0.1 Build 232 06/12/2013 Service Pack 1 SJ Web Edition
-    Info: Processing started: Wed Mar  5 20:07:18 2014
+    Info: Processing started: Wed Mar  5 21:09:02 2014
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off test -c test
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 1 design units, including 1 entities, in source file test.v
     Info (12023): Found entity 1: test
 Info (12127): Elaborating entity "test" for the top level hierarchy
-Warning (10230): Verilog HDL assignment warning at test.v(16): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at test.v(18): truncated value with size 32 to match size of target (4)
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
 Info (21057): Implemented 19 device resources after synthesis - the final resource count might be different
@@ -247,7 +247,7 @@ Info (21057): Implemented 19 device resources after synthesis - the final resour
     Info (21061): Implemented 6 logic cells
 Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 2 warnings
     Info: Peak virtual memory: 347 megabytes
-    Info: Processing ended: Wed Mar  5 20:07:19 2014
+    Info: Processing ended: Wed Mar  5 21:09:03 2014
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

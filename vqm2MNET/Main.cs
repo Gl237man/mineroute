@@ -21,7 +21,7 @@ namespace vqm2MNET
         static Module module;
         static void Main(string[] args)
         {
-            string InFile = "test";
+            string InFile = "test2";
             if (args.Length == 1)
             {
                 InFile = args[0];
@@ -172,6 +172,10 @@ namespace vqm2MNET
                 AddInCellLink(Links, module.Cells[i].cin, module.Cells[i].Name, "cin");
                 AddOutCellLink(Links, module.Cells[i].combout, module.Cells[i].Name, "combout");
                 AddOutCellLink(Links, module.Cells[i].cout, module.Cells[i].Name, "cout");
+
+				AddInCellLink(Links, module.Cells[i].clk, module.Cells[i].Name, "clk");
+				AddInCellLink(Links, module.Cells[i].datain, module.Cells[i].Name, "datain");
+				AddOutCellLink(Links, module.Cells[i].regout, module.Cells[i].Name, "regout");
             }
         }
 
@@ -369,6 +373,17 @@ namespace vqm2MNET
                         }
                     }
                     break;
+				case "cycloneii_lcell_ff":
+
+					Cell cell1 = new Cell(CellType.cycloneii_lcell_ff);
+                    cell1.Name = Params[1];
+                    cell1.clk = GetSubParamCell(Params[2], "clk");
+                    cell1.datain = GetSubParamCell(Params[2], "datain");
+                    cell1.regout = GetSubParamCell(Params[2], "regout");
+
+                    module.Cells.Add(cell1);
+
+				    break;
                 case "cycloneii_lcell_comb":
                     Cell cell = new Cell(CellType.cycloneii_lcell_comb);
                     cell.Name = Params[1];

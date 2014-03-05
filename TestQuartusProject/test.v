@@ -13,7 +13,10 @@ end
 
 always @(posedge clk)
 begin 
-   counter=counter+1;
+   if (clk == 1)
+	begin 
+		counter=counter+1;
+	end
 end
 
 endmodule
