@@ -7,5 +7,13 @@ sig4[0] => sig3.IN1
 sig4[1] => sig3.IN1
 sig3[0] <= sig3.DB_MAX_OUTPUT_PORT_TYPE
 sig3[1] <= sig3.DB_MAX_OUTPUT_PORT_TYPE
+counter[0] <= counter[0]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+counter[1] <= counter[1]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+counter[2] <= counter[2]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+counter[3] <= counter[3]~reg0.DB_MAX_OUTPUT_PORT_TYPE
+clk => counter[0]~reg0.CLK
+clk => counter[1]~reg0.CLK
+clk => counter[2]~reg0.CLK
+clk => counter[3]~reg0.CLK
 
 
