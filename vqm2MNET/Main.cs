@@ -51,6 +51,8 @@ namespace vqm2MNET
             while (WireOptimize(Links)) { }
 
             FillDup(Nodes);
+            FillLostDupLinks(Links);
+
             //Выгрузка
 
 			Console.WriteLine("Nodes {0}",Nodes.Count);
@@ -71,6 +73,47 @@ namespace vqm2MNET
             }
             System.IO.File.WriteAllText(OutFileName, Ofile);
         }
+        //Проверка на входящие линки на ветвитель
+        //Хак для обхода модулей синхронизации
+        private static void FillLostDupLinks(List<NetLink> Links)
+        {
+            for (int i = 0; i < module.Wires.Count; i++)
+            {
+                string LinkName = "";
+                for (int j=0;j<module.Wires[i].Connections.Count;j++)
+                {
+                    if (module.Wires[i].Connections[j].Direction == direction.From)
+                    {
+                        LinkName = module.Wires[i].Connections[j].CPoint;
+                    }
+                }
+
+                if (!CheckToDupLink(LinkName, Links, module.Wires[i].Name))
+                {
+                    NetLink Nl = new NetLink();
+                    Nl.FromDev = LinkName;
+                    Nl.FromPort = "O0";
+                    Nl.ToDev = module.Wires[i].Name;
+                    Nl.ToPort = "I0";
+                    Links.Add(Nl);
+                }
+            }
+        }
+
+        private static bool CheckToDupLink(string LinkName, List<NetLink> Links, string dev)
+        {
+            for (int i = 0; i < Links.Count; i++)
+            {
+                if (Links[i].ToDev == dev)
+                {
+                    if (Links[i].FromDev == LinkName)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         private static void FillDup(List<Node> Nodes)
         {
@@ -79,6 +122,7 @@ namespace vqm2MNET
                 Node N = new Node();
                 N.NodeName = module.Wires[i].Name;
                 N.NodeType = "DUP" + GetWireOutConnetionNum(module.Wires[i].Name);
+                Nodes.Add(N);
             }
         }
 
@@ -189,7 +233,7 @@ namespace vqm2MNET
                     Nl.FromDev = CellName;
                     Nl.FromPort = PortName;
                     Nl.ToDev = ConnectionName;
-                    Nl.ToPort = "I1";
+                    Nl.ToPort = "I0";
                     Links.Add(Nl);
                 }
 
@@ -201,7 +245,7 @@ namespace vqm2MNET
                     Nl.FromDev = CellName;
                     Nl.FromPort = PortName;
                     Nl.ToDev = ConnectionName;
-                    Nl.ToPort = "I" + (GetWireConnetionNum(ConnectionName, CellName)).ToString();
+                    Nl.ToPort = "I" + (GetWireInConnetionNum(ConnectionName) - 1).ToString();
                     Links.Add(Nl);
                 }
             }
@@ -257,7 +301,7 @@ namespace vqm2MNET
                 }
                 if (IsWire(ConnectionName))
                 {
-                    if (WireConnectionExist(ConnectionName, CellName))
+                    //if (WireConnectionExist(ConnectionName, CellName))
                         module.Wires[GetIdWireByName(ConnectionName)].Connections.Add(new Connection() { CPoint = CellName, Direction = direction.To });
                     NetLink Nl = new NetLink();
                     Nl.FromDev = ConnectionName;
@@ -378,8 +422,8 @@ namespace vqm2MNET
 					Cell cell1 = new Cell(CellType.cycloneii_lcell_ff);
                     cell1.Name = Params[1];
                     cell1.clk = GetSubParamCell(Params[2], "clk");
-                    cell1.datain = GetSubParamCell(Params[2], "datain");
-                    cell1.regout = GetSubParamCell(Params[2], "regout");
+                    cell1.datain = GetSubParamCell(Params[3], "datain");
+                    cell1.regout = GetSubParamCell(Params[4], "regout");
 
                     module.Cells.Add(cell1);
 
@@ -394,6 +438,25 @@ namespace vqm2MNET
                     cell.combout = GetSubParamCell(Params[2], "combout");
                     cell.cin = GetSubParamCell(Params[2], "cin"); // Надо проверить на других тестовых примерах
                     module.Cells.Add(cell);
+                    break;
+                case "cycloneii_clkctrl":
+
+                    for (int i = 0; i < module.Wires.Count; i++)
+                    {
+                        if (GetSubParamCell(Params[2], "outclk") == module.Wires[i].Name)
+                        {
+                            module.Wires[i].Connections.Add(new Connection() { Direction = direction.From, CPoint = GetSubParamCell(Params[2], "inclk").Replace("{","").Replace("}","") });
+                        }
+                    }
+                    
+                    for (int i = 0; i < module.Ports.Count; i++)
+                    {
+                        if (GetSubParamCell(Params[2], "inclk") == module.Ports[i].Name)
+                        {
+                            module.Ports[i].Connection = GetSubParamCell(Params[2], "outclk".Replace("{","").Replace("}",""));
+                        }
+                    }
+                    
                     break;
                 case "assign":
                     //Assign Ports
