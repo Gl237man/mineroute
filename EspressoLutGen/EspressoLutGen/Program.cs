@@ -11,7 +11,7 @@ namespace EspressoLutGen
         static void Main(string[] args)
         {
             string CmdFile = "";
-
+            /*
             for (int i = 0; i <= 0xFFFF; i++)
             {
                 string s = LutFileGen(i);
@@ -21,13 +21,14 @@ namespace EspressoLutGen
                 CmdFile += "espresso.exe " + "Lut_" + i.ToString("X4") + ".txt>"  + "Opt_" + i.ToString("X4") + ".txt" + "\r\n";
                 CmdFile += "del " + "Lut_" + i.ToString("X4") + ".txt" + "\r\n";
             }
+             */
             for (int i = 0; i <= 0x00FF; i++)
             {
                 string s = CoutFileGen(i);
-                Console.WriteLine("Cout_" + i.ToString("X4") + ".txt");
+                Console.WriteLine("Cout_" + i.ToString("X2") + ".txt");
                 System.IO.File.WriteAllText("Cout_" + i.ToString("X2") + ".txt", s);
                 CmdFile += "echo " + i.ToString("X2") + "\r\n";
-                CmdFile += "espresso.exe " + "Cout_" + i.ToString("X2") + ".txt>" + "OptCo_" + i.ToString("X4") + ".txt" + "\r\n";
+                CmdFile += "espresso.exe " + "Cout_" + i.ToString("X2") + ".txt>" + "OptCo_" + i.ToString("X2") + ".txt" + "\r\n";
                 CmdFile += "del " + "Cout_" + i.ToString("X2") + ".txt" + "\r\n";
             }
             System.IO.File.WriteAllText("Start.cmd", CmdFile);
@@ -47,7 +48,7 @@ namespace EspressoLutGen
                 bmass[i] = LutValue >> i & 1;
             }
 
-            ostr += ".i 4" + "\r\n";
+            ostr += ".i 3" + "\r\n";
             ostr += ".o 1" + "\r\n";
             ostr += ".ilb B C D" + "\r\n";
             ostr += ".ob F" + "\r\n";
