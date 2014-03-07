@@ -1,0 +1,6 @@
+NODE:INPort:datad
+NODE:INPort:datac
+NODE:INPort:datab
+NODE:INPort:dataa
+NODE:OUTPort:combout
+WIRE:datad-O0:combout-I0
