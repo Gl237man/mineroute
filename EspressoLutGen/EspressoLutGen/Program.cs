@@ -11,7 +11,7 @@ namespace EspressoLutGen
         static void Main(string[] args)
         {
             string CmdFile = "";
-            /*
+            
             for (int i = 0; i <= 0xFFFF; i++)
             {
                 string s = LutFileGen(i);
@@ -21,7 +21,7 @@ namespace EspressoLutGen
                 CmdFile += "espresso.exe " + "Lut_" + i.ToString("X4") + ".txt>"  + "Opt_" + i.ToString("X4") + ".txt" + "\r\n";
                 CmdFile += "del " + "Lut_" + i.ToString("X4") + ".txt" + "\r\n";
             }
-             */
+            
             for (int i = 0; i <= 0x00FF; i++)
             {
                 string s = CoutFileGen(i);
