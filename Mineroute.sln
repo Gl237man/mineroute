@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EspressoLutGen", "EspressoL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenMnetFromOptLut", "GenMnetFromOptLut\GenMnetFromOptLut\GenMnetFromOptLut.csproj", "{F43B13B3-429C-49E7-8612-B350369D9410}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutDecomposite", "MnetLutDecomposite\MnetLutDecomposite.csproj", "{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,16 @@ Global
 		{F43B13B3-429C-49E7-8612-B350369D9410}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F43B13B3-429C-49E7-8612-B350369D9410}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F43B13B3-429C-49E7-8612-B350369D9410}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
