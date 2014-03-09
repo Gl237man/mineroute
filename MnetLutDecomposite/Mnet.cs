@@ -93,5 +93,29 @@ namespace MnetLutDecomposite
                     wires[i].SrcName = To;
             }
         }
+
+        internal Wire FindWireFrom(string NodeName)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if (wires[i].SrcName == NodeName)
+                {
+                    return wires[i];
+                }
+            }
+            return null;
+        }
+
+        internal Wire FindWireTo(string NodeName)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if (wires[i].DistName == NodeName)
+                {
+                    return wires[i];
+                }
+            }
+            return null;
+        }
     }
 }

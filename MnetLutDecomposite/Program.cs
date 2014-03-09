@@ -14,7 +14,8 @@ namespace MnetLutDecomposite
         {
             MainNet = new Mnet();
             MainNet.ReadMnetFile(@"test2.MNET");
-            
+
+            List<Cpoint> PortsRep = new List<Cpoint>();
             List<Node> Luts = MainNet.GetLuts();
             List<Mnet> LutsMnet = new List<Mnet>();
             for (int i = 0; i < Luts.Count; i++)
@@ -26,6 +27,67 @@ namespace MnetLutDecomposite
             RenameLutNodes(LutsMnet);
             RemoveLutFromMainNet(MainNet,Luts);
 
+            ReplacePortsByCpoints(PortsRep, LutsMnet, Luts);
+
+        }
+
+        private static void ReplacePortsByCpoints(List<Cpoint> PortsRep, List<Mnet> LutsMnet, List<Node> Luts)
+        {
+            for (int i = 0; i < Luts.Count; i++)
+            {
+                List<Node> INports = new List<Node>();
+                for (int j = 0; j < LutsMnet[i].nodes.Count; j++)
+                {
+                    if (LutsMnet[i].nodes[j].NodeType == "INPort")
+                    {
+                        INports.Add(LutsMnet[i].nodes[j]);
+                    }
+                }
+                List<Node> OUTports = new List<Node>();
+                for (int j = 0; j < LutsMnet[i].nodes.Count; j++)
+                {
+                    if (LutsMnet[i].nodes[j].NodeType == "OUTPort")
+                    {
+                        OUTports.Add(LutsMnet[i].nodes[j]);
+                    }
+                }
+                //Создание линков вместо портов
+                for (int j = 0; j < INports.Count; j++)
+                {
+                    Wire W = LutsMnet[i].FindWireFrom(INports[j].NodeName);
+                    if (W != null)
+                    {
+                        PortsRep.Add(new Cpoint { Name = Luts[i].NodeName + "-" + W.SrcName, DistName = W.DistName, DistPort = W.DistPort });
+                    }
+                }
+
+                for (int j = 0; j < OUTports.Count; j++)
+                {
+                    Wire W = LutsMnet[i].FindWireTo(OUTports[j].NodeName);
+                    if (W != null)
+                    {
+                        PortsRep.Add(new Cpoint { Name = Luts[i].NodeName + "-" + W.DistName, DistName = W.SrcName, DistPort = W.SrcPort });
+                    }
+                }
+                //Удаление портов
+                for (int j = 0; j < INports.Count; j++)
+                {
+                    LutsMnet[i].RemoveNode(INports[j].NodeName);
+                }
+                for (int j = 0; j < OUTports.Count; j++)
+                {
+                    LutsMnet[i].RemoveNode(OUTports[j].NodeName);
+                }
+                //Удаление Линков несуществующих портов
+                for (int j = 0; j < INports.Count; j++)
+                {
+                    LutsMnet[i].RemoveWireFrom(INports[j].NodeName, "O0");
+                }
+                for (int j = 0; j < OUTports.Count; j++)
+                {
+                    LutsMnet[i].RemoveWireTo(OUTports[j].NodeName,"I0");
+                }
+            }
         }
 
         private static void RemoveLutFromMainNet(Mnet MainNet, List<Node> Luts)
@@ -53,7 +115,7 @@ namespace MnetLutDecomposite
                     }
                     if (LutsMnet[i].nodes[j].NodeType.StartsWith("DUP"))
                     {
-                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_DUP_" + glORindex);
+                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_DUP_" + glDUPindex);
                         glDUPindex++;
                     }
                 }
