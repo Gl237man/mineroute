@@ -32,7 +32,39 @@ namespace MnetLutDecomposite
                 }
             }
         }
-
+        public void RemoveNode(string NodeName)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].NodeName == NodeName)
+                {
+                    nodes.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        public void RemoveWireTo(string name,string port)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if ((wires[i].DistName == name) && (wires[i].DistPort == port))
+                {
+                    wires.RemoveAt(i);
+                    return;
+                }
+            }
+        }
+        public void RemoveWireFrom(string name, string port)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if ((wires[i].SrcName == name) && (wires[i].SrcPort == port))
+                {
+                    wires.RemoveAt(i);
+                    return;
+                }
+            }
+        }
         public List<Node> GetLuts()
         {
             List<Node> Luts = new List<Node>();
