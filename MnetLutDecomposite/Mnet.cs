@@ -77,5 +77,21 @@ namespace MnetLutDecomposite
             }
             return Luts;
         }
+
+        internal void RenameElement(string From, string To)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].NodeName == From)
+                    nodes[i].NodeName = To;
+            }
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if (wires[i].DistName == From)
+                    wires[i].DistName = To;
+                if (wires[i].SrcName == From)
+                    wires[i].SrcName = To;
+            }
+        }
     }
 }
