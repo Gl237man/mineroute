@@ -308,7 +308,7 @@ namespace GenMnetFromOptLut
                     Nodes.Add(new Node { NodeName = "OUTOR_1", NodeType = "OR" });
                     Mcpoint.Add(new Cpoint { DistName = "OUTOR_1", DistPort = "I0", Name = "OR0" });
                     Mcpoint.Add(new Cpoint { DistName = "OUTOR_1", DistPort = "I1", Name = "OR1" });
-                    Wires.Add(new Wire { DistName = "OUTPort", DistPort = "I0", SrcName = "OUTOR_1", SrcPort = "O0" });
+                    Wires.Add(new Wire { DistName = "combout", DistPort = "I0", SrcName = "OUTOR_1", SrcPort = "O0" });
                     break;
                 default:
                     Nodes.Add(new Node { NodeName = "combout", NodeType = "OUTPort" });
@@ -321,7 +321,7 @@ namespace GenMnetFromOptLut
                         Mcpoint.Add(new Cpoint { DistName = "OUTOR_" + i.ToString(), DistPort = "I1", Name = "OR" + i.ToString()});
                         Wires.Add(new Wire { DistName = "OUTOR_" + i.ToString() , DistPort = "I0", SrcName = "OUTOR_"+ (i-1).ToString() , SrcPort = "O0" });
                     }
-                    Wires.Add(new Wire { DistName = "OUTPort", DistPort = "I0", SrcName = "OUTOR_"+(p-1).ToString(), SrcPort = "O0" });
+                    Wires.Add(new Wire { DistName = "combout", DistPort = "I0", SrcName = "OUTOR_" + (p - 1).ToString(), SrcPort = "O0" });
                     
                     break;
             }
