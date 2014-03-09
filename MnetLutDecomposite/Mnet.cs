@@ -32,5 +32,18 @@ namespace MnetLutDecomposite
                 }
             }
         }
+
+        public List<Node> GetLuts()
+        {
+            List<Node> Luts = new List<Node>();
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].IsLut())
+                {
+                    Luts.Add(nodes[i]);
+                }
+            }
+            return Luts;
+        }
     }
 }

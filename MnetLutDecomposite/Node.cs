@@ -20,5 +20,18 @@ namespace MnetLutDecomposite
             NodeType = tstr[1];
             NodeName = tstr[2];
         }
+        public bool IsLut()
+        {
+            return NodeType.StartsWith("C2LUT_");
+        }
+
+        public string GetLutKey()
+        {
+            if (IsLut())
+            {
+                return NodeType.Substring(6, 4);
+            }
+            return "";
+        }
     }
 }
