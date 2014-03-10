@@ -5,6 +5,7 @@ namespace StarboundExport
 {
     class Program
     {
+
         static void Main(string[] args)
         {
             Mnet MainNetwork = new Mnet();
@@ -13,6 +14,10 @@ namespace StarboundExport
             List<Node> DupNodes = new List<Node>();
             RemoveDUPNodes(MainNetwork, DupNodes);
             RemoveDUOWires(MainNetwork, DupNodes);
+
+            
+
+
         }
 
         private static void RemoveDUOWires(Mnet MainNetwork, List<Node> Nodes)
