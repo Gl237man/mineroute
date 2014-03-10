@@ -12,8 +12,18 @@ namespace MnetLutDecomposite
         static int glDUPindex = 0;
         static void Main(string[] args)
         {
+            string file = "";
+            if (args.Length == 0)
+            {
+                file = "test2";
+            }
+            else
+            {
+                file = args[0];
+            }
+
             MainNet = new Mnet();
-            MainNet.ReadMnetFile(@"test2.MNET");
+            MainNet.ReadMnetFile(file + @".MNET");
 
             List<Cpoint> PortsRep = new List<Cpoint>();
             List<Node> Luts = MainNet.GetLuts();
@@ -29,7 +39,26 @@ namespace MnetLutDecomposite
             ReplacePortsByCpoints(PortsRep, LutsMnet, Luts);
 
             RpeplaceWireToCpoints(PortsRep);
+            CombineAllWiresAndNodes(LutsMnet);
+            string ExportStr = MainNet.GetSting();
+            System.IO.File.WriteAllText(file + @"_D.MNET", ExportStr);
+        }
 
+        private static void CombineAllWiresAndNodes(List<Mnet> LutsMnet)
+        {
+            for (int i = 0; i < LutsMnet.Count; i++)
+            {
+                for (int j=0;j<LutsMnet[i].nodes.Count;j++)
+                {
+                    MainNet.nodes.Add(LutsMnet[i].nodes[j]);
+                }
+
+                for (int j = 0; j < LutsMnet[i].wires.Count; j++)
+                {
+                    MainNet.wires.Add(LutsMnet[i].wires[j]);
+                }
+
+            }
         }
 
         private static void RpeplaceWireToCpoints(List<Cpoint> PortsRep)

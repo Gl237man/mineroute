@@ -140,5 +140,21 @@ namespace MnetLutDecomposite
             }
             return null;
         }
+
+        internal string GetSting()
+        {
+            string ostr = "";
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                ostr += nodes[i].ToString() + "\r\n";
+            }
+
+            for (int i = 0; i < wires.Count; i++)
+            {
+                ostr += wires[i].ToString() + "\r\n";
+            }
+
+            return ostr;
+        }
     }
 }
