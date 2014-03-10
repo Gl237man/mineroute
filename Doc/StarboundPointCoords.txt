@@ -1,0 +1,20 @@
+NOT GATE
+I0 - 0,0;
+O0 - 2,0;
+OR GATE
+I0 - 0,-1;
+I1 - 0,1;
+O0 - 2,0
+AND GATE
+I0 - 0,-1;
+I1 - 0,1;
+O0 - 2,0
+BLUB
+I0 - 0,0;
+D_TRIG
+CLK - 0,-1;
+I0 - 0,1;
+OUT - 2,0;
+BUTTON
+O0 - 1,1;
+
