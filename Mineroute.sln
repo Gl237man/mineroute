@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
+# Visual Studio 2013
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binhl2JsWE", "Binhl2JsWE\Binhl2JsWE.csproj", "{CF8DDE97-CCC4-461B-BB50-2460719F155E}"
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenMnetFromOptLut", "GenMnetFromOptLut\GenMnetFromOptLut\GenMnetFromOptLut.csproj", "{F43B13B3-429C-49E7-8612-B350369D9410}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutDecomposite", "MnetLutDecomposite\MnetLutDecomposite.csproj", "{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarboundExport", "StarboundExport\StarboundExport.csproj", "{81C50184-4C85-49DB-AE58-46BA91D0378D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -111,6 +113,16 @@ Global
 		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DB5E91CC-5FA4-4F22-9EA1-25D1EB0B2C12}.Release|x86.ActiveCfg = Release|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

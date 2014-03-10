@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MnetLutDecomposite
+namespace StarboundExport
 {
     class Mnet
     {
@@ -77,7 +77,15 @@ namespace MnetLutDecomposite
             }
             return Luts;
         }
-
+        public Node FindNode(string NodeName)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].NodeName == NodeName)
+                    return nodes[i];
+            }
+            return null;
+        }
         internal void RenameElement(string From, string To)
         {
             for (int i = 0; i < nodes.Count; i++)
