@@ -10,6 +10,36 @@ namespace StarboundExport
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(@"test2_D.MNET");
             ReducteDUP(MainNetwork);
+            List<Node> DupNodes = new List<Node>();
+            RemoveDUPNodes(MainNetwork, DupNodes);
+            RemoveDUOWires(MainNetwork, DupNodes);
+        }
+
+        private static void RemoveDUOWires(Mnet MainNetwork, List<Node> Nodes)
+        {
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                for (int j = 0; i < Nodes.Count; i++)
+                {
+                    MainNetwork.RemoveWireTo(Nodes[i].NodeName, "I" + j.ToString());
+                }
+            }
+        }
+
+        private static void RemoveDUPNodes(Mnet MainNetwork, List<Node> Nodes)
+        {
+            
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                if (MainNetwork.nodes[i].NodeType.StartsWith("DUP"))
+                {
+                    Nodes.Add(MainNetwork.nodes[i]);
+                }
+            }
+            for (int i = 0; i < Nodes.Count; i++)
+            {
+                MainNetwork.RemoveNode(Nodes[i].NodeName);
+            }
         }
 
         private static void ReducteDUP(Mnet MainNetwork)
