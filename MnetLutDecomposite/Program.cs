@@ -26,9 +26,29 @@ namespace MnetLutDecomposite
             }
             RenameLutNodes(LutsMnet);
             RemoveLutFromMainNet(MainNet,Luts);
-
             ReplacePortsByCpoints(PortsRep, LutsMnet, Luts);
 
+            RpeplaceWireToCpoints(PortsRep);
+
+        }
+
+        private static void RpeplaceWireToCpoints(List<Cpoint> PortsRep)
+        {
+            for (int i=0;i<PortsRep.Count;i++)
+            {
+                Wire tWire = MainNet.FindWireToPort(PortsRep[i].Name.Split('-')[0], PortsRep[i].Name.Split('-')[1]);
+                if (tWire != null)
+                {
+                    tWire.DistName = PortsRep[i].DistName;
+                    tWire.DistPort = PortsRep[i].DistPort;
+                }
+                Wire rWire = MainNet.FindWireFromPort(PortsRep[i].Name.Split('-')[0], PortsRep[i].Name.Split('-')[1]);
+                if (rWire != null)
+                {
+                    rWire.SrcName = PortsRep[i].DistName;
+                    rWire.SrcPort = PortsRep[i].DistPort;
+                }
+            }
         }
 
         private static void ReplacePortsByCpoints(List<Cpoint> PortsRep, List<Mnet> LutsMnet, List<Node> Luts)

@@ -106,11 +106,34 @@ namespace MnetLutDecomposite
             return null;
         }
 
+        internal Wire FindWireFromPort(string NodeName, string PortName)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if (wires[i].SrcName == NodeName && wires[i].SrcPort == PortName)
+                {
+                    return wires[i];
+                }
+            }
+            return null;
+        }
+
         internal Wire FindWireTo(string NodeName)
         {
             for (int i = 0; i < wires.Count; i++)
             {
                 if (wires[i].DistName == NodeName)
+                {
+                    return wires[i];
+                }
+            }
+            return null;
+        }
+        internal Wire FindWireToPort(string NodeName,string PortName)
+        {
+            for (int i = 0; i < wires.Count; i++)
+            {
+                if (wires[i].DistName == NodeName && wires[i].DistPort == PortName)
                 {
                     return wires[i];
                 }
