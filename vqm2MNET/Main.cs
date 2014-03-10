@@ -431,11 +431,12 @@ namespace vqm2MNET
                 case "cycloneii_lcell_comb":
                     Cell cell = new Cell(CellType.cycloneii_lcell_comb);
                     cell.Name = Params[1];
-                    cell.dataa = GetSubParamCell(Params[2], "dataa");
-                    cell.datab = GetSubParamCell(Params[2], "datab");
-                    cell.datac = GetSubParamCell(Params[2], "datac");
-                    cell.datad = GetSubParamCell(Params[2], "datad");
-                    cell.combout = GetSubParamCell(Params[2], "combout");
+                    string ParamS = CobineParam(Params);
+                    cell.dataa = GetSubParamCell(ParamS, "dataa");
+                    cell.datab = GetSubParamCell(ParamS, "datab");
+                    cell.datac = GetSubParamCell(ParamS, "datac");
+                    cell.datad = GetSubParamCell(ParamS, "datad");
+                    cell.combout = GetSubParamCell(ParamS, "combout");
                     cell.cin = GetSubParamCell(Params[2], "cin"); // Надо проверить на других тестовых примерах
                     module.Cells.Add(cell);
                     break;
@@ -538,6 +539,16 @@ namespace vqm2MNET
                 default:
                     break;
             }
+        }
+
+        private static string CobineParam(string[] Params)
+        {
+            string r = "";
+            for (int i = 2; i < Params.Length; i++)
+            {
+                r += Params[i];
+            }
+            return r;
         }
 
         private static string GetSubParamCell(string pdata, string pname)
