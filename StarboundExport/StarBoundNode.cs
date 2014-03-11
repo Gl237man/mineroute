@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,13 +31,18 @@ namespace StarboundExport
         public int ycoord;
         public List<StarBoundPort> Ports;
 
-        public StarBoundNode(string type, string ID)
+        public string ToString()
+        {
+            return "N:" + NodeType + ":" + xcoord.ToString() + ":" + ycoord.ToString();
+        }
+
+        public StarBoundNode(string type, string ID ,int x,int y)
         {
             
             Ports = new List<StarBoundPort>();
             NodeID = ID;
-            xcoord = 0;
-            ycoord = 0;
+            xcoord = x;
+            ycoord = y;
             switch (type)
             {
                 case "GND":
@@ -58,7 +63,7 @@ namespace StarboundExport
                 case "OUTPort":
                     NodeType = "BLUB";
                     //make ports
-                    Ports.Add(new StarBoundPort { PortName = "O0", xcoord = 0, ycoord = 0 ,NodeOwner = this});
+                    Ports.Add(new StarBoundPort { PortName = "I0", xcoord = 0, ycoord = 0 ,NodeOwner = this});
                     break;
                 case "TRIG_D":
                     NodeType = "D_TRIG";
@@ -88,6 +93,7 @@ namespace StarboundExport
                     Ports.Add(new StarBoundPort { PortName = "O0", xcoord = 2, ycoord = 0, NodeOwner = this });
                     break;
                 default:
+                    
                     break;
             }
         }
