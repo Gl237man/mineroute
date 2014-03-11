@@ -256,7 +256,7 @@ namespace GenMnetFromOptLut
                         if (!NINExist(j))
                         {
                             Nodes.Add(new Node { NodeName = "NOTDat"+j.ToString(), NodeType = "NOT" });
-                            CreateWireFromCpoint(FindMcPoint("BIN" + j.ToString()), "NOTDat" + j.ToString(), "IN0");
+                            CreateWireFromCpoint(FindMcPoint("BIN" + j.ToString()), "NOTDat" + j.ToString(), "I0");
                             Mcpoint.Add(new Cpoint { DistName = "NOTDat" + j.ToString(), DistPort = "O0", Name = "NIN" + j.ToString() });
                         }
                     }
