@@ -1,11 +1,11 @@
-NOT GATE
+NOT_GATE
 I0 - 0,0;
 O0 - 2,0;
-OR GATE
+OR_GATE
 I0 - 0,-1;
 I1 - 0,1;
 O0 - 2,0
-AND GATE
+AND_GATE
 I0 - 0,-1;
 I1 - 0,1;
 O0 - 2,0
@@ -17,4 +17,3 @@ I0 - 0,1;
 OUT - 2,0;
 BUTTON
 O0 - 1,1;
-
