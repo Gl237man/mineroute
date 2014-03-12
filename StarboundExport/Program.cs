@@ -6,17 +6,38 @@ namespace StarboundExport
 {
     class Program
     {
-        const int Height = 4;
+        static int Height = 4;
         const int Step = 3;
-        const int ImageMult = 25;
+        static int ImageMult = 25;
         static int tx = 0;
         static int ty = 0;
+        static int OptimiseDeep = 3;
 
         static void Main(string[] args)
         {
             string file = "test2_D";
             if (args.Length > 0)
+            {
                 file = args[0];
+                for (int i = 0; i < args.Length; i++)
+                {
+                    if (args[i].StartsWith("H="))
+                        Height = Convert.ToInt32(args[i].Split('=')[1]);
+                    if (args[i].StartsWith("ImMult="))
+                        ImageMult = Convert.ToInt32(args[i].Split('=')[1]);
+                    if (args[i].StartsWith("O="))
+                        OptimiseDeep = Convert.ToInt32(args[i].Split('=')[1]);
+                }
+            }
+
+            Console.WriteLine("Использование:");
+            Console.WriteLine("");
+            Console.WriteLine("StarboundExport [filename] {H=(4)Height,ImMult=(25)imagesize,O=(3)OptimizeDeep}");
+            Console.WriteLine("Примеры:");
+            Console.WriteLine("");
+            Console.WriteLine("StarboundExport test2_D H=4 ImMult=30 O=3");
+            Console.WriteLine("StarboundExport test2_D");
+            Console.WriteLine("");
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -34,15 +55,12 @@ namespace StarboundExport
             //place wires
             List<StarboundWire> SBWires = new List<StarboundWire>();
             ConnectSBNodes(MainNetwork, SBNodes, SBWires);
+
+
             string ostr = GenExportFile(SBNodes, SBWires);
             System.IO.File.WriteAllText(file + ".SBBIN", ostr);
             //CalcLincLengch
-            double len = 0;
-            for (int i = 0; i < SBWires.Count; i++)
-            {
-                len += Math.Sqrt((SBWires[i].startx - SBWires[i].endx) * (SBWires[i].startx - SBWires[i].endx)
-                               + (SBWires[i].starty - SBWires[i].endy) * (SBWires[i].starty - SBWires[i].endy));
-            }
+            double len = CalcComplexity(SBWires);
             Console.WriteLine("complexity:" + len);
             //TODO
             //draw image
@@ -52,9 +70,20 @@ namespace StarboundExport
 
         }
 
+        private static double CalcComplexity(List<StarboundWire> SBWires)
+        {
+            double len = 0;
+            for (int i = 0; i < SBWires.Count; i++)
+            {
+                len += Math.Sqrt((SBWires[i].startx - SBWires[i].endx) * (SBWires[i].startx - SBWires[i].endx)
+                               + (SBWires[i].starty - SBWires[i].endy) * (SBWires[i].starty - SBWires[i].endy));
+            }
+            return len;
+        }
+
         private static void SortOptimize(Mnet MainNetwork)
         {
-            for (int i = 0; i < MainNetwork.nodes.Count * 5; i++)
+            for (int i = 0; i < MainNetwork.nodes.Count * OptimiseDeep; i++)
             {
                 for (int j = 0; j < (MainNetwork.nodes.Count - 1); j++)
                 {
@@ -106,7 +135,7 @@ namespace StarboundExport
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i].NodeType == "OUTPort")
-                    return list.Count;
+                    return list.Count+1;
                 if (list[i].NodeName == p)
                     return i;
             }
