@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarboundExport
+namespace SBBIN2mcr
 {
     class StarBoundPort
     {
@@ -35,7 +35,12 @@ namespace StarboundExport
         {
             return "N:" + NodeType + ":" + xcoord.ToString() + ":" + ycoord.ToString();
         }
-
+        public StarBoundNode(string frstr)
+        {
+            NodeType = frstr.Split(':')[1];
+            xcoord = Convert.ToInt32(frstr.Split(':')[2]);
+            ycoord = Convert.ToInt32(frstr.Split(':')[3]);
+        }
         public StarBoundNode(string type, string ID ,int x,int y)
         {
             
