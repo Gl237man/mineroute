@@ -6,7 +6,7 @@ namespace StarboundExport
 {
     class Program
     {
-        static int Height = 2;
+        static int Height = 6;
         const int Step = 4;
         static int ImageMult = 25;
         static int tx = 0;
@@ -157,7 +157,7 @@ namespace StarboundExport
 
         private static Image DrawImage(List<StarBoundNode> SBNodes, List<StarboundWire> SBWires)
         {
-            Image IMmain = new Bitmap((tx + 2) * ImageMult * Step, (ty + 2) * ImageMult * Step);
+            Image IMmain = new Bitmap((tx + 2) * ImageMult * Step, (ty + 4) * ImageMult * Step);
             Graphics GR = Graphics.FromImage(IMmain);
             GR.Clear(Color.Black);
             Font F = new Font("arial", 8);

@@ -10,13 +10,13 @@ namespace SBBIN2mcr
     class Program
     {
         static int totalmoves = 0;
-        const int syncpoint = 80;
+        const int syncpoint = 40;
         const int dDelay = 85;
         const int dmelay = 50;
         const int VMul = 25;
-        const int MoveSpeed = 89;
+        const int MoveSpeed = 88;
 
-        int Clevel = 2;
+        static int Clevel = 2;
 
         const int x0 = 440;
         static void Main(string[] args)
@@ -31,7 +31,9 @@ namespace SBBIN2mcr
             for (int i = 0; i < nodes.Count; i++)
             {
                 string ToolName = nodes[i].NodeType;
-                
+
+                outfile += SyncToStart(); xcoord = -1;
+
                 outfile += SelectTool(ToolName);
                 
                 outfile += MoveTo(nodes[i].xcoord, ref xcoord);
@@ -43,8 +45,10 @@ namespace SBBIN2mcr
 
             for (int i = 0; i < wires.Count; i++)
             {
+                outfile += SyncToStart(); xcoord = -1;
                 outfile += MoveTo(wires[i].startx, ref xcoord);
                 outfile += ClickAtY(wires[i].starty);
+                outfile += SyncToStart(); xcoord = -1;
                 outfile += MoveTo(wires[i].endx, ref xcoord);
                 outfile += ClickAtY(wires[i].endy);
             }
@@ -52,10 +56,62 @@ namespace SBBIN2mcr
             System.IO.File.WriteAllText("T.mcr", outfile);
         }
 
+        private static string SetLevelAtY(int Ycoord)
+        {
+            string outfile = "";
+            int needlevel = Ycoord / 7;
+
+            while (Clevel != needlevel)
+            {
+                if (Clevel < needlevel)
+                {
+                    outfile += LevelDown();
+                    Clevel++;
+                }
+                if (Clevel > needlevel)
+                {
+                    outfile += LevelUp();
+                    Clevel--;
+                }
+            }
+
+            return outfile;
+        }
+
+        private static string LevelUp()
+        {
+            string outfile = "";
+            outfile += "DELAY : 100" + "\r\n";
+            outfile += "Keyboard : Space : KeyDown" + "\r\n";
+            outfile += "DELAY : 1000" + "\r\n";
+            outfile += "Keyboard : Space : KeyUp" + "\r\n";
+            outfile += "DELAY : 500" + "\r\n";
+            return outfile;
+        }
+
+        private static string LevelDown()
+        {
+            string outfile = "";
+            outfile += "DELAY : 100" + "\r\n";
+            outfile += "Keyboard : S : KeyDown" + "\r\n";
+            outfile += "DELAY : 100" + "\r\n";
+            outfile += "Keyboard : Space : KeyDown" + "\r\n";
+            outfile += "DELAY : 200" + "\r\n";
+            outfile += "Keyboard : Space : KeyUp" + "\r\n";
+            outfile += "DELAY : 100" + "\r\n";
+            outfile += "Keyboard : S : KeyUp" + "\r\n";
+            outfile += "DELAY : 500" + "\r\n";
+            return outfile;
+        }
+
         private static string ClickAtY(int Ycoord)
         {
-            int coord = x0 + Ycoord * VMul;
             string outS = "";
+            outS += SetLevelAtY(Ycoord);
+
+            Ycoord = Ycoord - Clevel * 8;
+            int coord = x0 + Ycoord * VMul;
+
 
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
             outS += "Mouse : 840 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
@@ -97,6 +153,19 @@ namespace SBBIN2mcr
             outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : A : KeyDown" + "\r\n";
             outfile += "DELAY : " + (10000).ToString() + "\r\n";
+            outfile += "Keyboard : A : KeyUp" + "\r\n";
+
+
+            return outfile;
+        }
+        private static string SyncToStart()
+        {
+            string outfile = "";
+
+
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
+            outfile += "Keyboard : A : KeyDown" + "\r\n";
+            outfile += "DELAY : " + (3000).ToString() + "\r\n";
             outfile += "Keyboard : A : KeyUp" + "\r\n";
 
 
@@ -169,8 +238,13 @@ namespace SBBIN2mcr
         }
         private static string PlaceAtY(int Ycoord)
         {
-            int coord = x0 + Ycoord * VMul;
             string outS = "";
+            outS += SetLevelAtY(Ycoord);
+
+            Ycoord = Ycoord - Clevel * 8;
+
+            int coord = x0 + Ycoord * VMul;
+            
 
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
             outS += "Mouse : 865 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
