@@ -1,0 +1,7 @@
+1 - WireTool
+2 - OR_GATE
+3 - NOT_GATE
+4 - BUTTON
+5 - BLUB
+6 - D_TRIG
+7 - AND_GATE
