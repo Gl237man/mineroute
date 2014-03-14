@@ -10,7 +10,7 @@ namespace SBBIN2mcr
     {
         const int dDelay = 100;
         const int VMul = 25;
-        const int MoveSpeed = 90;
+        const int MoveSpeed = 85;
         static void Main(string[] args)
         {
             List<StarBoundNode> nodes = new List<StarBoundNode>();
