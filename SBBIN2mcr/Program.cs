@@ -10,6 +10,8 @@ namespace SBBIN2mcr
     {
         static void Main(string[] args)
         {
+            string[] indat = System.IO.File.ReadAllLines("test_D.SBBIN");
+
         }
     }
 }
