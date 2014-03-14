@@ -9,6 +9,7 @@ namespace SBBIN2mcr
     class Program
     {
         const int dDelay = 100;
+        const int VMul = 25;
         static void Main(string[] args)
         {
             List<StarBoundNode> nodes = new List<StarBoundNode>();
@@ -22,7 +23,23 @@ namespace SBBIN2mcr
                 string ToolName = nodes[i].NodeType;
                 //selectTool
                 outfile += SelectTool(ToolName);
+                outfile += PlaceAtY(nodes[i].ycoord);
             }
+        }
+
+        private static string PlaceAtY(int Ycoord)
+        {
+            int coord = 415 + Ycoord * VMul;
+            string outS = "";
+
+            outS += "DELAY : " + dDelay.ToString() + "\r\n";
+            outS += "Mouse : 865 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
+            outS += "DELAY : " + dDelay.ToString() + "\r\n";
+            outS += "Mouse : 865 : " + coord + " : LeftButtonDown : 0 : 0 : 0" + "\r\n";
+            outS += "DELAY : " + dDelay.ToString() + "\r\n";
+            outS += "Mouse : 865 : " + coord + " : LeftButtonUp : 0 : 0 : 0" + "\r\n";
+
+            return outS;
         }
 
         private static string SelectTool(string ToolName)
