@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace SBBIN2mcr
 {
+
     class Program
     {
-        const int dDelay = 100;
+        static int totalmoves = 0;
+        const int syncpoint = 80;
+        const int dDelay = 85;
+        const int dmelay = 50;
         const int VMul = 25;
-        const int MoveSpeed = 85;
+        const int MoveSpeed = 89;
+
+        int Clevel = 2;
+
+        const int x0 = 440;
         static void Main(string[] args)
         {
             List<StarBoundNode> nodes = new List<StarBoundNode>();
@@ -19,7 +27,7 @@ namespace SBBIN2mcr
 
             string outfile = "";
             outfile += StartClic();
-            int xcoord = 0;
+            int xcoord = -1;
             for (int i = 0; i < nodes.Count; i++)
             {
                 string ToolName = nodes[i].NodeType;
@@ -40,11 +48,13 @@ namespace SBBIN2mcr
                 outfile += MoveTo(wires[i].endx, ref xcoord);
                 outfile += ClickAtY(wires[i].endy);
             }
+
+            System.IO.File.WriteAllText("T.mcr", outfile);
         }
 
         private static string ClickAtY(int Ycoord)
         {
-            int coord = 415 + Ycoord * VMul;
+            int coord = x0 + Ycoord * VMul;
             string outS = "";
 
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
@@ -59,7 +69,10 @@ namespace SBBIN2mcr
 
         private static string MoveTo(int x, ref int xcoord)
         {
+            
+            
             string outfile = "";
+            
             while (xcoord != x)
             {
                 if (xcoord < x)
@@ -76,17 +89,40 @@ namespace SBBIN2mcr
             return outfile;
         }
 
+        private static string SyncToStart(int xcoord)
+        {
+            string outfile = "";
+
+
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
+            outfile += "Keyboard : A : KeyDown" + "\r\n";
+            outfile += "DELAY : " + (10000).ToString() + "\r\n";
+            outfile += "Keyboard : A : KeyUp" + "\r\n";
+
+
+            return outfile;
+        }
+
         private static string MoverRight(ref int xcoord)
         {
             string outfile = "";
 
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            totalmoves++;
+            if (totalmoves > syncpoint)
+            {
+                outfile += SyncToStart(xcoord);
+                xcoord = -1;
+                totalmoves = 0;
+            }
+
+
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyDown" + "\r\n";
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : D : KeyDown" + "\r\n";
             outfile += "DELAY : " + MoveSpeed.ToString() + "\r\n";
             outfile += "Keyboard : D : KeyUp" + "\r\n";
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyUp" + "\r\n";
 
             xcoord++;
@@ -97,13 +133,21 @@ namespace SBBIN2mcr
         {
             string outfile = "";
 
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            totalmoves++;
+            if (totalmoves > syncpoint)
+            {
+                outfile += SyncToStart(xcoord);
+                xcoord = -1;
+                totalmoves = 0;
+            }
+
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyDown" + "\r\n";
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : A : KeyDown" + "\r\n";
             outfile += "DELAY : " + MoveSpeed.ToString() + "\r\n";
             outfile += "Keyboard : A : KeyUp" + "\r\n";
-            outfile += "DELAY : " + dDelay.ToString() + "\r\n";
+            outfile += "DELAY : " + dmelay.ToString() + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyUp" + "\r\n";
 
             xcoord--;
@@ -125,7 +169,7 @@ namespace SBBIN2mcr
         }
         private static string PlaceAtY(int Ycoord)
         {
-            int coord = 415 + Ycoord * VMul;
+            int coord = x0 + Ycoord * VMul;
             string outS = "";
 
             outS += "DELAY : " + dDelay.ToString() + "\r\n";

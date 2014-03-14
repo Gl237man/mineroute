@@ -1,1 +1,0 @@
-C:\altera\11.0sp1\quartus\bin\quartus_cdb c:\fpga\tm -vqm=c:\fpga\1.vqm
