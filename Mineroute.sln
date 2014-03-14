@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutDecomposite", "MnetL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StarboundExport", "StarboundExport\StarboundExport.csproj", "{81C50184-4C85-49DB-AE58-46BA91D0378D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBBIN2mcr", "SBBIN2mcr\SBBIN2mcr.csproj", "{CFED8EF9-AAA4-45C2-923E-138038A438B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +125,16 @@ Global
 		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{81C50184-4C85-49DB-AE58-46BA91D0378D}.Release|x86.ActiveCfg = Release|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CFED8EF9-AAA4-45C2-923E-138038A438B8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
