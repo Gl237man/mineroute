@@ -50,6 +50,7 @@ namespace SBBIN2mcr
                 outfile += ClickAtY(wires[i].starty);
                 outfile += MoveTo(wires[i].endx, ref xcoord);
                 outfile += ClickAtY(wires[i].endy);
+                outfile += SyncToStart(); xcoord = 1;
             }
 
             System.IO.File.WriteAllText("T.mcr", outfile);
@@ -113,11 +114,11 @@ namespace SBBIN2mcr
 
 
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
-            outS += "Mouse : 848 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
+            outS += "Mouse : 845 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
-            outS += "Mouse : 848 : " + coord + " : LeftButtonDown : 0 : 0 : 0" + "\r\n";
+            outS += "Mouse : 845 : " + coord + " : LeftButtonDown : 0 : 0 : 0" + "\r\n";
             outS += "DELAY : " + dDelay.ToString() + "\r\n";
-            outS += "Mouse : 848 : " + coord + " : LeftButtonUp : 0 : 0 : 0" + "\r\n";
+            outS += "Mouse : 845 : " + coord + " : LeftButtonUp : 0 : 0 : 0" + "\r\n";
 
             return outS;
         }

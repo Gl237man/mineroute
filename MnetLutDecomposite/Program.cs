@@ -10,6 +10,7 @@ namespace MnetLutDecomposite
         static int glANDindex = 0;
         static int glORindex = 0;
         static int glDUPindex = 0;
+        static int glNOTindex = 0;
         static void Main(string[] args)
         {
             string file = "";
@@ -166,6 +167,13 @@ namespace MnetLutDecomposite
                     {
                         LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_DUP_" + glDUPindex);
                         glDUPindex++;
+                    
+                    }
+                    if (LutsMnet[i].nodes[j].NodeType.StartsWith("NOT"))
+                    {
+                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_NOT_" + glNOTindex);
+                        glNOTindex++;
+
                     }
                 }
             }
