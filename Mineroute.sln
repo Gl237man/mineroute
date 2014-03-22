@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binhl2JsWE", "Binhl2JsWE\Binhl2JsWE.csproj", "{CF8DDE97-CCC4-461B-BB50-2460719F155E}"
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBBIN2mcr", "SBBIN2mcr\SBBIN2mcr.csproj", "{CFED8EF9-AAA4-45C2-923E-138038A438B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SBBIN2mcrTP", "SBBIN2mcrTP\SBBIN2mcrTP.csproj", "{04BECE55-03F0-4C0C-854A-996E58AB33F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnetsynt2", "Mnetsynt2\Mnetsynt2.csproj", "{31F67756-C504-4F9C-A4CF-E322BE89E881}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,6 +149,16 @@ Global
 		{04BECE55-03F0-4C0C-854A-996E58AB33F8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{04BECE55-03F0-4C0C-854A-996E58AB33F8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{04BECE55-03F0-4C0C-854A-996E58AB33F8}.Release|x86.ActiveCfg = Release|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{31F67756-C504-4F9C-A4CF-E322BE89E881}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
