@@ -19,6 +19,10 @@ namespace Mnetsynt2
             MainNetwork.ReadMnetFile(file + @".MNET");
             ReducteDUP(MainNetwork);
 
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT",20, 20, 10);
+
+
+            OutNode.export("test_D.binhl");
             /*
             List<Node> DupNodes = new List<Node>();
             RemoveDUPNodes(MainNetwork, DupNodes);

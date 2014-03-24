@@ -1,4 +1,4 @@
-mkdir SBtest
+mkdir MCtest
 copy vqm2MNET\bin\Debug\*.exe MCtest\
 copy MnetLutDecomposite\bin\Debug\*.exe MCtest\
 copy Mnetsynt2\bin\Debug\*.exe MCtest\
