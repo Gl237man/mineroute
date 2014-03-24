@@ -13,6 +13,7 @@ namespace RouteUtils
         public int SizeY;
         public int SizeZ;
         public string[, ,] DataMatrix;
+        public string[, ,] mask;
         public Node(string name, int sx, int sy, int sz)
         {
             Name = name;
@@ -34,6 +35,19 @@ namespace RouteUtils
             }
         }
 
+        public void PlaceAnotherNode(Node node, int Xcoord, int Ycoord, int ZCoord)
+        {
+            for (int x = 0; x < node.SizeX; x++)
+            {
+                for (int y = 0; y < node.SizeY; y++)
+                {
+                    for (int z = 0; z < node.SizeZ; z++)
+                    {
+                        DataMatrix[Xcoord + x, Ycoord + y, ZCoord + z] = node.DataMatrix[x, y, z];
+                    }
+                }
+            }
+        }
         public void export(string FileName)
         {
             string ostr = "";

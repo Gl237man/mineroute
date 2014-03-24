@@ -21,6 +21,7 @@ namespace Mnetsynt2
 
             RouteUtils.Node OutNode = new RouteUtils.Node("OUT",20, 20, 10);
 
+            OutNode.PlaceAnotherNode(new RouteUtils.Node("NOT.binhl"), 0, 0, 0);
 
             OutNode.export("test_D.binhl");
             /*
