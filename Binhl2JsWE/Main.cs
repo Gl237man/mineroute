@@ -91,8 +91,14 @@ namespace Binhl2JsWE
                 case "v":
                     ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 3));" + "\r\n";
                     break;
+                case "=":
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 13));" + "\r\n";
+                    break;
                 case "_":
                     ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 1));" + "\r\n";
+                    break;
+                case "-":
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 2));" + "\r\n";
                     break;
                 case "*":
                     ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 5));" + "\r\n";
