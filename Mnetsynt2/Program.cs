@@ -13,19 +13,20 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            string file = "test2_D";
+            string file = "test_D";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
             ReducteDUP(MainNetwork);
 
+            /*
             List<Node> DupNodes = new List<Node>();
             RemoveDUPNodes(MainNetwork, DupNodes);
             RemoveDUOWires(MainNetwork, DupNodes);
 
             //Sorting Nodes;
             SortOptimize(MainNetwork);
-
+            */
 
         }
 

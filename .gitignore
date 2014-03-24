@@ -108,5 +108,6 @@ Backup*/
 UpgradeLog*.XML
 # TestFolders
 SBtest/
+MCtest/
 test/
 TestQuartusProject/
