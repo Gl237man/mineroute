@@ -18,12 +18,24 @@ namespace Mnetsynt2
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
             ReducteDUP(MainNetwork);
+            //loadnodes
+            Console.WriteLine("Загрузка темплейтов");
+            RouteUtils.Node[] mcNodes = new RouteUtils.Node[MainNetwork.nodes.Count];
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                mcNodes[i] = new RouteUtils.Node(MainNetwork.nodes[i].NodeType + ".binhl");
+            }
+            Console.WriteLine("OK");
+            //Place nodes
 
+            
             RouteUtils.Node OutNode = new RouteUtils.Node("OUT",50, 20, 10);
 
             OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
 
             OutNode.export("test_D.binhl");
+            
+
             /*
             List<Node> DupNodes = new List<Node>();
             RemoveDUPNodes(MainNetwork, DupNodes);

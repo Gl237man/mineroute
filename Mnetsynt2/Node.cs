@@ -10,6 +10,9 @@ namespace Mnetsynt2
     {
         public string NodeType;
         public string NodeName;
+        public int x;
+        public int y;
+        public int z;
         public string ToString()
         {
             return "NODE:" + NodeType + ":" + NodeName;
