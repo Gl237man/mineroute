@@ -3,8 +3,8 @@ in:1
 out:3
 in:I0:1:7
 out:O0:1:1
-out:O1:1:4
-out:O2:1:7
+out:O1:4:1
+out:O2:7:1
 size:8:7
 layers:7
 layer:0

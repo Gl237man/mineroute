@@ -3,11 +3,11 @@ in:1
 out:6
 in:I0:1:7
 out:O0:1:1
-out:O1:1:4
-out:O2:1:7
-out:O3:1:10
-out:O4:1:13
-out:O4:1:16
+out:O1:4:1
+out:O2:7:1
+out:O3:10:1
+out:O4:13:1
+out:O5:16:1
 size:17:7
 layers:7
 layer:0
