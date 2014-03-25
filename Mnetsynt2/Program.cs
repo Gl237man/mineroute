@@ -35,10 +35,12 @@ namespace Mnetsynt2
 
             while (!TryPlace(MainNetwork, mcNodes, PlaceLayer, BaseSize))
             {
-                BaseSize+=10;
+                BaseSize += 10;
                 Console.WriteLine("Размер:" + BaseSize.ToString());
             }
             BaseSize += 20;
+
+            Console.WriteLine("Размещение ОК");
 
             List<RouteUtils.Cpoint> Cpoints = new List<RouteUtils.Cpoint>();
 
@@ -48,9 +50,11 @@ namespace Mnetsynt2
             {
                 for (int j = 0; j < mcNodes[i].InPorts.Length; j++)
                 {
-                    Cpoints.Add(new RouteUtils.Cpoint { BaseX = mcNodes[i].InPorts[j].PosX + MainNetwork.nodes[i].x,
-                                                        BaseY = mcNodes[i].InPorts[j].PosY + MainNetwork.nodes[i].y,
-                                                        PointName = mcNodes[i].Name+"-"+ mcNodes[i].InPorts[j].Name
+                    Cpoints.Add(new RouteUtils.Cpoint
+                    {
+                        BaseX = mcNodes[i].InPorts[j].PosX + MainNetwork.nodes[i].x,
+                        BaseY = mcNodes[i].InPorts[j].PosY + MainNetwork.nodes[i].y,
+                        PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].InPorts[j].Name
                     });
 
                 }
@@ -66,31 +70,139 @@ namespace Mnetsynt2
 
                 }
             }
-            
+            int CurrentWireLayer = 1;
+
             //Draw wires in layer
+
             RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
+            string[,] WireMask = new string[BaseSize, BaseSize];
+
+            //PlaceMaskCpoint
+            for (int j = 0; j < Cpoints.Count; j++)
+            {
+                DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 1);
+            }
+
+            Wire W = MainNetwork.wires[0];
+
+            RouteUtils.Wire MCW = new RouteUtils.Wire(W.SrcName + "-" + W.SrcPort, W.DistName + "-" + W.DistPort);
+            //UnmaskStartEndPoint
+            RouteUtils.Cpoint SP = FindCpoint(MCW.StartName, Cpoints);
+            RouteUtils.Cpoint EP = FindCpoint(MCW.EndName, Cpoints);
+
+            SP.BaseY += CurrentWireLayer;
+            EP.BaseY += CurrentWireLayer;
+
+            UnmaskCpoint(WireMask, SP);
+            UnmaskCpoint(WireMask, EP);
+            //CalcAstar
+            int[,] AStarTable = new int[BaseSize, BaseSize];
+            AStarTable[SP.BaseX, SP.BaseY] = 1;
+
+            bool Calcing = true;
+
+            while (Calcing)
+            {
+                int aded = 0;
+                for (int x = 1; x < BaseSize - 1; x++)
+                {
+                    for (int y = 1; y < BaseSize - 1; y++)
+                    {
+                        if (AStarTable[x, y] != 0)
+                        {
+                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != "X")
+                            {
+                                AStarTable[x + 1, y] = AStarTable[x, y] + 1;
+                                aded++;
+                            }
+                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != "X")
+                            {
+                                AStarTable[x - 1, y] = AStarTable[x, y] + 1;
+                                aded++;
+                            }
+                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != "X")
+                            {
+                                AStarTable[x, y - 1] = AStarTable[x, y] + 1;
+                                aded++;
+                            }
+                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != "X")
+                            {
+                                AStarTable[x, y + 1] = AStarTable[x, y] + 1;
+                                aded++;
+                            }
+                        }
+                    }
+                }
+                if (aded == 0) Calcing = false;
+            }
+
+            //DrawWire
+            List<int> WPX = new List<int>();
+            List<int> WPY = new List<int>();
+
+            bool Wcalc = true;
+            int tx = EP.BaseX;
+            int ty = EP.BaseY;
+            while (Wcalc)
+            {
+                WPX.Add(tx);
+                WPY.Add(ty);
+                if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0)
+                {
+                    tx = tx - 1;
+                }
+
+                if (AStarTable[tx + 1, ty] < AStarTable[tx, ty] && AStarTable[tx + 1, ty] != 0)
+                {
+                    tx = tx + 1;
+                }
+
+                if (AStarTable[tx, ty + 1] < AStarTable[tx, ty] && AStarTable[tx, ty + 1] != 0)
+                {
+                    ty = ty + 1;
+                }
+
+                if (AStarTable[tx, ty - 1] < AStarTable[tx, ty] && AStarTable[tx, ty - 1] != 0)
+                {
+                    ty = ty - 1;
+                }
+                if (SP.BaseX == tx && SP.BaseY == ty) Wcalc = false;
+            }
 
 
-
-
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT",BaseSize, BaseSize, 10);
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 10);
 
             //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
             {
                 OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
-                //PlaceDebuginfo
-                int layer = 0;
-                for (int j = 0; j < Cpoints.Count; j++)
+
+            }
+
+            //PlaceDebuginfo
+            int layer = 0;
+            for (int x = 0; x < BaseSize; x++)
+            {
+                for (int y = 0; y < BaseSize; y++)
                 {
-                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+                    if (WireMask[x, y] == "X")
+                        OutNode.DataMatrix[x, y, layer] = "k";
                 }
             }
 
+
+
+            /*
+            for (int j = 0; j < Cpoints.Count; j++)
+            {
+                OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
+                OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
+                OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+            }
+             */
+
             OutNode.export("test_D.binhl");
-            
+
 
             /*
             List<Node> DupNodes = new List<Node>();
@@ -101,6 +213,27 @@ namespace Mnetsynt2
             SortOptimize(MainNetwork);
             */
 
+        }
+
+        private static void UnmaskCpoint(string[,] WireMask, RouteUtils.Cpoint SP)
+        {
+            WireMask[SP.BaseX, SP.BaseY] = "";
+            WireMask[SP.BaseX - 1, SP.BaseY] = "";
+            WireMask[SP.BaseX + 1, SP.BaseY] = "";
+
+            WireMask[SP.BaseX, SP.BaseY + 1] = "";
+            WireMask[SP.BaseX - 1, SP.BaseY + 1] = "";
+            WireMask[SP.BaseX + 1, SP.BaseY + 1] = "";
+        }
+
+        private static RouteUtils.Cpoint FindCpoint(string p,List<RouteUtils.Cpoint> CPnt)
+        {
+            for (int j = 0; j < CPnt.Count; j++)
+            {
+                if (CPnt[j].PointName == p)
+                    return CPnt[j];
+            }
+            return null;
         }
 
         private static bool TryPlace(Mnet MainNetwork, RouteUtils.Node[] mcNodes, int PlaceLayer, int BaseSize)
