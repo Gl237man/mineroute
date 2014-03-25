@@ -1,9 +1,9 @@
-Name:AND
+Name:TRIG_D
 in:2
 out:1
 in:datain:1:0
-in:clk:3:0
-out:regout:2:8
+in:clk:6:0
+out:regout:6:17
 size:8:19
 layers:7
 layer:0

@@ -1,9 +1,9 @@
 Name:OR
 in:2
 out:1
-in:IN0:1:6
-in:IN1:3:6
-out:OUT0:3:1
+in:I0:1:6
+in:I1:3:6
+out:O0:3:1
 size:5:7
 layers:7
 layer:0
