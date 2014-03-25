@@ -12,6 +12,7 @@ namespace Mnetsynt2
         public string DistName;
         public string SrcPort;
         public string DistPort;
+        public bool Placed;
         public string ToString()
         {
             return "WIRE:" + SrcName + "-" + SrcPort + ":" + DistName + "-" + DistPort;

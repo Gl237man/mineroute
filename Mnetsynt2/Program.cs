@@ -13,7 +13,7 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            string file = "test_D";
+            string file = "test1";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -27,11 +27,59 @@ namespace Mnetsynt2
             }
             Console.WriteLine("OK");
             //Place nodes
+            int PlaceLayer = 1;
+            int PortNum = CalcPortNum(MainNetwork);
 
+            int BaseSize = 5 * PortNum;
+
+
+            while (!TryPlace(MainNetwork, mcNodes, PlaceLayer, BaseSize))
+            {
+                BaseSize+=10;
+                Console.WriteLine("Размер:" + BaseSize.ToString());
+            }
+            BaseSize += 20;
+
+            List<RouteUtils.Cpoint> Cpoints = new List<RouteUtils.Cpoint>();
+
+            //CreateCpointList
+
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                for (int j = 0; j < mcNodes[i].InPorts.Length; j++)
+                {
+                    Cpoints.Add(new RouteUtils.Cpoint { BaseX = mcNodes[i].InPorts[j].PosX + MainNetwork.nodes[i].x,
+                                                        BaseY = mcNodes[i].InPorts[j].PosY + MainNetwork.nodes[i].y,
+                                                        PointName = mcNodes[i].Name+"-"+ mcNodes[i].InPorts[j].Name
+                    });
+
+                }
+
+                for (int j = 0; j < mcNodes[i].OutPorts.Length; j++)
+                {
+                    Cpoints.Add(new RouteUtils.Cpoint
+                    {
+                        BaseX = mcNodes[i].OutPorts[j].PosX + MainNetwork.nodes[i].x,
+                        BaseY = mcNodes[i].OutPorts[j].PosY + MainNetwork.nodes[i].y,
+                        PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].OutPorts[j].Name
+                    });
+
+                }
+            }
             
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT",50, 20, 10);
+            //Draw wires in layer
+            RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
 
-            OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
+
+
+
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT",BaseSize, BaseSize, 10);
+
+            //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
+            }
 
             OutNode.export("test_D.binhl");
             
@@ -45,6 +93,113 @@ namespace Mnetsynt2
             SortOptimize(MainNetwork);
             */
 
+        }
+
+        private static bool TryPlace(Mnet MainNetwork, RouteUtils.Node[] mcNodes, int PlaceLayer, int BaseSize)
+        {
+            string[,] PlaceMask = new string[BaseSize, BaseSize];
+
+            //PlacePorts
+            int potrtx = 1;
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                if (MainNetwork.nodes[i].NodeType.Contains("Port"))
+                {
+                    MainNetwork.nodes[i].x = potrtx;
+                    MainNetwork.nodes[i].y = 1;
+                    MainNetwork.nodes[i].z = PlaceLayer;
+                    //DrawMask
+                    int mx = MainNetwork.nodes[i].x;
+                    int my = MainNetwork.nodes[i].y;
+                    int mw = mcNodes[i].SizeX;
+                    int mh = mcNodes[i].SizeY;
+
+                    DrawAtMask(PlaceMask, mx, my, mw, mh);
+
+                    potrtx += 4;
+                }
+            }
+
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                bool placed = false;
+                if (MainNetwork.nodes[i].NodeType.Contains("Port"))
+                {
+                    placed = true;
+                }
+                for (int x = 1; x < BaseSize; x++)
+                {
+                    for (int y = 1; y < BaseSize; y++)
+                    {
+                        if (!placed)
+                        {
+                            MainNetwork.nodes[i].x = x;
+                            MainNetwork.nodes[i].y = y;
+                            MainNetwork.nodes[i].z = PlaceLayer;
+
+                            int mx = MainNetwork.nodes[i].x;
+                            int my = MainNetwork.nodes[i].y;
+                            int mw = mcNodes[i].SizeX;
+                            int mh = mcNodes[i].SizeY;
+
+                            if (CanPlace(PlaceMask, mx, my, mw, mh))
+                            {
+                                DrawAtMask(PlaceMask, mx, my, mw, mh);
+                                placed = true;
+                            }
+                        }
+                    }
+                }
+                if (!placed)
+                    return false;
+            }
+            return true;
+        }
+
+        private static bool CanPlace(string[,] PlaceMask, int mx, int my, int mw, int mh)
+        {
+            mw++;
+            mh++;
+
+            for (int x = 0; x < mw; x++)
+            {
+                for (int y = 0; y < mh; y++)
+                {
+                    try
+                    {
+                        if (PlaceMask[mx + x, my + y] == "X") return false;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static void DrawAtMask(string[,] PlaceMask, int mx, int my, int mw, int mh)
+        {
+            for (int x = -1; x < mw + 1; x++)
+            {
+                for (int y = -1; y < mh + 1; y++)
+                {
+                    PlaceMask[mx + x, my + y] = "X";
+                }
+            }
+        }
+
+        private static int CalcPortNum(Mnet MainNetwork)
+        {
+            int PortNum = 0;
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                if (MainNetwork.nodes[i].NodeType.Contains("Port"))
+                {
+                    PortNum++;
+                }
+            }
+            return PortNum;
         }
 
         private static List<Wire> FindAllWiresTo(List<Wire> Wlist, Node node)
