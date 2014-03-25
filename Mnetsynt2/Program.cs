@@ -145,28 +145,43 @@ namespace Mnetsynt2
             int ty = EP.BaseY;
             while (Wcalc)
             {
+                bool R = false;
                 WPX.Add(tx);
                 WPY.Add(ty);
-                if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0)
+                if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0 & !R)
                 {
+                    R = true;
                     tx = tx - 1;
                 }
 
-                if (AStarTable[tx + 1, ty] < AStarTable[tx, ty] && AStarTable[tx + 1, ty] != 0)
+                if (AStarTable[tx + 1, ty] < AStarTable[tx, ty] && AStarTable[tx + 1, ty] != 0 & !R)
                 {
+                    R = true;
                     tx = tx + 1;
                 }
 
-                if (AStarTable[tx, ty + 1] < AStarTable[tx, ty] && AStarTable[tx, ty + 1] != 0)
+                if (AStarTable[tx, ty + 1] < AStarTable[tx, ty] && AStarTable[tx, ty + 1] != 0 & !R)
                 {
+                    R = true;
                     ty = ty + 1;
                 }
 
-                if (AStarTable[tx, ty - 1] < AStarTable[tx, ty] && AStarTable[tx, ty - 1] != 0)
+                if (AStarTable[tx, ty - 1] < AStarTable[tx, ty] && AStarTable[tx, ty - 1] != 0 & !R)
                 {
+                    R = true;
                     ty = ty - 1;
                 }
-                if (SP.BaseX == tx && SP.BaseY == ty) Wcalc = false;
+                if (SP.BaseX == tx && SP.BaseY == ty)
+                {
+                    Wcalc = false;
+                    WPX.Add(tx);
+                    WPY.Add(ty);
+                }
+            }
+            //WireRemask
+            for (int i = 0; i < WPX.Count; i++)
+            {
+                DrawAtMask(WireMask,WPX[i], WPY[i],1,1);
             }
 
 
@@ -190,18 +205,21 @@ namespace Mnetsynt2
                 }
             }
 
-
-
-            /*
-            for (int j = 0; j < Cpoints.Count; j++)
+            for (int i = 0; i < WPX.Count; i++)
             {
-                OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
-                OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
-                OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+                OutNode.DataMatrix[WPX[i], WPY[i], layer] = "w";
             }
-             */
 
-            OutNode.export("test_D.binhl");
+                /*
+                for (int j = 0; j < Cpoints.Count; j++)
+                {
+                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+                }
+                 */
+
+                OutNode.export("test_D.binhl");
 
 
             /*
