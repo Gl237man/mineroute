@@ -1,7 +1,7 @@
 Name:OUTPort
 in:1
 out:0
-in:I0:0:1
+in:I0:1:4
 size:3:5
 layers:7
 layer:0

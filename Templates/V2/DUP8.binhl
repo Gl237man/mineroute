@@ -1,7 +1,7 @@
 Name:DUP8
 in:1
 out:8
-in:I0:7:7
+in:I0:7:6
 out:O0:1:1
 out:O1:4:1
 out:O2:7:1

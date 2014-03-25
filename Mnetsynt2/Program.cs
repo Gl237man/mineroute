@@ -79,6 +79,14 @@ namespace Mnetsynt2
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
             {
                 OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
+                //PlaceDebuginfo
+                int layer = 0;
+                for (int j = 0; j < Cpoints.Count; j++)
+                {
+                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+                }
             }
 
             OutNode.export("test_D.binhl");
