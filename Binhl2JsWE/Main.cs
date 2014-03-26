@@ -32,10 +32,10 @@ namespace Binhl2JsWE
             GenScript += @"var sess = context.remember();" + "\r\n";
 
             int tvn = 0;
-
+            int strn = 0;
+            GenScript += @"function v" + tvn.ToString() + " (){" + "\r\n";
             for (int i = 0; i < N.SizeX; i++)
             {
-                GenScript += @"function v"+tvn.ToString()+" (){" + "\r\n";
                 for (int j = 0; j < N.SizeY; j++)
                 {
                     
@@ -45,15 +45,25 @@ namespace Binhl2JsWE
                         {
                             GenScript += GetCoordSring(i, j, k);
                             GenScript += GetBlockStr(N.DataMatrix[i, j, k]);
+                            strn++;
+                            if (strn > 200)
+                            {
+                                GenScript += @"};" + "\r\n";
+                                GenScript += @"v" + tvn.ToString() + "();" + "\r\n";
+                                tvn++;
+                                Console.Write(tvn);
+                                GenScript += @"function v" + tvn.ToString() + " (){" + "\r\n";
+                                strn = 0;
+                            }
                         }
                         //DataMatrix[i, j, k] = "0";
                     }
                 }
-                GenScript += @"};" + "\r\n";
-                GenScript += @"v" + tvn.ToString() + "();" + "\r\n";
-                tvn++;
-                Console.Write(tvn);
+                
             }
+
+            GenScript += @"};" + "\r\n";
+            GenScript += @"v" + tvn.ToString() + "();" + "\r\n";
 
             System.IO.File.WriteAllText(FileName+".js", GenScript);
         }

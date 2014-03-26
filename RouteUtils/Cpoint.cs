@@ -11,5 +11,6 @@ namespace RouteUtils
         public int BaseX;
         public int BaseY;
         public int usedLayer;
+        public bool indat;
     }
 }
