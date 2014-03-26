@@ -27,7 +27,7 @@ namespace Mnetsynt2
             }
             Console.WriteLine("OK");
             //Place nodes
-            int PlaceLayer = 1;
+            int PlaceLayer = 20;
             int PortNum = CalcPortNum(MainNetwork);
 
             int BaseSize = 5 * PortNum;
@@ -77,19 +77,37 @@ namespace Mnetsynt2
             RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
             //Draw wires in layer
 
-
-            string[,] WireMask = new string[BaseSize,BaseSize];
-            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            for (int j = 0; j < 10; j++)
             {
-                
-                List<int> WPX;
-                List<int> WPY;
+                CurrentWireLayer = j * 2 + 1;
+                CurrentRealLayer = PlaceLayer - 1 - j * 2;
 
-                PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
-                Console.WriteLine(MainNetwork.wires[i].ToString());
+
+                string[,] WireMask = new string[BaseSize, BaseSize];
+                for (int i = 0; i < MainNetwork.wires.Count; i++)
+                {
+
+                    List<int> WPX;
+                    List<int> WPY;
+                    if (!MainNetwork.wires[i].Placed)
+                    {
+                        PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
+                        if (MainNetwork.wires[i].Placed)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Green;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+
+                        Console.WriteLine(MainNetwork.wires[i].ToString());
+
+                    }
+                }
+
             }
-
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 10);
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 30);
 
             //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
@@ -157,6 +175,7 @@ namespace Mnetsynt2
             //PlaceMaskCpoint
             for (int j = 0; j < Cpoints.Count; j++)
             {
+                if (Cpoints[j].usedLayer == 0)
                 DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
@@ -200,7 +219,12 @@ namespace Mnetsynt2
                     MCWires[WireNum].WirePointZ[WPX.Count - i - 1] = CurrentRealLayer;
                 }
                 MainNetwork.wires[WireNum].Placed = true;
+
+                SP.usedLayer = CurrentWireLayer;
+                EP.usedLayer = CurrentWireLayer;
             }
+            SP.BaseY -= CurrentWireLayer;
+            EP.BaseY -= CurrentWireLayer;
         }
 
         private static bool TryPlaceWire(RouteUtils.Cpoint SP, RouteUtils.Cpoint EP, int[,] AStarTable, out List<int> WPX, out List<int> WPY)

@@ -10,5 +10,6 @@ namespace RouteUtils
         public string PointName;
         public int BaseX;
         public int BaseY;
+        public int usedLayer;
     }
 }
