@@ -17,7 +17,7 @@ namespace Mnetsynt2
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
-            ReducteDUP(MainNetwork);
+            //ReducteDUP(MainNetwork);
             //loadnodes
             Console.WriteLine("Загрузка темплейтов");
             RouteUtils.Node[] mcNodes = new RouteUtils.Node[MainNetwork.nodes.Count];
@@ -70,20 +70,97 @@ namespace Mnetsynt2
 
                 }
             }
-            int CurrentWireLayer = 1;
 
+            int CurrentWireLayer = 1;
+            int CurrentRealLayer = 0;
+            int WireNum = 0;
+            RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
             //Draw wires in layer
 
-            RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
-            string[,] WireMask = new string[BaseSize, BaseSize];
+
+            string[,] WireMask = new string[BaseSize,BaseSize];
+            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            {
+                
+                List<int> WPX;
+                List<int> WPY;
+
+                PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
+                Console.WriteLine(MainNetwork.wires[i].ToString());
+            }
+
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 10);
+
+            //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
+
+            }
+            //PlaceWires
+            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            {
+                if (MainNetwork.wires[i].Placed)
+                {
+                    for (int j = 0; j < MCWires[i].WirePointX.Length; j++)
+                    {
+                        OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "w";
+                    }
+                }
+            }
+
+
+                /*
+                //PlaceDebuginfo
+                int layer = 0;
+                for (int x = 0; x < BaseSize; x++)
+                {
+                    for (int y = 0; y < BaseSize; y++)
+                    {
+                        if (WireMask[x, y] == "X")
+                            OutNode.DataMatrix[x, y, layer] = "k";
+                    }
+                }
+
+                for (int i = 0; i < WPX.Count; i++)
+                {
+                    OutNode.DataMatrix[WPX[i], WPY[i], layer] = "w";
+                }
+                */
+                /*
+                for (int j = 0; j < Cpoints.Count; j++)
+                {
+                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
+                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
+                }
+                 */
+
+                OutNode.export("test_D.binhl");
+
+
+            /*
+            List<Node> DupNodes = new List<Node>();
+            RemoveDUPNodes(MainNetwork, DupNodes);
+            RemoveDUOWires(MainNetwork, DupNodes);
+
+            //Sorting Nodes;
+            SortOptimize(MainNetwork);
+            */
+
+        }
+
+        private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, string[,] WireMask, out List<int> WPX, out List<int> WPY)
+        {
+            //WireMask = new string[BaseSize, BaseSize];
 
             //PlaceMaskCpoint
             for (int j = 0; j < Cpoints.Count; j++)
             {
-                DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 1);
+                DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
-            Wire W = MainNetwork.wires[0];
+            Wire W = MainNetwork.wires[WireNum];
 
             RouteUtils.Wire MCW = new RouteUtils.Wire(W.SrcName + "-" + W.SrcPort, W.DistName + "-" + W.DistPort);
             //UnmaskStartEndPoint
@@ -96,6 +173,86 @@ namespace Mnetsynt2
             UnmaskCpoint(WireMask, SP);
             UnmaskCpoint(WireMask, EP);
             //CalcAstar
+            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP);
+
+            //DrawWire
+
+
+            bool placed = TryPlaceWire(SP, EP, AStarTable, out WPX, out WPY);
+            if (placed)
+            {
+                //WireRemask
+                for (int i = 0; i < WPX.Count; i++)
+                {
+                    DrawAtMask(WireMask, WPX[i], WPY[i], 1, 1);
+                }
+
+                MCWires[WireNum] = new RouteUtils.Wire(MCW.StartName, MCW.EndName);
+
+                MCWires[WireNum].WirePointX = new int[WPX.Count];
+                MCWires[WireNum].WirePointY = new int[WPX.Count];
+                MCWires[WireNum].WirePointZ = new int[WPX.Count];
+
+                for (int i = 0; i < WPX.Count; i++)
+                {
+                    MCWires[WireNum].WirePointX[WPX.Count - i - 1] = WPX[i];
+                    MCWires[WireNum].WirePointY[WPX.Count - i - 1] = WPY[i];
+                    MCWires[WireNum].WirePointZ[WPX.Count - i - 1] = CurrentRealLayer;
+                }
+                MainNetwork.wires[WireNum].Placed = true;
+            }
+        }
+
+        private static bool TryPlaceWire(RouteUtils.Cpoint SP, RouteUtils.Cpoint EP, int[,] AStarTable, out List<int> WPX, out List<int> WPY)
+        {
+            WPX = new List<int>();
+            WPY = new List<int>();
+
+            bool Wcalc = true;
+            int tx = EP.BaseX;
+            int ty = EP.BaseY;
+            if (AStarTable[tx, ty] == 0)
+                return false;
+            while (Wcalc)
+            {
+                bool R = false;
+                WPX.Add(tx);
+                WPY.Add(ty);
+                if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0 & !R)
+                {
+                    R = true;
+                    tx = tx - 1;
+                }
+
+                if (AStarTable[tx + 1, ty] < AStarTable[tx, ty] && AStarTable[tx + 1, ty] != 0 & !R)
+                {
+                    R = true;
+                    tx = tx + 1;
+                }
+
+                if (AStarTable[tx, ty + 1] < AStarTable[tx, ty] && AStarTable[tx, ty + 1] != 0 & !R)
+                {
+                    R = true;
+                    ty = ty + 1;
+                }
+
+                if (AStarTable[tx, ty - 1] < AStarTable[tx, ty] && AStarTable[tx, ty - 1] != 0 & !R)
+                {
+                    R = true;
+                    ty = ty - 1;
+                }
+                if (SP.BaseX == tx && SP.BaseY == ty)
+                {
+                    Wcalc = false;
+                    WPX.Add(tx);
+                    WPY.Add(ty);
+                }
+            }
+            return true;
+        }
+
+        private static int[,] CalcAstar(int BaseSize, string[,] WireMask, RouteUtils.Cpoint SP)
+        {
             int[,] AStarTable = new int[BaseSize, BaseSize];
             AStarTable[SP.BaseX, SP.BaseY] = 1;
 
@@ -135,102 +292,7 @@ namespace Mnetsynt2
                 }
                 if (aded == 0) Calcing = false;
             }
-
-            //DrawWire
-            List<int> WPX = new List<int>();
-            List<int> WPY = new List<int>();
-
-            bool Wcalc = true;
-            int tx = EP.BaseX;
-            int ty = EP.BaseY;
-            while (Wcalc)
-            {
-                bool R = false;
-                WPX.Add(tx);
-                WPY.Add(ty);
-                if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0 & !R)
-                {
-                    R = true;
-                    tx = tx - 1;
-                }
-
-                if (AStarTable[tx + 1, ty] < AStarTable[tx, ty] && AStarTable[tx + 1, ty] != 0 & !R)
-                {
-                    R = true;
-                    tx = tx + 1;
-                }
-
-                if (AStarTable[tx, ty + 1] < AStarTable[tx, ty] && AStarTable[tx, ty + 1] != 0 & !R)
-                {
-                    R = true;
-                    ty = ty + 1;
-                }
-
-                if (AStarTable[tx, ty - 1] < AStarTable[tx, ty] && AStarTable[tx, ty - 1] != 0 & !R)
-                {
-                    R = true;
-                    ty = ty - 1;
-                }
-                if (SP.BaseX == tx && SP.BaseY == ty)
-                {
-                    Wcalc = false;
-                    WPX.Add(tx);
-                    WPY.Add(ty);
-                }
-            }
-            //WireRemask
-            for (int i = 0; i < WPX.Count; i++)
-            {
-                DrawAtMask(WireMask,WPX[i], WPY[i],1,1);
-            }
-
-
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 10);
-
-            //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
-            for (int i = 0; i < MainNetwork.nodes.Count; i++)
-            {
-                OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
-
-            }
-
-            //PlaceDebuginfo
-            int layer = 0;
-            for (int x = 0; x < BaseSize; x++)
-            {
-                for (int y = 0; y < BaseSize; y++)
-                {
-                    if (WireMask[x, y] == "X")
-                        OutNode.DataMatrix[x, y, layer] = "k";
-                }
-            }
-
-            for (int i = 0; i < WPX.Count; i++)
-            {
-                OutNode.DataMatrix[WPX[i], WPY[i], layer] = "w";
-            }
-
-                /*
-                for (int j = 0; j < Cpoints.Count; j++)
-                {
-                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
-                }
-                 */
-
-                OutNode.export("test_D.binhl");
-
-
-            /*
-            List<Node> DupNodes = new List<Node>();
-            RemoveDUPNodes(MainNetwork, DupNodes);
-            RemoveDUOWires(MainNetwork, DupNodes);
-
-            //Sorting Nodes;
-            SortOptimize(MainNetwork);
-            */
-
+            return AStarTable;
         }
 
         private static void UnmaskCpoint(string[,] WireMask, RouteUtils.Cpoint SP)
