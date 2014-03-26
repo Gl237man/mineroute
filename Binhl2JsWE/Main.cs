@@ -83,6 +83,9 @@ namespace Binhl2JsWE
                 case "w":
                     ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 0));" + "\r\n";
                     break;
+                case "S":
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 3));" + "\r\n";
+                    break;
                 case "0":
                     ost = "sess.setBlock(pt, new BaseBlock(BlockID.AIR, 0));" + "\r\n";
                     break;

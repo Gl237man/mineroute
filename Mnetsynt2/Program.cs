@@ -13,7 +13,7 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            string file = "test1";
+            string file = "test_D";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -162,6 +162,28 @@ namespace Mnetsynt2
             {
                 MCWires[i].PlaceRepeaters();
             }
+            //SyncWires
+            List<RouteUtils.Wire> WiresToSync = new List<RouteUtils.Wire>();
+            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            {
+                if (MainNetwork.wires[i].DistPort == "clk")
+                {
+                    WiresToSync.Add(MCWires[i]);
+                }
+            }
+            int SyncLen = 0;
+            for (int i = 0; i < WiresToSync.Count; i++)
+            {
+                if (WiresToSync[i].calcRepCount() > SyncLen)
+                    SyncLen = WiresToSync[i].calcRepCount();
+            }
+
+            for (int i = 0; i < WiresToSync.Count; i++)
+            {
+                WiresToSync[i].repCompincate(SyncLen - WiresToSync[i].calcRepCount());
+                WiresToSync[i].Synced = true;
+            }
+
 
                 //PlaceWires
                 for (int i = 0; i < MainNetwork.wires.Count; i++)
@@ -170,7 +192,14 @@ namespace Mnetsynt2
                     {
                         for (int j = 0; j < MCWires[i].WirePointX.Length; j++)
                         {
-                            OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "w";
+                            if (MCWires[i].Synced)
+                            {
+                                OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "S";
+                            }
+                            else
+                            {
+                                OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "w";
+                            }
                             if (MCWires[i].Rep[j])
                             {
                                 OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j] + 1] = MCWires[i].RepNp[j];

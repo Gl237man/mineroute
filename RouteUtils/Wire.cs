@@ -21,6 +21,17 @@ namespace RouteUtils
         public bool[] Rep;
         public bool[] CanRep;
         public string[] RepNp;
+        public bool Synced = false;
+
+        public int calcRepCount()
+        {
+            int c = 0;
+            for (int i = 0; i < Rep.Length; i++)
+            {
+                if (Rep[i]) c++;
+            }
+            return c;
+        }
 
         public Wire(string stName, string edName)
         {
@@ -59,7 +70,7 @@ namespace RouteUtils
             {
                 if (CanRep[p])
                 {
-                    PlaceRepeaters(p);
+                    PlaceRepeater(p);
                     placed = true;
                 }
                 else
@@ -91,7 +102,7 @@ namespace RouteUtils
             {
                 if (CanRep[p])
                 {
-                    PlaceRepeaters(p);
+                    PlaceRepeater(p);
                     placed = true;
                 }
                 else
@@ -102,7 +113,7 @@ namespace RouteUtils
             return p;
         }
 
-        private void PlaceRepeaters(int p)
+        private void PlaceRepeater(int p)
         {
             Rep[p] = true;
             if (WirePointX[p - 1] == WirePointX[p + 1])
@@ -126,6 +137,23 @@ namespace RouteUtils
                 {
                     RepNp[p] = ">";
                 }
+            }
+        }
+
+        public void repCompincate(int p)
+        {
+            int cpoint = 1;
+            while(p>0)
+            {
+                if (!Rep[cpoint])
+                {
+                    if (CanRep[cpoint])
+                    {
+                        PlaceRepeater(cpoint);
+                        p--;
+                    }
+                }
+                cpoint++;
             }
         }
     }
