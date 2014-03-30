@@ -16,7 +16,7 @@ namespace MnetLutDecomposite
             string file = "";
             if (args.Length == 0)
             {
-                file = "test2";
+                file = "test3";
             }
             else
             {
@@ -32,8 +32,18 @@ namespace MnetLutDecomposite
             for (int i = 0; i < Luts.Count; i++)
             {
                 Mnet Lnet = new Mnet();
+                Luts[i].HaveCout = СheckCout(Luts[i], MainNet.wires);
+
                 Lnet.ReadMnetFile(@"MNETLib\" + Luts[i].GetLutKey().Substring(0, 1) + @"\lut_" + Luts[i].GetLutKey() + ".MNET");
-                LutsMnet.Add(Lnet);
+                if (!Luts[i].HaveCout)
+                {
+                    LutsMnet.Add(Lnet);
+                }
+                else
+                {
+                    Mnet LnetC = new Mnet();
+                    LnetC.ReadMnetFile(@"MNETLib\OptCo" + @"\lutc_" + Luts[i].GetLutKey().Substring(2 , 2) + ".MNET");
+                }
             }
             RenameLutNodes(LutsMnet);
             RemoveLutFromMainNet(MainNet,Luts);
@@ -45,6 +55,19 @@ namespace MnetLutDecomposite
             System.IO.File.WriteAllText(file + @"_D.MNET", ExportStr);
         }
 
+        private static bool СheckCout(Node node, List<Wire> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (node.NodeName == list[i].SrcName)
+                {
+                    if (list[i].SrcPort == "cout")
+                        return true;
+                }
+            }
+            return false;
+        }
+               
         private static void CombineAllWiresAndNodes(List<Mnet> LutsMnet)
         {
             for (int i = 0; i < LutsMnet.Count; i++)

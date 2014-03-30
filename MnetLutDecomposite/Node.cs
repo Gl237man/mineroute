@@ -8,6 +8,7 @@ namespace MnetLutDecomposite
 {
     class Node
     {
+        public bool HaveCout;
         public string NodeType;
         public string NodeName;
         public string ToString()
