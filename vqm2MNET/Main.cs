@@ -19,9 +19,12 @@ namespace vqm2MNET
     class Program
     {
         static Module module;
+
+        static int GlobalDup = 0;
+
         static void Main(string[] args)
         {
-            string InFile = "test2";
+            string InFile = "test";
             if (args.Length == 1)
             {
                 InFile = args[0];
@@ -53,6 +56,7 @@ namespace vqm2MNET
             FillDup(Nodes);
             FillLostDupLinks(Links);
 
+            ConvertLostLink2Dup(Nodes, Links);
             //Выгрузка
 
 			Console.WriteLine("Nodes {0}",Nodes.Count);
@@ -72,6 +76,74 @@ namespace vqm2MNET
                 Ofile += "WIRE:" + Links[i].FromDev + "-" + Links[i].FromPort + ":" + Links[i].ToDev + "-" + Links[i].ToPort + "\r\n";
             }
             System.IO.File.WriteAllText(OutFileName, Ofile);
+        }
+
+        private static void ConvertLostLink2Dup(List<Node> Nodes, List<NetLink> Links)
+        {
+
+            for (int i = 0; i < Links.Count; i++)
+            {
+                if (CheckMultiLink(Links[i], Links))
+                {
+                    MakeDup(Links[i], Links, Nodes);
+                }
+            }
+        }
+
+        private static void MakeDup(NetLink netLink, List<NetLink> Links, List<Node> Nodes)
+        {
+            string srcPort = netLink.FromPort;
+            string srcDev = netLink.FromDev;
+            List<NetLink> DestLinksPorts = new List<NetLink>();
+
+            for (int i = 0; i < Links.Count; i++)
+            {
+                if (Links[i].FromDev == srcDev)
+                    if (Links[i].FromPort == srcPort)
+                    {
+                        DestLinksPorts.Add(Links[i]);
+                    }
+            }
+            Nodes.Add(new Node
+            {
+                NodeName = "RecoveredDUP" + GlobalDup
+            ,
+                NodeType = "DUP" + DestLinksPorts.Count
+            });
+
+            for (int i = 0; i < DestLinksPorts.Count; i++)
+            {
+                DestLinksPorts[i].FromDev = "RecoveredDUP" + GlobalDup;
+                DestLinksPorts[i].FromPort = "O" + i;
+            }
+            Links.Add(new NetLink
+            {
+                ToDev = "RecoveredDUP" + GlobalDup,
+                ToPort = "I0",
+                FromDev = srcDev,
+                FromPort = srcPort
+            });
+
+
+        }
+
+        private static bool CheckMultiLink(NetLink netLink, List<NetLink> Links)
+        {
+            string srcPort = netLink.FromPort;
+            string srcDev = netLink.FromDev;
+            int cnt = 0;
+            for (int i = 0; i < Links.Count; i++)
+            {
+                if (Links[i].FromDev == srcDev)
+                    if (Links[i].FromPort == srcPort)
+                    {
+                        cnt++;
+                    }
+            }
+            if (cnt > 1)
+                return true;
+            else
+                return false;
         }
         //Проверка на входящие линки на ветвитель
         //Хак для обхода модулей синхронизации
