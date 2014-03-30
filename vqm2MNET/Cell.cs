@@ -25,6 +25,7 @@ namespace vqm2MNET
 		public string clk;
 		public string datain;
 		public string regout;
+        public string sclr;
 
 		public Cell (CellType CType)
 		{

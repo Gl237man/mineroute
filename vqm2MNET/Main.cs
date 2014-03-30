@@ -24,7 +24,7 @@ namespace vqm2MNET
 
         static void Main(string[] args)
         {
-            string InFile = "test";
+            string InFile = "test3";
             if (args.Length == 1)
             {
                 InFile = args[0];
@@ -290,6 +290,7 @@ namespace vqm2MNET
                 AddOutCellLink(Links, module.Cells[i].cout, module.Cells[i].Name, "cout");
 
 				AddInCellLink(Links, module.Cells[i].clk, module.Cells[i].Name, "clk");
+                AddInCellLink(Links, module.Cells[i].sclr, module.Cells[i].Name, "sclr");
 				AddInCellLink(Links, module.Cells[i].datain, module.Cells[i].Name, "datain");
 				AddOutCellLink(Links, module.Cells[i].regout, module.Cells[i].Name, "regout");
             }
@@ -494,6 +495,7 @@ namespace vqm2MNET
 					Cell cell1 = new Cell(CellType.cycloneii_lcell_ff);
                     cell1.Name = Params[1];
                     cell1.clk = GetSubParamCell(Params[2], "clk");
+                    cell1.sclr = GetSubParamCell(Params[4], "sclr");
                     cell1.datain = GetSubParamCell(Params[3], "datain");
                     cell1.regout = GetSubParamCell(Params[4], "regout");
 
@@ -509,9 +511,11 @@ namespace vqm2MNET
                     cell.datac = GetSubParamCell(ParamS, "datac");
                     cell.datad = GetSubParamCell(ParamS, "datad");
                     cell.combout = GetSubParamCell(ParamS, "combout");
-                    cell.cin = GetSubParamCell(Params[2], "cin"); // Надо проверить на других тестовых примерах
+                    cell.cout = GetSubParamCell(ParamS, "cout");
+                    cell.cin = GetSubParamCell(ParamS, "cin"); // Надо проверить на других тестовых примерах
                     module.Cells.Add(cell);
                     break;
+
                 case "cycloneii_clkctrl":
 
                     for (int i = 0; i < module.Wires.Count; i++)
