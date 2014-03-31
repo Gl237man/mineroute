@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            string file = "test_D";
+            string file = "test3_D";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -38,7 +38,7 @@ namespace Mnetsynt2
                 BaseSize += 10;
                 Console.WriteLine("Размер:" + BaseSize.ToString());
             }
-            BaseSize += 20;
+            BaseSize += 30;
 
             Console.WriteLine("Размещение ОК");
 
@@ -514,7 +514,7 @@ namespace Mnetsynt2
             {
                 for (int y = -1; y < mh + 1; y++)
                 {
-                    PlaceMask[mx + x, my + y] = "X";
+                        PlaceMask[mx + x, my + y] = "X";
                 }
             }
         }
