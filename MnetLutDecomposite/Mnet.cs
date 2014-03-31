@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -161,6 +161,16 @@ namespace MnetLutDecomposite
             }
 
             return ostr;
+        }
+
+        internal Node FindNode(string p)
+        {
+            for (int i = 0; i < nodes.Count; i++)
+            {
+                if (nodes[i].NodeName == p)
+                    return nodes[i];
+            }
+            return null;
         }
     }
 }
