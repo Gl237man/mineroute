@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -66,19 +66,22 @@ namespace RouteUtils
 
             ostr += "size:" + SizeX.ToString() + ":" + SizeY.ToString() + "\r\n";
             ostr += "layers:" + SizeZ.ToString() + "\r\n";
+
+            StringBuilder SB = new StringBuilder();
+            
             for (int i = 0; i < SizeZ; i++)
             {
-                ostr += "layer:" + i.ToString() + "\r\n";
+                SB.Append("layer:" + i.ToString() + "\r\n");
                 for (int j = 0; j < SizeY; j++)
                 {
                     for (int k = 0; k < SizeX; k++)
                     {
-                        ostr += DataMatrix[k, SizeY - j - 1, i];
+                        SB.Append(DataMatrix[k, SizeY - j - 1, i]);
                     }
-                    ostr += "\r\n";
+                    SB.Append("\r\n");
                 }
             }
-
+            ostr += SB.ToString();
             //ostr = ostr.Replace("0", " ");
 
             //DrawImg();
