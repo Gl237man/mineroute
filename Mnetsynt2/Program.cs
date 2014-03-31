@@ -126,7 +126,7 @@ namespace Mnetsynt2
                 Console.WriteLine("Разведено в текущем слое:" + WireNum);
 
             }
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, 40);
+            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, PlaceLayer + 10);
 
             //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
@@ -221,34 +221,161 @@ namespace Mnetsynt2
                     }
                 }
 
+                //Обрезка
+                Console.WriteLine("Обрезка рабочей Облости");
+                RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
+                Console.WriteLine("Экспорт");
+                OutNodeO.export("test_D.binhl");
+        }
 
-                /*
-                //PlaceDebuginfo
-                int layer = 0;
+        private static RouteUtils.Node CutOutputNode(int PlaceLayer, int BaseSize, RouteUtils.Node OutNode)
+        {
+            //find xs
+            int xs = 0;
+            int ys = 0;
+            int zs = 0;
+            for (int i = 1; i < BaseSize; i++)
+            {
+                int pn = 0;
+                for (int y = 0; y < BaseSize; y++)
+                {
+                    for (int z = 0; z < (PlaceLayer + 10); z++)
+                    {
+                        if (OutNode.DataMatrix[i, y, z] != "0")
+                        {
+                            pn++;
+                        }
+                    }
+                }
+                if (pn != 0)
+                {
+                    xs = i - 1;
+                    break;
+                }
+            }
+
+            for (int i = 1; i < BaseSize; i++)
+            {
+                int pn = 0;
+                for (int x = 0; x < BaseSize; x++)
+                {
+                    for (int z = 0; z < (PlaceLayer + 10); z++)
+                    {
+                        if (OutNode.DataMatrix[x, i, z] != "0")
+                        {
+                            pn++;
+                        }
+                    }
+                }
+                if (pn != 0)
+                {
+                    ys = i - 1;
+                    break;
+                }
+            }
+
+            for (int i = 1; i < (PlaceLayer + 10); i++)
+            {
+                int pn = 0;
                 for (int x = 0; x < BaseSize; x++)
                 {
                     for (int y = 0; y < BaseSize; y++)
                     {
-                        if (WireMask[x, y] == "X")
-                            OutNode.DataMatrix[x, y, layer] = "k";
+                        if (OutNode.DataMatrix[x, y, i] != "0")
+                        {
+                            pn++;
+                        }
                     }
                 }
-
-                for (int i = 0; i < WPX.Count; i++)
+                if (pn != 0)
                 {
-                    OutNode.DataMatrix[WPX[i], WPY[i], layer] = "w";
+                    zs = i - 1;
+                    break;
                 }
-                */
-                /*
-                for (int j = 0; j < Cpoints.Count; j++)
-                {
-                    OutNode.DataMatrix[Cpoints[j].BaseX, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX - 1, Cpoints[j].BaseY, layer] = "k";
-                    OutNode.DataMatrix[Cpoints[j].BaseX + 1, Cpoints[j].BaseY, layer] = "k";
-                }
-                 */
+            }
 
-                OutNode.export("test_D.binhl");
+            int xe = 0;
+            int ye = 0;
+            int ze = 0;
+            for (int i = 1; i < BaseSize; i++)
+            {
+                int qi = BaseSize - 1 - i;
+                int pn = 0;
+                for (int y = 0; y < BaseSize; y++)
+                {
+                    for (int z = 0; z < (PlaceLayer + 10); z++)
+                    {
+                        if (OutNode.DataMatrix[qi, y, z] != "0")
+                        {
+                            pn++;
+                        }
+                    }
+                }
+                if (pn != 0)
+                {
+                    xe = qi + 2;
+                    break;
+                }
+            }
+
+            for (int i = 1; i < BaseSize; i++)
+            {
+                int qi = BaseSize - 1 - i;
+                int pn = 0;
+                for (int x = 0; x < BaseSize; x++)
+                {
+                    for (int z = 0; z < (PlaceLayer + 10); z++)
+                    {
+                        if (OutNode.DataMatrix[x, qi, z] != "0")
+                        {
+                            pn++;
+                        }
+                    }
+                }
+                if (pn != 0)
+                {
+                    ye = qi + 2;
+                    break;
+                }
+            }
+
+            for (int i = 1; i < (PlaceLayer + 10); i++)
+            {
+                int qi = (PlaceLayer + 10) - 1 - i;
+
+                int pn = 0;
+                for (int x = 0; x < BaseSize; x++)
+                {
+                    for (int y = 0; y < BaseSize; y++)
+                    {
+                        if (OutNode.DataMatrix[x, y, qi] != "0")
+                        {
+                            pn++;
+                        }
+                    }
+                }
+                if (pn != 0)
+                {
+                    ze = qi + 2;
+                    break;
+                }
+            }
+
+            RouteUtils.Node OutNodeO = new RouteUtils.Node("OUT", xe - xs, ye - ys, ze - zs);
+
+            for (int x = xs; x < xe; x++)
+            {
+                for (int y = ys; y < ye; y++)
+                {
+                    for (int z = zs; z < ze; z++)
+                    {
+                        OutNodeO.DataMatrix[x - xs, y - ys, z - zs] = OutNode.DataMatrix[x, y, z];
+                    }
+                }
+            }
+
+            
+            return OutNodeO;
         }
 
         private static void SortWire(List<RouteUtils.Cpoint> Cpoints, Mnet MainNetwork,int BW)
