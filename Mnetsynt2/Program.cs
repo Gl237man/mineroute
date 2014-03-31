@@ -9,7 +9,12 @@ namespace Mnetsynt2
     class Program
     {
 
-        static int OptimiseDeep = 3;
+        static int OptimiseDeep = 1;
+        /// <summary>
+        /// Разряженность
+        /// </summary>
+        static int dolled = 5;
+
 
         static void Main(string[] args)
         {
@@ -17,6 +22,8 @@ namespace Mnetsynt2
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
+            Console.WriteLine("Оптимизация распалажения");
+            SortOptimize(MainNetwork);
             //ReducteDUP(MainNetwork);
             //loadnodes
             Console.WriteLine("Загрузка темплейтов");
@@ -72,6 +79,8 @@ namespace Mnetsynt2
 
                 }
             }
+
+            SortWire(Cpoints,MainNetwork,BaseSize);
 
             int CurrentWireLayer = 1;
             int CurrentRealLayer = 0;
@@ -240,19 +249,30 @@ namespace Mnetsynt2
                  */
 
                 OutNode.export("test_D.binhl");
-
-
-            /*
-            List<Node> DupNodes = new List<Node>();
-            RemoveDUPNodes(MainNetwork, DupNodes);
-            RemoveDUOWires(MainNetwork, DupNodes);
-
-            //Sorting Nodes;
-            SortOptimize(MainNetwork);
-            */
-
         }
 
+        private static void SortWire(List<RouteUtils.Cpoint> Cpoints, Mnet MainNetwork,int BW)
+        {
+            int Moves = 1;
+            while (Moves > 0)
+                Moves = 0;
+                for (int i = 1; i < MainNetwork.wires.Count; i++)
+                {
+                    RouteUtils.Cpoint CA = FindCpoint(MainNetwork.wires[i].SrcName + "-" + MainNetwork.wires[i].SrcPort, Cpoints);
+                    RouteUtils.Cpoint CB = FindCpoint(MainNetwork.wires[i - 1].SrcName + "-" + MainNetwork.wires[i - 1].SrcPort, Cpoints);
+                    int ka = CA.BaseX + CA.BaseY * BW;
+                    int kb = CB.BaseX + CB.BaseY * BW;
+                    if (ka < kb)
+                    {
+                        Wire W = MainNetwork.wires[i];
+                        MainNetwork.wires[i] = MainNetwork.wires[i - 1];
+                        MainNetwork.wires[i - 1] = W;
+                    }
+
+                }
+        }
+
+       
         private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask, out List<int> WPX, out List<int> WPY)
         {
             //WireMask = new string[BaseSize, BaseSize];
@@ -460,9 +480,9 @@ namespace Mnetsynt2
                     placed = true;
                 }
 
-                for (int x = lastX; x < BaseSize; x++)
+                for (int x = lastX; x < BaseSize; x += dolled)
                 {
-                    for (int y = 1; y < BaseSize; y++)
+                    for (int y = 1; y < BaseSize; y += dolled)
                     {
                         if (!placed)
                         {
@@ -567,19 +587,22 @@ namespace Mnetsynt2
         {
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i].NodeType == "OUTPort")
-                    return list.Count + 1;
                 if (list[i].NodeName == p)
+                {
+                    //if (list[i].NodeType == "OUTPort")
+                    //    return list.Count + 1;
                     return i;
+                }
+                    
             }
             return 0;
         }
 
         private static void SortOptimize(Mnet MainNetwork)
         {
-            for (int i = 0; i < MainNetwork.nodes.Count * OptimiseDeep; i++)
+            for (int i = 0; i < MainNetwork.nodes.Count * MainNetwork.nodes.Count * OptimiseDeep; i++)
             {
-                for (int j = 0; j < (MainNetwork.nodes.Count - 1); j++)
+                for (int j = 2; j < (MainNetwork.nodes.Count - 1); j++)
                 {
                     if (MainNetwork.nodes[j].NodeType != "INPort" && MainNetwork.nodes[j].NodeType != "OUTPort")
                     {
