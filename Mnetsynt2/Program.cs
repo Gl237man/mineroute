@@ -91,7 +91,7 @@ namespace Mnetsynt2
 
                 WireNum = 0;
 
-                string[,] WireMask = new string[BaseSize, BaseSize];
+                char[,] WireMask = new char[BaseSize, BaseSize];
                 for (int i = 0; i < MainNetwork.wires.Count; i++)
                 {
 
@@ -253,7 +253,7 @@ namespace Mnetsynt2
 
         }
 
-        private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, string[,] WireMask, out List<int> WPX, out List<int> WPY)
+        private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask, out List<int> WPX, out List<int> WPY)
         {
             //WireMask = new string[BaseSize, BaseSize];
 
@@ -360,7 +360,7 @@ namespace Mnetsynt2
             return true;
         }
 
-        private static int[,] CalcAstar(int BaseSize, string[,] WireMask, RouteUtils.Cpoint SP)
+        private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP)
         {
             int[,] AStarTable = new int[BaseSize, BaseSize];
             AStarTable[SP.BaseX, SP.BaseY] = 1;
@@ -376,22 +376,22 @@ namespace Mnetsynt2
                     {
                         if (AStarTable[x, y] != 0)
                         {
-                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != "X")
+                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != 'X')
                             {
                                 AStarTable[x + 1, y] = AStarTable[x, y] + 1;
                                 aded++;
                             }
-                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != "X")
+                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != 'X')
                             {
                                 AStarTable[x - 1, y] = AStarTable[x, y] + 1;
                                 aded++;
                             }
-                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != "X")
+                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != 'X')
                             {
                                 AStarTable[x, y - 1] = AStarTable[x, y] + 1;
                                 aded++;
                             }
-                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != "X")
+                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != 'X')
                             {
                                 AStarTable[x, y + 1] = AStarTable[x, y] + 1;
                                 aded++;
@@ -404,15 +404,15 @@ namespace Mnetsynt2
             return AStarTable;
         }
 
-        private static void UnmaskCpoint(string[,] WireMask, RouteUtils.Cpoint SP)
+        private static void UnmaskCpoint(char[,] WireMask, RouteUtils.Cpoint SP)
         {
-            WireMask[SP.BaseX, SP.BaseY] = "";
-            WireMask[SP.BaseX - 1, SP.BaseY] = "";
-            WireMask[SP.BaseX + 1, SP.BaseY] = "";
+            WireMask[SP.BaseX, SP.BaseY] = ' ';
+            WireMask[SP.BaseX - 1, SP.BaseY] = ' ';
+            WireMask[SP.BaseX + 1, SP.BaseY] = ' ';
 
-            WireMask[SP.BaseX, SP.BaseY + 1] = "";
-            WireMask[SP.BaseX - 1, SP.BaseY + 1] = "";
-            WireMask[SP.BaseX + 1, SP.BaseY + 1] = "";
+            WireMask[SP.BaseX, SP.BaseY + 1] = ' ';
+            WireMask[SP.BaseX - 1, SP.BaseY + 1] = ' ';
+            WireMask[SP.BaseX + 1, SP.BaseY + 1] = ' ';
         }
 
         private static RouteUtils.Cpoint FindCpoint(string p,List<RouteUtils.Cpoint> CPnt)
@@ -427,7 +427,7 @@ namespace Mnetsynt2
 
         private static bool TryPlace(Mnet MainNetwork, RouteUtils.Node[] mcNodes, int PlaceLayer, int BaseSize)
         {
-            string[,] PlaceMask = new string[BaseSize, BaseSize];
+            char[,] PlaceMask = new char[BaseSize, BaseSize];
 
             //PlacePorts
             int potrtx = 1;
@@ -450,6 +450,8 @@ namespace Mnetsynt2
                 }
             }
 
+            int lastY = 1;
+            int lastX = 1;
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
             {
                 bool placed = false;
@@ -457,7 +459,8 @@ namespace Mnetsynt2
                 {
                     placed = true;
                 }
-                for (int x = 1; x < BaseSize; x++)
+
+                for (int x = lastX; x < BaseSize; x++)
                 {
                     for (int y = 1; y < BaseSize; y++)
                     {
@@ -476,17 +479,20 @@ namespace Mnetsynt2
                             {
                                 DrawAtMask(PlaceMask, mx, my, mw, mh + 3);
                                 placed = true;
+                                lastX = x;
+                                lastY = y;
                             }
                         }
                     }
                 }
+
                 if (!placed)
                     return false;
             }
             return true;
         }
 
-        private static bool CanPlace(string[,] PlaceMask, int mx, int my, int mw, int mh)
+        private static bool CanPlace(char[,] PlaceMask, int mx, int my, int mw, int mh)
         {
             mw++;
             mh++;
@@ -497,7 +503,7 @@ namespace Mnetsynt2
                 {
                     try
                     {
-                        if (PlaceMask[mx + x, my + y] == "X") return false;
+                        if (PlaceMask[mx + x, my + y] == 'X') return false;
                     }
                     catch
                     {
@@ -508,13 +514,13 @@ namespace Mnetsynt2
             return true;
         }
 
-        private static void DrawAtMask(string[,] PlaceMask, int mx, int my, int mw, int mh)
+        private static void DrawAtMask(char[,] PlaceMask, int mx, int my, int mw, int mh)
         {
             for (int x = -1; x < mw + 1; x++)
             {
                 for (int y = -1; y < mh + 1; y++)
                 {
-                        PlaceMask[mx + x, my + y] = "X";
+                        PlaceMask[mx + x, my + y] = 'X';
                 }
             }
         }
