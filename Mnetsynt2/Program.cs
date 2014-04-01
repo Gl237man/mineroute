@@ -94,11 +94,13 @@ namespace Mnetsynt2
                 CurrentWireLayer = j * 2 + 1;
                 if (j > 4) CurrentWireLayer += 5;
                 if (j > 9) CurrentWireLayer += 5;
+                if (j > 14) CurrentWireLayer += 5;
 
                 CurrentRealLayer = PlaceLayer - 1 - j * 2;
 
                 if (j > 4) CurrentRealLayer -= 2;
                 if (j > 9) CurrentRealLayer -= 2;
+                if (j > 14) CurrentRealLayer -= 2;
 
                 WireNum = 0;
 
@@ -157,7 +159,7 @@ namespace Mnetsynt2
 
                 if (Cpoints[i].usedLayer >= 30-8)
                 {
-                    Cpoints[i].usedLayer -= 8;
+                    Cpoints[i].usedLayer -= 3;
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (31 - 8)] = "W";
                     if (Cpoints[i].indat)
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (30 - 8)] = "^";
@@ -170,15 +172,36 @@ namespace Mnetsynt2
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3, PlaceLayer - (30 - 8)] = "#";
                 }
 
+                if (Cpoints[i].usedLayer >= 22 + 12)
+                {
+                    Cpoints[i].usedLayer -= 3;
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3 + 12+3, PlaceLayer - (31 - 8+12)] = "W";
+                    if (Cpoints[i].indat)
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3 +12+3, PlaceLayer - (30 - 8+12)] = "^";
+                    else
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3+12+3, PlaceLayer - (30 - 8+12)] = "v";
+
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3+12+3, PlaceLayer - (31 - 8+12)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3+12+3, PlaceLayer - (30 - 8+12)] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3+12+3, PlaceLayer - (31 - 8+12)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3+12+3, PlaceLayer - (30 - 8+12)] = "#";
+                }
 
 
                 for (int j = 0; j < Cpoints[i].usedLayer; j++)
                 {
-                    if (j > (30-8))
+                    if (j > (30 - 8) && j <= (30 - 8 + 12))
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1] = "w";
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1 + 1] = "#";
                     }
+
+                    if (j > (30 - 8 + 12))
+                    {
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 - 5 + 3, PlaceLayer - j - 1] = "w";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 - 5 + 3, PlaceLayer - j - 1 + 1] = "#";
+                    }
+
                     if (j <= 10)
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1] = "w";
