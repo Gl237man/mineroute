@@ -9,16 +9,16 @@ namespace Mnetsynt2
     class Program
     {
 
-        static int OptimiseDeep = 1;
+        static int OptimiseDeep = 25;
         /// <summary>
         /// Разряженность
         /// </summary>
-        static int dolled = 5;
+        static int dolled = 1;
 
 
         static void Main(string[] args)
         {
-            string file = "test3_D";
+            string file = "test4";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -34,7 +34,7 @@ namespace Mnetsynt2
             }
             Console.WriteLine("OK");
             //Place nodes
-            int PlaceLayer = 30;
+            int PlaceLayer = 60;
             int PortNum = CalcPortNum(MainNetwork);
 
             int BaseSize = 5 * PortNum;
@@ -45,7 +45,7 @@ namespace Mnetsynt2
                 BaseSize += 10;
                 Console.WriteLine("Размер:" + BaseSize.ToString());
             }
-            BaseSize += 30;
+            BaseSize += PlaceLayer;
 
             Console.WriteLine("Размещение ОК");
 
@@ -88,15 +88,17 @@ namespace Mnetsynt2
             RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
             //Draw wires in layer
 
-            for (int j = 0; j < 12; j++)
+            for (int j = 0; j < 24; j++)
             {
 
                 CurrentWireLayer = j * 2 + 1;
                 if (j > 4) CurrentWireLayer += 5;
+                if (j > 9) CurrentWireLayer += 5;
 
                 CurrentRealLayer = PlaceLayer - 1 - j * 2;
 
                 if (j > 4) CurrentRealLayer -= 2;
+                if (j > 9) CurrentRealLayer -= 2;
 
                 WireNum = 0;
 
@@ -152,14 +154,37 @@ namespace Mnetsynt2
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 11] = "W";
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 10] = "#";
                 }
+
+                if (Cpoints[i].usedLayer >= 30-8)
+                {
+                    Cpoints[i].usedLayer -= 8;
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (31 - 8)] = "W";
+                    if (Cpoints[i].indat)
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (30 - 8)] = "^";
+                    else
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (30 - 8)] = "v";
+
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3, PlaceLayer - (31 - 8)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3, PlaceLayer - (30 - 8)] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3, PlaceLayer - (31 - 8)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3, PlaceLayer - (30 - 8)] = "#";
+                }
+
+
+
                 for (int j = 0; j < Cpoints[i].usedLayer; j++)
                 {
+                    if (j > (30-8))
+                    {
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1] = "w";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1 + 1] = "#";
+                    }
                     if (j <= 10)
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1] = "w";
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1 + 1] = "#";
                     }
-                    else
+                    if (j > 10 && j <= (30-8))
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 1] = "w";
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 1 + 1] = "#";
@@ -727,7 +752,7 @@ namespace Mnetsynt2
 
         private static void SortOptimize(Mnet MainNetwork)
         {
-            for (int i = 0; i < MainNetwork.nodes.Count * MainNetwork.nodes.Count * OptimiseDeep; i++)
+            for (int i = 0; i < MainNetwork.nodes.Count * OptimiseDeep; i++)
             {
                 for (int j = 2; j < (MainNetwork.nodes.Count - 1); j++)
                 {

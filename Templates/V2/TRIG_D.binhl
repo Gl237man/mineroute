@@ -3,7 +3,7 @@ in:3
 out:1
 in:datain:1:18
 in:clk:6:18
-in:sclr:0:14
+in:sclr:0:5
 out:regout:6:1
 size:8:19
 layers:7
