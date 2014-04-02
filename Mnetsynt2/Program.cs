@@ -9,16 +9,19 @@ namespace Mnetsynt2
     class Program
     {
 
-        static int OptimiseDeep = 25;
+        static int OptimiseDeep = 99;
         /// <summary>
         /// Разряженность
         /// </summary>
-        static int dolled = 1;
+        static int dolled = 3;
 
+        static bool WireOpt = true;
+
+        static bool TypeSort = false;
 
         static void Main(string[] args)
         {
-            string file = "test4";
+            string file = "test_D";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
@@ -87,7 +90,7 @@ namespace Mnetsynt2
             int WireNum = 0;
             RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
             //Draw wires in layer
-
+            int TotalLayers = 0;
             for (int j = 0; j < 24; j++)
             {
 
@@ -105,31 +108,84 @@ namespace Mnetsynt2
                 WireNum = 0;
 
                 char[,] WireMask = new char[BaseSize, BaseSize];
+
+                
                 for (int i = 0; i < MainNetwork.wires.Count; i++)
                 {
-
+                    
                     List<int> WPX;
                     List<int> WPY;
-                    if (!MainNetwork.wires[i].Placed)
+
+                    if (WireOpt)
                     {
-                        PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
-                        if (MainNetwork.wires[i].Placed)
+                        int Twire = 0;
+                        int mink = 999999;
+                        int bestN = 0;
+                        for (int k = 0; k < MainNetwork.wires.Count; k++)
                         {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            WireNum++;
+                            if (!MainNetwork.wires[k].Placed)
+                            {
+                                int bw = FindBestWireToRoute(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, k, MCWires, WireMask);
+                                if (mink > bw && bw != 0)
+                                {
+                                    mink = bw;
+                                    bestN = k;
+                                }
+                            }
+                        }
+                        if (!MainNetwork.wires[bestN].Placed)
+                        {
+                            PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, bestN, MCWires, WireMask, out WPX, out WPY);
+                            Twire = bestN;
+                            if (MainNetwork.wires[bestN].Placed)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                WireNum++;
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+                            Console.WriteLine(MainNetwork.wires[bestN].ToString());
                         }
                         else
                         {
-                            Console.ForegroundColor = ConsoleColor.White;
+                            i = MainNetwork.wires.Count;
                         }
+                       
+                    }
+                    else
+                    {
+                        if (!MainNetwork.wires[i].Placed)
+                        {
+                           
 
-                        Console.WriteLine(MainNetwork.wires[i].ToString());
 
+                            PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
+                           
+
+
+
+                            if (MainNetwork.wires[i].Placed)
+                            {
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                WireNum++;
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.White;
+                            }
+
+                            Console.WriteLine(MainNetwork.wires[i].ToString());
+
+                        }
                     }
                 }
                 Console.WriteLine("Разведено в текущем слое:" + WireNum);
-
+                if (WireNum > 0) TotalLayers++;
             }
+            Console.WriteLine("Всего Слоев:" + TotalLayers);
+
             RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, PlaceLayer + 10);
 
             //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
@@ -274,6 +330,34 @@ namespace Mnetsynt2
                 RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
                 Console.WriteLine("Экспорт");
                 OutNodeO.export("test_D.binhl");
+        }
+
+        private static int FindBestWireToRoute(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask)
+        {
+            for (int j = 0; j < Cpoints.Count; j++)
+            {
+                if (Cpoints[j].usedLayer == 0)
+                    DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
+            }
+
+            Wire W = MainNetwork.wires[WireNum];
+
+            RouteUtils.Wire MCW = new RouteUtils.Wire(W.SrcName + "-" + W.SrcPort, W.DistName + "-" + W.DistPort);
+            //UnmaskStartEndPoint
+            RouteUtils.Cpoint SP = FindCpoint(MCW.StartName, Cpoints);
+            RouteUtils.Cpoint EP = FindCpoint(MCW.EndName, Cpoints);
+
+            SP.BaseY += CurrentWireLayer;
+            EP.BaseY += CurrentWireLayer;
+
+            UnmaskCpoint(WireMask, SP);
+            UnmaskCpoint(WireMask, EP);
+            //CalcAstar
+            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP);
+            SP.BaseY -= CurrentWireLayer;
+            EP.BaseY -= CurrentWireLayer;
+
+            return AStarTable[EP.BaseX, EP.BaseY + CurrentWireLayer];
         }
 
         private static RouteUtils.Node CutOutputNode(int PlaceLayer, int BaseSize, RouteUtils.Node OutNode)
@@ -783,7 +867,24 @@ namespace Mnetsynt2
                     {
                         List<Wire> Wlist1 = FindAllWiresTo(MainNetwork.wires, MainNetwork.nodes[j]);
                         //List<Wire> Wlist2 = FindAllWiresTo(MainNetwork.wires, MainNetwork.nodes[j+1]);
-                        int ka = CalcWireLens(Wlist1, MainNetwork);
+                        int ka = 0;
+                        if (TypeSort)
+                        {
+                            int wa = CalcTypeWeight(MainNetwork.nodes[j]);
+                            int wb = CalcTypeWeight(MainNetwork.nodes[j-1]);
+                            if (wa > wb)
+                            {
+                                ka = 1;
+                            }
+                            else
+                            {
+                                ka = 0;
+                            }
+                        }
+                        else
+                        {
+                            ka = CalcWireLens(Wlist1, MainNetwork);
+                        }
                         //int kb = CalcWireLens(Wlist2, MainNetwork);
                         if (ka < 0)
                         {
@@ -807,6 +908,25 @@ namespace Mnetsynt2
                         }
                     }
                 }
+            }
+        }
+
+        private static int CalcTypeWeight(Node node)
+        {
+            if (node.NodeType.StartsWith("DUP")) return 1;
+
+            switch (node.NodeType)
+            {
+                case "TRIG_D":
+                    return 5;
+                case "AND":
+                    return 3;
+                case "NOT":
+                    return 2;
+                case "OR":
+                    return 4;
+                default:
+                    return 0;
             }
         }
 
