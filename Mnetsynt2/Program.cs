@@ -13,20 +13,23 @@ namespace Mnetsynt2
         /// <summary>
         /// Разряженность
         /// </summary>
-        static int dolled = 3;
+        static int dolled = 1;
 
         static bool WireOpt = true;
-
         static bool TypeSort = false;
+        static bool SortObjectOpt = false;
 
         static void Main(string[] args)
         {
-            string file = "test_D";
+            string file = "test3_D";
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");
-            Console.WriteLine("Оптимизация распалажения");
-            SortOptimize(MainNetwork);
+            if (SortObjectOpt)
+            {
+                Console.WriteLine("Оптимизация распалажения");
+                SortOptimize(MainNetwork);
+            }
             //ReducteDUP(MainNetwork);
             //loadnodes
             Console.WriteLine("Загрузка темплейтов");
@@ -109,10 +112,10 @@ namespace Mnetsynt2
 
                 char[,] WireMask = new char[BaseSize, BaseSize];
 
-                
+
                 for (int i = 0; i < MainNetwork.wires.Count; i++)
                 {
-                    
+
                     List<int> WPX;
                     List<int> WPY;
 
@@ -141,28 +144,30 @@ namespace Mnetsynt2
                             {
                                 Console.ForegroundColor = ConsoleColor.Green;
                                 WireNum++;
+                                Console.WriteLine(MainNetwork.wires[bestN].ToString());
                             }
                             else
                             {
+                                i = MainNetwork.wires.Count;
                                 Console.ForegroundColor = ConsoleColor.White;
                             }
-                            Console.WriteLine(MainNetwork.wires[bestN].ToString());
+
                         }
                         else
                         {
                             i = MainNetwork.wires.Count;
                         }
-                       
+
                     }
                     else
                     {
                         if (!MainNetwork.wires[i].Placed)
                         {
-                           
+
 
 
                             PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
-                           
+
 
 
 
@@ -182,7 +187,14 @@ namespace Mnetsynt2
                     }
                 }
                 Console.WriteLine("Разведено в текущем слое:" + WireNum);
-                if (WireNum > 0) TotalLayers++;
+                if (WireNum > 0)
+                {
+                    TotalLayers++;
+                }
+                else
+                {
+                    break;
+                }
             }
             Console.WriteLine("Всего Слоев:" + TotalLayers);
 
@@ -353,7 +365,7 @@ namespace Mnetsynt2
             UnmaskCpoint(WireMask, SP);
             UnmaskCpoint(WireMask, EP);
             //CalcAstar
-            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP);
+            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP, EP);
             SP.BaseY -= CurrentWireLayer;
             EP.BaseY -= CurrentWireLayer;
 
@@ -556,7 +568,7 @@ namespace Mnetsynt2
             UnmaskCpoint(WireMask, SP);
             UnmaskCpoint(WireMask, EP);
             //CalcAstar
-            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP);
+            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP, EP);
 
             //DrawWire
 
@@ -639,7 +651,7 @@ namespace Mnetsynt2
             return true;
         }
 
-        private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP)
+        private static int[,] CalcAstarOld(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP)
         {
             int[,] AStarTable = new int[BaseSize, BaseSize];
             AStarTable[SP.BaseX, SP.BaseY] = 1;
@@ -674,6 +686,75 @@ namespace Mnetsynt2
                             {
                                 AStarTable[x, y + 1] = AStarTable[x, y] + 1;
                                 aded++;
+                            }
+                        }
+                    }
+                }
+                if (aded == 0) Calcing = false;
+            }
+            return AStarTable;
+        }
+
+        private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP, RouteUtils.Cpoint EP)
+        {
+            int[,] AStarTable = new int[BaseSize, BaseSize];
+            AStarTable[SP.BaseX, SP.BaseY] = 1;
+            List<int> lsx = new List<int>();
+            List<int> lsy = new List<int>();
+
+            lsx.Add(SP.BaseX);
+            lsy.Add(SP.BaseY);
+
+            bool Calcing = true;
+
+            while (Calcing)
+            {
+                int[] csx = lsx.ToArray();
+                int[] csy = lsy.ToArray();
+
+                lsx = new List<int>();
+                lsy = new List<int>();
+
+                int aded = 0;
+                for (int i = 0; i < csx.Length; i++)
+                {
+                    int x = csx[i];
+                    int y = csy[i];
+
+                    if (x == EP.BaseX && y == EP.BaseY)
+                        Calcing = false;
+
+                    if (x > 1 && x < BaseSize - 2 && y > 1 && y < BaseSize - 2)
+                    {
+                        if (AStarTable[x, y] != 0)
+                        {
+                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != 'X')
+                            {
+                                AStarTable[x + 1, y] = AStarTable[x, y] + 1;
+                                aded++;
+                                lsx.Add(x + 1);
+                                lsy.Add(y);
+                            }
+                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != 'X')
+                            {
+                                AStarTable[x - 1, y] = AStarTable[x, y] + 1;
+                                aded++;
+                                lsx.Add(x - 1);
+                                lsy.Add(y);
+                            }
+                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != 'X')
+                            {
+                                AStarTable[x, y - 1] = AStarTable[x, y] + 1;
+                                aded++;
+                                lsx.Add(x);
+                                lsy.Add(y - 1);
+                            }
+                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != 'X')
+                            {
+                                AStarTable[x, y + 1] = AStarTable[x, y] + 1;
+                                aded++;
+                                lsx.Add(x);
+                                lsy.Add(y + 1);
                             }
                         }
                     }
