@@ -11,6 +11,34 @@ namespace MnetLutDecomposite
         public List<Node> nodes;
         public List<Wire> wires;
 
+        public void ReadMnetFileBl(string FileName, BinLib.Blib BL)
+        {
+            nodes = new List<Node>();
+            wires = new List<Wire>();
+            string[] tstr = BL.ReadAllLines(FileName);
+
+            for (int i = 0; i < tstr.Length; i++)
+            {
+                tstr[i] = tstr[i].Replace("cin", "datac");
+            }
+
+            for (int i = 0; i < tstr.Length; i++)
+            {
+                if (tstr[i].Split(':')[0] == "NODE")
+                {
+                    Node N = new Node();
+                    N.ReadFromString(tstr[i]);
+                    nodes.Add(N);
+                }
+                if (tstr[i].Split(':')[0] == "WIRE")
+                {
+                    Wire W = new Wire();
+                    W.ReadFromString(tstr[i]);
+                    wires.Add(W);
+                }
+            }
+        }
+
         public void ReadMnetFile(string FileName)
         {
             nodes = new List<Node>();
