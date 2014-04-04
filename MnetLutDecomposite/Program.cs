@@ -29,12 +29,16 @@ namespace MnetLutDecomposite
             List<Cpoint> PortsRep = new List<Cpoint>();
             List<Node> Luts = MainNet.GetLuts();
             List<Mnet> LutsMnet = new List<Mnet>();
+            BinLib.Blib Bl = new BinLib.Blib();
+            Bl.Load("MNETLib.BinLib");
+            //"MNETLib.BinLib"
+
             for (int i = 0; i < Luts.Count; i++)
             {
                 Mnet Lnet = new Mnet();
                 Luts[i].HaveCout = СheckCout(Luts[i], MainNet.wires);
 
-                Lnet.ReadMnetFile(@"MNETLib\" + Luts[i].GetLutKey().Substring(0, 1) + @"\lut_" + Luts[i].GetLutKey() + ".MNET");
+                Lnet.ReadMnetFileBl(@"lut_" + Luts[i].GetLutKey() + ".MNET",Bl);
                 if (!Luts[i].HaveCout)
                 {
                     LutsMnet.Add(Lnet);
@@ -42,7 +46,7 @@ namespace MnetLutDecomposite
                 else
                 {
                     Mnet LnetC = new Mnet();
-                    LnetC.ReadMnetFile(@"MNETLib\OptCo" + @"\lutc_" + Luts[i].GetLutKey().Substring(2 , 2) + ".MNET");
+                    LnetC.ReadMnetFileBl(@"lutc_" + Luts[i].GetLutKey().Substring(2, 2) + ".MNET",Bl);
                     Mnet Combined = MnetComb(Lnet, LnetC);
                     LutsMnet.Add(Combined);
                 }
