@@ -21,6 +21,7 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
+
             string file = "test4";
 
             Mnet MainNetwork = new Mnet();
@@ -225,60 +226,59 @@ namespace Mnetsynt2
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 10] = "#";
                 }
 
-                if (Cpoints[i].usedLayer >= 30-8)
+                if (Cpoints[i].usedLayer >= 22)
                 {
                     Cpoints[i].usedLayer -= 3;
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (31 - 8)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 23] = "W";
                     if (Cpoints[i].indat)
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (30 - 8)] = "^";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 23] = "^";
                     else
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3, PlaceLayer - (30 - 8)] = "v";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 23] = "v";
 
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3, PlaceLayer - (31 - 8)] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3, PlaceLayer - (30 - 8)] = "#";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3, PlaceLayer - (31 - 8)] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3, PlaceLayer - (30 - 8)] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 28, PlaceLayer - 23] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 28, PlaceLayer - 22] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 29, PlaceLayer - 23] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 29, PlaceLayer - 22] = "#";
                 }
 
-                if (Cpoints[i].usedLayer >= 22 + 12)
+                if (Cpoints[i].usedLayer >= 34)
                 {
                     Cpoints[i].usedLayer -= 3;
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3 + 12+3, PlaceLayer - (31 - 8+12)] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 35] = "W";
                     if (Cpoints[i].indat)
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3 +12+3, PlaceLayer - (30 - 8+12)] = "^";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "^";
                     else
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 32 - 8 + 3+12+3, PlaceLayer - (30 - 8+12)] = "v";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "v";
 
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3+12+3, PlaceLayer - (31 - 8+12)] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (33 - 8) + 3+12+3, PlaceLayer - (30 - 8+12)] = "#";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3+12+3, PlaceLayer - (31 - 8+12)] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + (34 - 8) + 3+12+3, PlaceLayer - (30 - 8+12)] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 43, PlaceLayer - 35] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 43, PlaceLayer - 34] = "#";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 44, PlaceLayer - 35] = "W";
+                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 44, PlaceLayer - 34] = "#";
                 }
 
 
                 for (int j = 0; j < Cpoints[i].usedLayer; j++)
                 {
-                    if (j > (30 - 8) && j <= (30 - 8 + 12))
-                    {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 -5, PlaceLayer - j - 1 + 1] = "#";
-                    }
-
-                    if (j > (30 - 8 + 12))
-                    {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 - 5 + 3, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 12 - 5 + 3, PlaceLayer - j - 1 + 1] = "#";
-                    }
-
                     if (j <= 10)
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1 + 1] = "#";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 2] = "#";
                     }
-                    if (j > 10 && j <= (30-8))
+                    if (j > 10 && j <= 22)
                     {
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 1 + 1] = "#";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 2] = "#";
+                    }
+                    if (j > 22 && j <= 34)
+                    {
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 7, PlaceLayer - j - 1] = "w";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 7, PlaceLayer - j - 2] = "#";
+                    }
+
+                    if (j > 34)
+                    {
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 10, PlaceLayer - j - 1] = "w";
+                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 10, PlaceLayer - j - 2] = "#";
                     }
                 }
             }
@@ -649,50 +649,6 @@ namespace Mnetsynt2
                 }
             }
             return true;
-        }
-
-        private static int[,] CalcAstarOld(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP)
-        {
-            int[,] AStarTable = new int[BaseSize, BaseSize];
-            AStarTable[SP.BaseX, SP.BaseY] = 1;
-
-            bool Calcing = true;
-
-            while (Calcing)
-            {
-                int aded = 0;
-                for (int x = 1; x < BaseSize - 1; x++)
-                {
-                    for (int y = 1; y < BaseSize - 1; y++)
-                    {
-                        if (AStarTable[x, y] != 0)
-                        {
-                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != 'X')
-                            {
-                                AStarTable[x + 1, y] = AStarTable[x, y] + 1;
-                                aded++;
-                            }
-                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != 'X')
-                            {
-                                AStarTable[x - 1, y] = AStarTable[x, y] + 1;
-                                aded++;
-                            }
-                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != 'X')
-                            {
-                                AStarTable[x, y - 1] = AStarTable[x, y] + 1;
-                                aded++;
-                            }
-                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != 'X')
-                            {
-                                AStarTable[x, y + 1] = AStarTable[x, y] + 1;
-                                aded++;
-                            }
-                        }
-                    }
-                }
-                if (aded == 0) Calcing = false;
-            }
-            return AStarTable;
         }
 
         private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP, RouteUtils.Cpoint EP)
