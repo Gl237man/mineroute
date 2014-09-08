@@ -10,7 +10,7 @@ namespace StarboundExport
     {
         public string NodeType;
         public string NodeName;
-        public string ToString()
+        public override string ToString()
         {
             return "NODE:" + NodeType + ":" + NodeName;
         }

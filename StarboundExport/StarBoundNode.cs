@@ -31,7 +31,7 @@ namespace StarboundExport
         public int ycoord;
         public List<StarBoundPort> Ports;
 
-        public string ToString()
+        public override string ToString()
         {
             return "N:" + NodeType + ":" + xcoord.ToString() + ":" + ycoord.ToString();
         }

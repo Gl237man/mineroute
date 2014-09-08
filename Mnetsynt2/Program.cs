@@ -21,8 +21,13 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-
             string file = "test4";
+
+            if (args.Length > 0)
+            {
+                file = args[0];
+            }
+            
 
             Mnet MainNetwork = new Mnet();
             MainNetwork.ReadMnetFile(file + @".MNET");

@@ -1,0 +1,342 @@
+//Тестовый VQM Темплейт
+
+module 	test (
+	counter,
+	reset,
+	clk);
+output 	[15:0] counter;
+input 	reset;
+input 	clk;
+wire \clk~clkctrl ;
+wire \counter[0]~16 ;
+wire \counter[0]~reg0 ;
+wire \counter[0]~17 ;
+wire \counter[1]~18 ;
+wire \counter[1]~reg0 ;
+wire \counter[1]~19 ;
+wire \counter[2]~20 ;
+wire \counter[2]~reg0 ;
+wire \counter[2]~21 ;
+wire \counter[3]~22 ;
+wire \counter[3]~reg0 ;
+wire \counter[3]~23 ;
+wire \counter[4]~24 ;
+wire \counter[4]~reg0 ;
+wire \counter[4]~25 ;
+wire \counter[5]~26 ;
+wire \counter[5]~reg0 ;
+wire \counter[5]~27 ;
+wire \counter[6]~28 ;
+wire \counter[6]~reg0 ;
+wire \counter[6]~29 ;
+wire \counter[7]~30 ;
+wire \counter[7]~reg0 ;
+wire \counter[7]~31 ;
+wire \counter[8]~32 ;
+wire \counter[8]~reg0 ;
+wire \counter[8]~33 ;
+wire \counter[9]~34 ;
+wire \counter[9]~reg0 ;
+wire \counter[9]~35 ;
+wire \counter[10]~36 ;
+wire \counter[10]~reg0 ;
+wire \counter[10]~37 ;
+wire \counter[11]~38 ;
+wire \counter[11]~reg0 ;
+wire \counter[11]~39 ;
+wire \counter[12]~40 ;
+wire \counter[12]~reg0 ;
+wire \counter[12]~41 ;
+wire \counter[13]~42 ;
+wire \counter[13]~reg0 ;
+wire \counter[13]~43 ;
+wire \counter[14]~44 ;
+wire \counter[14]~reg0 ;
+wire \counter[14]~45 ;
+wire \counter[15]~46 ;
+wire \counter[15]~reg0 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_clkctrl \clk~clkctrl_I (
+	.inclk({clk}),
+	.outclk(\clk~clkctrl ));
+defparam \clk~clkctrl_I .clock_type = "Global Clock";
+defparam \clk~clkctrl_I .ena_register_mode = "none";
+
+cycloneii_lcell_comb \counter[0]~16_I (
+	.datab(\counter[0]~reg0 ),
+	.datad(vcc),
+	.combout(\counter[0]~16 ),
+	.cout(\counter[0]~17 ));
+defparam \counter[0]~16_I .sum_lutc_input = "datac";
+defparam \counter[0]~16_I .lut_mask = "33CC";
+
+cycloneii_lcell_ff \counter[0]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[0]~16 ),
+	.sclr(reset),
+	.regout(\counter[0]~reg0 ));
+
+cycloneii_lcell_comb \counter[1]~18_I (
+	.datab(\counter[1]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[0]~17 ),
+	.combout(\counter[1]~18 ),
+	.cout(\counter[1]~19 ));
+defparam \counter[1]~18_I .sum_lutc_input = "cin";
+defparam \counter[1]~18_I .lut_mask = "3C3F";
+
+cycloneii_lcell_ff \counter[1]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[1]~18 ),
+	.sclr(reset),
+	.regout(\counter[1]~reg0 ));
+
+cycloneii_lcell_comb \counter[2]~20_I (
+	.datab(\counter[2]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[1]~19 ),
+	.combout(\counter[2]~20 ),
+	.cout(\counter[2]~21 ));
+defparam \counter[2]~20_I .sum_lutc_input = "cin";
+defparam \counter[2]~20_I .lut_mask = "C30C";
+
+cycloneii_lcell_ff \counter[2]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[2]~20 ),
+	.sclr(reset),
+	.regout(\counter[2]~reg0 ));
+
+cycloneii_lcell_comb \counter[3]~22_I (
+	.dataa(\counter[3]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[2]~21 ),
+	.combout(\counter[3]~22 ),
+	.cout(\counter[3]~23 ));
+defparam \counter[3]~22_I .sum_lutc_input = "cin";
+defparam \counter[3]~22_I .lut_mask = "5A5F";
+
+cycloneii_lcell_ff \counter[3]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[3]~22 ),
+	.sclr(reset),
+	.regout(\counter[3]~reg0 ));
+
+cycloneii_lcell_comb \counter[4]~24_I (
+	.datab(\counter[4]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[3]~23 ),
+	.combout(\counter[4]~24 ),
+	.cout(\counter[4]~25 ));
+defparam \counter[4]~24_I .sum_lutc_input = "cin";
+defparam \counter[4]~24_I .lut_mask = "C30C";
+
+cycloneii_lcell_ff \counter[4]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[4]~24 ),
+	.sclr(reset),
+	.regout(\counter[4]~reg0 ));
+
+cycloneii_lcell_comb \counter[5]~26_I (
+	.dataa(\counter[5]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[4]~25 ),
+	.combout(\counter[5]~26 ),
+	.cout(\counter[5]~27 ));
+defparam \counter[5]~26_I .sum_lutc_input = "cin";
+defparam \counter[5]~26_I .lut_mask = "5A5F";
+
+cycloneii_lcell_ff \counter[5]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[5]~26 ),
+	.sclr(reset),
+	.regout(\counter[5]~reg0 ));
+
+cycloneii_lcell_comb \counter[6]~28_I (
+	.dataa(\counter[6]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[5]~27 ),
+	.combout(\counter[6]~28 ),
+	.cout(\counter[6]~29 ));
+defparam \counter[6]~28_I .sum_lutc_input = "cin";
+defparam \counter[6]~28_I .lut_mask = "A50A";
+
+cycloneii_lcell_ff \counter[6]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[6]~28 ),
+	.sclr(reset),
+	.regout(\counter[6]~reg0 ));
+
+cycloneii_lcell_comb \counter[7]~30_I (
+	.datab(\counter[7]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[6]~29 ),
+	.combout(\counter[7]~30 ),
+	.cout(\counter[7]~31 ));
+defparam \counter[7]~30_I .sum_lutc_input = "cin";
+defparam \counter[7]~30_I .lut_mask = "3C3F";
+
+cycloneii_lcell_ff \counter[7]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[7]~30 ),
+	.sclr(reset),
+	.regout(\counter[7]~reg0 ));
+
+cycloneii_lcell_comb \counter[8]~32_I (
+	.dataa(\counter[8]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[7]~31 ),
+	.combout(\counter[8]~32 ),
+	.cout(\counter[8]~33 ));
+defparam \counter[8]~32_I .sum_lutc_input = "cin";
+defparam \counter[8]~32_I .lut_mask = "A50A";
+
+cycloneii_lcell_ff \counter[8]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[8]~32 ),
+	.sclr(reset),
+	.regout(\counter[8]~reg0 ));
+
+cycloneii_lcell_comb \counter[9]~34_I (
+	.datab(\counter[9]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[8]~33 ),
+	.combout(\counter[9]~34 ),
+	.cout(\counter[9]~35 ));
+defparam \counter[9]~34_I .sum_lutc_input = "cin";
+defparam \counter[9]~34_I .lut_mask = "3C3F";
+
+cycloneii_lcell_ff \counter[9]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[9]~34 ),
+	.sclr(reset),
+	.regout(\counter[9]~reg0 ));
+
+cycloneii_lcell_comb \counter[10]~36_I (
+	.dataa(\counter[10]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[9]~35 ),
+	.combout(\counter[10]~36 ),
+	.cout(\counter[10]~37 ));
+defparam \counter[10]~36_I .sum_lutc_input = "cin";
+defparam \counter[10]~36_I .lut_mask = "A50A";
+
+cycloneii_lcell_ff \counter[10]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[10]~36 ),
+	.sclr(reset),
+	.regout(\counter[10]~reg0 ));
+
+cycloneii_lcell_comb \counter[11]~38_I (
+	.datab(\counter[11]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[10]~37 ),
+	.combout(\counter[11]~38 ),
+	.cout(\counter[11]~39 ));
+defparam \counter[11]~38_I .sum_lutc_input = "cin";
+defparam \counter[11]~38_I .lut_mask = "3C3F";
+
+cycloneii_lcell_ff \counter[11]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[11]~38 ),
+	.sclr(reset),
+	.regout(\counter[11]~reg0 ));
+
+cycloneii_lcell_comb \counter[12]~40_I (
+	.dataa(\counter[12]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[11]~39 ),
+	.combout(\counter[12]~40 ),
+	.cout(\counter[12]~41 ));
+defparam \counter[12]~40_I .sum_lutc_input = "cin";
+defparam \counter[12]~40_I .lut_mask = "A50A";
+
+cycloneii_lcell_ff \counter[12]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[12]~40 ),
+	.sclr(reset),
+	.regout(\counter[12]~reg0 ));
+
+cycloneii_lcell_comb \counter[13]~42_I (
+	.datab(\counter[13]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[12]~41 ),
+	.combout(\counter[13]~42 ),
+	.cout(\counter[13]~43 ));
+defparam \counter[13]~42_I .sum_lutc_input = "cin";
+defparam \counter[13]~42_I .lut_mask = "3C3F";
+
+cycloneii_lcell_ff \counter[13]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[13]~42 ),
+	.sclr(reset),
+	.regout(\counter[13]~reg0 ));
+
+cycloneii_lcell_comb \counter[14]~44_I (
+	.datab(\counter[14]~reg0 ),
+	.datad(vcc),
+	.cin(\counter[13]~43 ),
+	.combout(\counter[14]~44 ),
+	.cout(\counter[14]~45 ));
+defparam \counter[14]~44_I .sum_lutc_input = "cin";
+defparam \counter[14]~44_I .lut_mask = "C30C";
+
+cycloneii_lcell_ff \counter[14]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[14]~44 ),
+	.sclr(reset),
+	.regout(\counter[14]~reg0 ));
+
+cycloneii_lcell_comb \counter[15]~46_I (
+	.datad(\counter[15]~reg0 ),
+	.cin(\counter[14]~45 ),
+	.combout(\counter[15]~46 ));
+defparam \counter[15]~46_I .sum_lutc_input = "cin";
+defparam \counter[15]~46_I .lut_mask = "0FF0";
+
+cycloneii_lcell_ff \counter[15]~reg0_I (
+	.clk(\clk~clkctrl ),
+	.datain(\counter[15]~46 ),
+	.sclr(reset),
+	.regout(\counter[15]~reg0 ));
+
+assign counter[0] = \counter[0]~reg0 ;
+
+assign counter[1] = \counter[1]~reg0 ;
+
+assign counter[2] = \counter[2]~reg0 ;
+
+assign counter[3] = \counter[3]~reg0 ;
+
+assign counter[4] = \counter[4]~reg0 ;
+
+assign counter[5] = \counter[5]~reg0 ;
+
+assign counter[6] = \counter[6]~reg0 ;
+
+assign counter[7] = \counter[7]~reg0 ;
+
+assign counter[8] = \counter[8]~reg0 ;
+
+assign counter[9] = \counter[9]~reg0 ;
+
+assign counter[10] = \counter[10]~reg0 ;
+
+assign counter[11] = \counter[11]~reg0 ;
+
+assign counter[12] = \counter[12]~reg0 ;
+
+assign counter[13] = \counter[13]~reg0 ;
+
+assign counter[14] = \counter[14]~reg0 ;
+
+assign counter[15] = \counter[15]~reg0 ;
+
+endmodule

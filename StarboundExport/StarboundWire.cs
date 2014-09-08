@@ -14,7 +14,7 @@ namespace StarboundExport
         public int endx;
         public int endy;
 
-        public string ToString()
+        public override string ToString()
         {
             return "W:" + startx.ToString() + ":" + starty.ToString() + ":" + endx.ToString() + ":" + endy.ToString();
         }

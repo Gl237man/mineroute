@@ -16,7 +16,7 @@ namespace MnetLutDecomposite
             string file = "";
             if (args.Length == 0)
             {
-                file = "test3";
+                file = "test";
             }
             else
             {
