@@ -13,7 +13,7 @@ namespace Mnetsynt2
         public int x;
         public int y;
         public int z;
-        public string ToString()
+        public override string ToString()
         {
             return "NODE:" + NodeType + ":" + NodeName;
         }

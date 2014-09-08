@@ -25,7 +25,7 @@ namespace SBBIN2mcr
             endy = Convert.ToInt32(fromstr.Split(':')[4]);
         }
 
-        public string ToString()
+        public override string ToString()
         {
             return "W:" + startx.ToString() + ":" + starty.ToString() + ":" + endx.ToString() + ":" + endy.ToString();
         }

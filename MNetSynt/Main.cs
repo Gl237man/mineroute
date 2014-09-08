@@ -181,8 +181,8 @@ namespace MNetSynt
             SizeX = 128;
             SizeY = 256;
             int pmax = Convert.ToInt32(Math.Sqrt(NotPortNodeNum));
-            int px = 0;
-            int py = 0;
+            //int px = 0;
+            //int py = 0;
 
             CoordX = new List<int>();
             CoordY = new List<int>();
@@ -873,7 +873,7 @@ namespace MNetSynt
 
             }
 
-            maker:
+            //maker:
             //maker
             Node outNode = new Node("4AND", SizeX, SizeY, 4);
 
@@ -1088,7 +1088,7 @@ namespace MNetSynt
             }
 
             //end make
-        endmake:
+        //endmake:
 
 
 

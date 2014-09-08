@@ -12,7 +12,7 @@ namespace GenMnetFromOptLut
         public string DistName;
         public string SrcPort;
         public string DistPort;
-        public string ToString()
+        public override string ToString()
         {
             return "WIRE:" + SrcName + "-" + SrcPort + ":" + DistName + "-" + DistPort;
         }
