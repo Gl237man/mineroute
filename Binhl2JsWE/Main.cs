@@ -12,7 +12,7 @@ namespace Binhl2JsWE
             string FileName = "";
             if (args.Length < 1)
             {
-                FileName = "tm";
+                FileName = "test";
             }
             else
             {

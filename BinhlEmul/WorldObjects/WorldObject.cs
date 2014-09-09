@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarboundExport
+namespace BinhlEmul.WorldObjects
 {
-    class Cpoint
+    class WorldObject
     {
-        public string Name;
-        public string DistName;
-        public string DistPort;
+
     }
 }
