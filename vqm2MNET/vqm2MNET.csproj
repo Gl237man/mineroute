@@ -42,5 +42,8 @@
     <Compile Include="Module.cs" />
     <Compile Include="IOPort.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ReadMe.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

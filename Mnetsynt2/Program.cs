@@ -346,7 +346,7 @@ namespace Mnetsynt2
                 Console.WriteLine("Обрезка рабочей Облости");
                 RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
                 Console.WriteLine("Экспорт");
-                OutNodeO.export("test_D.binhl");
+                OutNodeO.export( file + ".binhl");
         }
 
         private static int FindBestWireToRoute(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask)
