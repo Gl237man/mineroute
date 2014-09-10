@@ -1,36 +1,25 @@
-using System;
 using System.Collections.Generic;
 using RouteUtils;
 
 namespace EDF2MNET
 {
-    class Program
+    static class Program
     {
-        static List<string> Mainportlist = new List<string>();
-        static List<string> MainportlistT = new List<string>();
+        static readonly List<string> Mainportlist = new List<string>();
+        static readonly List<string> MainportlistT = new List<string>();
         static void Main(string[] args)
         {
-
-            string FileName = "";
-            if (args.Length < 1)
-            {
-                FileName = "tm";
-            }
-            else
-            {
-                FileName = args[0];
-            }
+            string fileName = args.Length < 1 ? "tm" : args[0];
 
 
             string ostr = "";
-            string[] instr = System.IO.File.ReadAllLines(FileName+".edf");
-            int portstart = 0;
+            string[] instr = System.IO.File.ReadAllLines(fileName+".edf");
             int ldes = 0;//library DESIGN
             while (!instr[ldes].Contains("library DESIGN"))
             {
                 ldes++;
             }
-            portstart = ldes;
+            int portstart = ldes;
             while (!instr[portstart].Contains("(port "))
             {
                 portstart++;
@@ -40,37 +29,35 @@ namespace EDF2MNET
             {
                 if (instr[portend].Contains("(port "))
                 {
-                    
-                    
-                    string ParseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-                    string[] Mstr = ParseStr.Split(' ');
-                    if (Mstr[2] == "rename")
+                    string parseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+                    string[] mstr = parseStr.Split(' ');
+                    if (mstr[2] == "rename")
                     {
-                        if (Mstr[6] == "INPUT")
+                        if (mstr[6] == "INPUT")
                         {
-                            ostr += "NODE:INPort:" + Mstr[3] + "\n";
-                            Mainportlist.Add(Mstr[3]);
+                            ostr += "NODE:INPort:" + mstr[3] + "\n";
+                            Mainportlist.Add(mstr[3]);
                             MainportlistT.Add("I");
                         }
-                        if (Mstr[6] == "OUTPUT")
+                        if (mstr[6] == "OUTPUT")
                         {
-                            ostr += "NODE:OUTPort:" + Mstr[3] + "\n";
-                            Mainportlist.Add(Mstr[3]);
+                            ostr += "NODE:OUTPort:" + mstr[3] + "\n";
+                            Mainportlist.Add(mstr[3]);
                             MainportlistT.Add("O");
                         }
                     }
                     else
                     {
-                        if (Mstr[4] == "INPUT")
+                        if (mstr[4] == "INPUT")
                         {
-                            ostr += "NODE:INPort:" + Mstr[2] + "\n";
-                            Mainportlist.Add(Mstr[2]);
+                            ostr += "NODE:INPort:" + mstr[2] + "\n";
+                            Mainportlist.Add(mstr[2]);
                             MainportlistT.Add("I");
                         }
-                        if (Mstr[4] == "OUTPUT")
+                        if (mstr[4] == "OUTPUT")
                         {
-                            ostr += "NODE:OUTPort:" + Mstr[2] + "\n";
-                            Mainportlist.Add(Mstr[2]);
+                            ostr += "NODE:OUTPort:" + mstr[2] + "\n";
+                            Mainportlist.Add(mstr[2]);
                             MainportlistT.Add("O");
                         }
                     }
@@ -81,47 +68,47 @@ namespace EDF2MNET
             {
                 if (instr[portend].Contains("instance "))
                 {
-                    string ParseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-                    string[] Mstr = ParseStr.Split(' ');
-                    ostr += "NODE:" + Mstr[6] + ":" + Mstr[2] + "\n";
-                    Node N = new Node(Mstr[6] + ".binhl");
-                    for (int j = 0; j < N.InPorts.Length; j++)
+                    string parseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+                    string[] mstr = parseStr.Split(' ');
+                    ostr += "NODE:" + mstr[6] + ":" + mstr[2] + "\n";
+                    var node = new Node(mstr[6] + ".binhl");
+                    foreach (INPort port in node.InPorts)
                     {
-                        Mainportlist.Add(Mstr[2] + "-" +N.InPorts[j].Name);
+                        Mainportlist.Add(mstr[2] + "-" +port.Name);
                         MainportlistT.Add("I");
                     }
-                    for (int j = 0; j < N.OutPorts.Length; j++)
+                    foreach (OUTPort port in node.OutPorts)
                     {
-                        Mainportlist.Add(Mstr[2] + "-" + N.OutPorts[j].Name);
+                        Mainportlist.Add(mstr[2] + "-" + port.Name);
                         MainportlistT.Add("O");
                     }
                 }
                 if (instr[portend].Contains("(net "))
                 {
-                    string ParseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
-                    string[] Mstr = ParseStr.Split(' ');
-                    List<string> portlist = new List<string>();
-                    List<string> portlistT = new List<string>();
-                    for (int i = 0; i < Mstr.Length; i++)
+                    string parseStr = instr[portend].Replace(")", " ").Replace("(", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ").Replace("  ", " ");
+                    string[] mstr = parseStr.Split(' ');
+                    var portlist = new List<string>();
+                    var portlistT = new List<string>();
+                    for (int i = 0; i < mstr.Length; i++)
                     {
-                        if (Mstr[i] == "portRef")
+                        if (mstr[i] == "portRef")
                         {
-                            if (Mstr[i + 2] == "instanceRef")
+                            if (mstr[i + 2] == "instanceRef")
                             {
-                                portlist.Add(Mstr[i + 3] + "-" + Mstr[i + 1]);
-                                portlistT.Add(FindPortType(Mstr[i + 3] + "-" + Mstr[i + 1]));
+                                portlist.Add(mstr[i + 3] + "-" + mstr[i + 1]);
+                                portlistT.Add(FindPortType(mstr[i + 3] + "-" + mstr[i + 1]));
                             }
                             else
                             {
-                                if (FindPortType(Mstr[i + 1]) == "I")
+                                if (FindPortType(mstr[i + 1]) == "I")
                                 {
                                     portlistT.Add("O");
-                                    portlist.Add(Mstr[i + 1] + "-O0");
+                                    portlist.Add(mstr[i + 1] + "-O0");
                                 }
                                 else
                                 {
                                     portlistT.Add("I");
-                                    portlist.Add(Mstr[i + 1] + "-I0");
+                                    portlist.Add(mstr[i + 1] + "-I0");
                                 }
                             }
                         }
@@ -139,17 +126,17 @@ namespace EDF2MNET
                     }
                     if (portlist.Count == 3)
                     {
-                        ostr += "NODE:dup2:" + Mstr[2] + "\n";
+                        ostr += "NODE:dup2:" + mstr[2] + "\n";
                         int op = 0;
                         for (int j = 0; j < portlist.Count; j++)
                         {
                             if (portlistT[j] == "O")
                             {
-                                ostr += "WIRE:" + portlist[j] + ":" + Mstr[2] + "-I0" + "\n";
+                                ostr += "WIRE:" + portlist[j] + ":" + mstr[2] + "-I0" + "\n";
                             }
                             else
                             {
-                                ostr += "WIRE:" + Mstr[2] + "-O" + op.ToString() + ":" + portlist[j] + "\n";
+                                ostr += "WIRE:" + mstr[2] + "-O" + op + ":" + portlist[j] + "\n";
                                 op++;
                             }
                         }
@@ -158,18 +145,18 @@ namespace EDF2MNET
                 portend++;
             }
 
-            System.IO.File.WriteAllText(FileName+".MNET", ostr);
+            System.IO.File.WriteAllText(fileName+".MNET", ostr);
             //for (int i = 0; i < instr.Length; i++)
             //{
  
             //}
         }
 
-        private static string FindPortType(string PortName)
+        private static string FindPortType(string portName)
         {
             for (int i = 0; i < Mainportlist.Count; i++)
             {
-                if (Mainportlist[i] == PortName)
+                if (Mainportlist[i] == portName)
                 {
                     return MainportlistT[i];
                 }

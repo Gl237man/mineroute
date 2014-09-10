@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BinLib
+﻿namespace BinLib
 {
-    class File
+    internal class File
     {
-        public string FileName;
         public byte[] Content;
+        public string FileName;
     }
 }

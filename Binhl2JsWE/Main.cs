@@ -1,137 +1,120 @@
 using System;
-using System.Collections.Generic;
-using RouteUtils;
+using System.IO;
 using System.Text;
+using RouteUtils;
 
 namespace Binhl2JsWE
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            string FileName = "";
-            if (args.Length < 1)
-            {
-                FileName = "test";
-            }
-            else
-            {
-                FileName = args[0];
-            }
+            string fileName = args.Length < 1 ? "test" : args[0];
 
 
-            Node N = new Node(FileName + ".binhl");
-            string GenScript = "";
-            GenScript += @"// $Id$" + "\r\n";
+            var node = new Node(fileName + ".binhl");
+            string genScript = "";
+            genScript += @"// $Id$" + "\r\n";
 
 
-            GenScript += @"importPackage(Packages.java.io);" + "\r\n";
-            GenScript += @"importPackage(Packages.java.awt);" + "\r\n";
-            GenScript += @"importPackage(Packages.com.sk89q.worldedit);" + "\r\n";
-            GenScript += @"importPackage(Packages.com.sk89q.worldedit.blocks);" + "\r\n";
-            GenScript += @"var origin = player.getBlockOn();" + "\r\n";
-            GenScript += @"var sess = context.remember();" + "\r\n";
+            genScript += @"importPackage(Packages.java.io);" + "\r\n";
+            genScript += @"importPackage(Packages.java.awt);" + "\r\n";
+            genScript += @"importPackage(Packages.com.sk89q.worldedit);" + "\r\n";
+            genScript += @"importPackage(Packages.com.sk89q.worldedit.blocks);" + "\r\n";
+            genScript += @"var origin = player.getBlockOn();" + "\r\n";
+            genScript += @"var sess = context.remember();" + "\r\n";
 
             int tvn = 0;
             int strn = 0;
 
-            StringBuilder SB = new StringBuilder();
-                
-            SB.Append( @"function v" + tvn.ToString() + " (){" + "\r\n");
-            for (int i = 0; i < N.SizeX; i++)
+            var sb = new StringBuilder();
+
+            sb.Append(@"function v" + tvn + " (){" + "\r\n");
+            for (int i = 0; i < node.SizeX; i++)
             {
-                for (int j = 0; j < N.SizeY; j++)
+                for (int j = 0; j < node.SizeY; j++)
                 {
-                    
-                    for (int k = 0; k < N.SizeZ; k++)
+                    for (int k = 0; k < node.SizeZ; k++)
                     {
-                        if (N.DataMatrix[i, j, k] != "0")
-                        {
-                            SB.Append(GetCoordSring(i, j, k));
-                            SB.Append(GetBlockStr(N.DataMatrix[i, j, k]));
-                            strn++;
-                            if (strn > 200)
-                            {
-                                SB.Append( @"};" + "\r\n");
-                                SB.Append(@"v" + tvn.ToString() + "();" + "\r\n");
-                                tvn++;
-                                Console.Write(tvn);
-                                SB.Append( @"function v" + tvn.ToString() + " (){" + "\r\n");
-                                strn = 0;
-                            }
-                        }
+                        if (node.DataMatrix[i, j, k] == "0") continue;
+                        sb.Append(GetCoordSring(i, j, k));
+                        sb.Append(GetBlockStr(node.DataMatrix[i, j, k]));
+                        strn++;
+                        if (strn <= 200) continue;
+                        sb.Append(@"};" + "\r\n");
+                        sb.Append(@"v" + tvn + "();" + "\r\n");
+                        tvn++;
+                        Console.Write(tvn);
+                        sb.Append(@"function v" + tvn + " (){" + "\r\n");
+                        strn = 0;
                         //DataMatrix[i, j, k] = "0";
                     }
                 }
-                
             }
 
-            SB.Append(@"};" + "\r\n");
-            SB.Append( @"v" + tvn.ToString() + "();" + "\r\n");
+            sb.Append(@"};" + "\r\n");
+            sb.Append(@"v" + tvn + "();" + "\r\n");
 
-            GenScript += SB.ToString();
+            genScript += sb.ToString();
 
-            System.IO.File.WriteAllText(FileName+".js", GenScript);
+            File.WriteAllText(fileName + ".js", genScript);
         }
 
-        private static string GetBlockStr(string BckS)
+        private static string GetBlockStr(string bckS)
         {
-
             string ost = "";
-            switch (BckS)
+            switch (bckS)
             {
                 case "k":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 4));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 4));\r\n";
                     break;
                 case "W":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 15));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 15));\r\n";
                     break;
                 case "w":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 0));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 0));\r\n";
                     break;
                 case "S":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 3));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.CLOTH, 3));\r\n";
                     break;
                 case "0":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.AIR, 0));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.AIR, 0));\r\n";
                     break;
                 case "#":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_WIRE, 0));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_WIRE, 0));\r\n";
                     break;
                 case "^":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 1));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 1));\r\n";
                     break;
                 case "<":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 0));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 0));\r\n";
                     break;
                 case ">":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 2));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 2));\r\n";
                     break;
                 case "v":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 3));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 3));\r\n";
                     break;
                 case "=":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 13));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_REPEATER_OFF, 13));\r\n";
                     break;
                 case "_":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 1));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 1));\r\n";
                     break;
                 case "-":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 2));" + "\r\n";
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 2));\r\n";
                     break;
                 case "*":
-                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 5));" + "\r\n";
-                    break;
-                default:
+                    ost = "sess.setBlock(pt, new BaseBlock(BlockID.REDSTONE_TORCH_ON, 5));\r\n";
                     break;
             }
 
             return ost;
         }
+
         private static string GetCoordSring(int x, int y, int z)
         {
-            string str = "var pt = origin.add(" + y.ToString() + "," + z.ToString() + ", " + x.ToString() + ");" + "\r\n";
-
+            string str = string.Format("var pt = origin.add({0},{1},{2});\r\n", y, z, x);
             return str;
         }
     }

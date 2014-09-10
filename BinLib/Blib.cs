@@ -1,156 +1,154 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace BinLib
 {
     public class Blib
     {
-        List<File> Files;
+        private List<File> _files;
 
         public Blib()
         {
-            Files = new List<File>();
+            _files = new List<File>();
         }
 
         private File GetFile(string name)
         {
-            for (int i = 0; i < Files.Count; i++)
-            {
-                if (Files[i].FileName == name)
-                {
-                    return Files[i];
-                }
-            }
-            return null;
+            return _files.FirstOrDefault(t => t.FileName == name);
         }
 
         private void SaveFile(File file)
         {
             bool update = false;
-            for (int i = 0; i < Files.Count; i++)
+            for (int i = 0; i < _files.Count; i++)
             {
-                if (Files[i].FileName == file.FileName)
+                if (_files[i].FileName == file.FileName)
                 {
-                    Files[i] = file;
+                    _files[i] = file;
                     update = true;
                     break;
                 }
             }
             if (!update)
             {
-                Files.Add(file);
+                _files.Add(file);
             }
-            
-        }
-        public byte[] ReadAllBytes(string FileName)
-        {
-            byte[] b = GetFile(FileName).Content;
-            return (byte[])b.Clone();
         }
 
-        public string ReadAllText(string FileName)
+        private byte[] ReadAllBytes(string fileName)
         {
-            string S = Encoding.Default.GetString(ReadAllBytes(FileName));
-            return S;
+            byte[] b = GetFile(fileName).Content;
+            return (byte[]) b.Clone();
         }
 
-        public string[] ReadAllLines(string FileName)
+        private string ReadAllText(string fileName)
         {
-            string S = ReadAllText(FileName);
-            return S.Replace("\n","").Split(Convert.ToChar("\r"));
+            return Encoding.Default.GetString(ReadAllBytes(fileName));
         }
 
-        public void WriteAllBytes(string FileName, byte[] bytes)
+        public string[] ReadAllLines(string fileName)
         {
-            File F = new File { Content = (byte[])bytes.Clone(), FileName = FileName };
-            SaveFile(F);
+            string s = ReadAllText(fileName);
+            return s.Replace("\n", "").Split(Convert.ToChar("\r"));
         }
 
+/*
+        public void WriteAllBytes(string fileName, byte[] bytes)
+        {
+            File f = new File { Content = (byte[])bytes.Clone(), FileName = fileName };
+            SaveFile(f);
+        }
+*/
+
+/*
         public void WriteAllText(string FileName, string Text)
         {
             byte[] bin = Encoding.Default.GetBytes(Text);
             File F = new File { FileName = FileName, Content = bin };
             SaveFile(F);
         }
+*/
 
-        public void WriteAllLines(string FileName, string[] lines)
+        public void WriteAllLines(string fileName, string[] lines)
         {
-            StringBuilder SB = new StringBuilder();
-            SB.Append(lines[0]);
+            var sb = new StringBuilder();
+            sb.Append(lines[0]);
             for (int i = 1; i < lines.Length; i++)
             {
-                SB.Append("\r\n" + lines[i]);
+                sb.Append("\r\n" + lines[i]);
             }
-            string S = SB.ToString();
-            byte[] bin = Encoding.Default.GetBytes(S);
+            string s = sb.ToString();
+            byte[] bin = Encoding.Default.GetBytes(s);
 
-            File F = new File {FileName = FileName , Content = bin};
-            SaveFile(F);
+            var f = new File {FileName = fileName, Content = bin};
+            SaveFile(f);
         }
 
 
+/*
         public Blib(string FileName)
         {
             if (System.IO.File.Exists(FileName))
                 Load(FileName);
             else
             {
-                Files = new List<File>();
+                _files = new List<File>();
                 Save(FileName);
             }
         }
+*/
 
-        public void Save(string FileName)
+        public void Save(string fileName)
         {
-            System.IO.FileStream F = System.IO.File.OpenWrite(FileName);
-            System.IO.Compression.GZipStream GZ = new System.IO.Compression.GZipStream(F, System.IO.Compression.CompressionLevel.Optimal);
-            GZ.Write(BitConverter.GetBytes(Files.Count), 0, 4);
-            for (int i = 0; i < Files.Count; i++)
+            FileStream f = System.IO.File.OpenWrite(fileName);
+            var gz = new GZipStream(f, CompressionLevel.Optimal);
+            gz.Write(BitConverter.GetBytes(_files.Count), 0, 4);
+            foreach (File file in _files)
             {
-                byte[] binName = Encoding.Default.GetBytes(Files[i].FileName);
-                GZ.Write(BitConverter.GetBytes(binName.Length), 0, 4);
-                GZ.Write(binName, 0, binName.Length);
-                GZ.Write(BitConverter.GetBytes(Files[i].Content.Length), 0, 4);
-                GZ.Write(Files[i].Content, 0, Files[i].Content.Length);
+                byte[] binName = Encoding.Default.GetBytes(file.FileName);
+                gz.Write(BitConverter.GetBytes(binName.Length), 0, 4);
+                gz.Write(binName, 0, binName.Length);
+                gz.Write(BitConverter.GetBytes(file.Content.Length), 0, 4);
+                gz.Write(file.Content, 0, file.Content.Length);
             }
-            GZ.Flush();
-            GZ.Close();
-            F.Close();
+            gz.Flush();
+            gz.Close();
+            f.Close();
         }
 
-        public void Load(string FileName)
+        public void Load(string fileName)
         {
-            Files = new List<File>();
-            System.IO.FileStream F = System.IO.File.OpenRead(FileName);
-            System.IO.Compression.GZipStream GZ = new System.IO.Compression.GZipStream(F, System.IO.Compression.CompressionMode.Decompress);
+            _files = new List<File>();
+            FileStream f = System.IO.File.OpenRead(fileName);
+            var gz = new GZipStream(f, CompressionMode.Decompress);
 
-            int FileNum = GetInt(GZ);
-            for (int i = 0; i < FileNum; i++)
+            int fileNum = GetInt(gz);
+            for (int i = 0; i < fileNum; i++)
             {
-                File FL = new File();
-                int fnlen = GetInt(GZ);
-                byte[] BinName = new byte[fnlen];
-                GZ.Read(BinName, 0, fnlen);
-                FL.FileName = Encoding.Default.GetString(BinName);
-                int Flen = GetInt(GZ);
-                byte[] Bin = new byte[Flen];
-                GZ.Read(Bin, 0, Flen);
-                FL.Content = Bin;
-                Files.Add(FL);
+                var fl = new File();
+                int fnlen = GetInt(gz);
+                var binName = new byte[fnlen];
+                gz.Read(binName, 0, fnlen);
+                fl.FileName = Encoding.Default.GetString(binName);
+                int flen = GetInt(gz);
+                var bin = new byte[flen];
+                gz.Read(bin, 0, flen);
+                fl.Content = bin;
+                _files.Add(fl);
             }
-            GZ.Close();
-            F.Close();
+            gz.Close();
+            f.Close();
         }
 
-        private static int GetInt(System.IO.Compression.GZipStream GZ)
+        private static int GetInt(GZipStream gz)
         {
-            int i;
-            byte[] b = new byte[4];
-            GZ.Read(b, 0, 4);
-            i = BitConverter.ToInt32(b, 0);
+            var b = new byte[4];
+            gz.Read(b, 0, 4);
+            int i = BitConverter.ToInt32(b, 0);
             return i;
         }
     }

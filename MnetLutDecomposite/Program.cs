@@ -1,312 +1,285 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Linq;
+using BinLib;
 
 namespace MnetLutDecomposite
 {
-    class Program
+    internal static class Program
     {
-        static Mnet MainNet;
-        static int glANDindex = 0;
-        static int glORindex = 0;
-        static int glDUPindex = 0;
-        static int glNOTindex = 0;
-        static void Main(string[] args)
+        private static Mnet _mainNet;
+        private static int _glAnDindex;
+        private static int _glORindex;
+        private static int _glDuPindex;
+        private static int _glNoTindex;
+
+        private static void Main(string[] args)
         {
-            string file = "";
-            if (args.Length == 0)
-            {
-                file = "test";
-            }
-            else
-            {
-                file = args[0];
-            }
+            string file = args.Length == 0 ? "test" : args[0];
 
-            MainNet = new Mnet();
-            MainNet.ReadMnetFile(file + @".MNET");
+            _mainNet = new Mnet();
+            _mainNet.ReadMnetFile(file + @".MNET");
 
-            List<Cpoint> PortsRep = new List<Cpoint>();
-            List<Node> Luts = MainNet.GetLuts();
-            List<Mnet> LutsMnet = new List<Mnet>();
-            BinLib.Blib Bl = new BinLib.Blib();
-            Bl.Load("MNETLib.BinLib");
+            var portsRep = new List<Cpoint>();
+            List<Node> luts = _mainNet.GetLuts();
+            var lutsMnet = new List<Mnet>();
+            var bl = new Blib();
+            bl.Load("MNETLib.BinLib");
             //"MNETLib.BinLib"
 
-            for (int i = 0; i < Luts.Count; i++)
+            foreach (Node node in luts)
             {
-                Mnet Lnet = new Mnet();
-                Luts[i].HaveCout = СheckCout(Luts[i], MainNet.wires);
+                var lnet = new Mnet();
+                node.HaveCout = СheckCout(node, _mainNet.Wires);
 
-                Lnet.ReadMnetFileBl(@"lut_" + Luts[i].GetLutKey() + ".MNET",Bl);
-                if (!Luts[i].HaveCout)
+                lnet.ReadMnetFileBl(@"lut_" + node.GetLutKey() + ".MNET", bl);
+                if (!node.HaveCout)
                 {
-                    LutsMnet.Add(Lnet);
+                    lutsMnet.Add(lnet);
                 }
                 else
                 {
-                    Mnet LnetC = new Mnet();
-                    LnetC.ReadMnetFileBl(@"lutc_" + Luts[i].GetLutKey().Substring(2, 2) + ".MNET",Bl);
-                    Mnet Combined = MnetComb(Lnet, LnetC);
-                    LutsMnet.Add(Combined);
+                    var lnetC = new Mnet();
+                    lnetC.ReadMnetFileBl(@"lutc_" + node.GetLutKey().Substring(2, 2) + ".MNET", bl);
+                    Mnet combined = MnetComb(lnet, lnetC);
+                    lutsMnet.Add(combined);
                 }
             }
-            RenameLutNodes(LutsMnet);
-            RemoveLutFromMainNet(MainNet,Luts);
-            ReplacePortsByCpoints(PortsRep, LutsMnet, Luts);
+            RenameLutNodes(lutsMnet);
+            RemoveLutFromMainNet(_mainNet, luts);
+            ReplacePortsByCpoints(portsRep, lutsMnet, luts);
 
-            RpeplaceWireToCpoints(PortsRep);
-            CombineAllWiresAndNodes(LutsMnet);
-            string ExportStr = MainNet.GetSting();
-            System.IO.File.WriteAllText(file + @"_D.MNET", ExportStr);
+            RpeplaceWireToCpoints(portsRep);
+            CombineAllWiresAndNodes(lutsMnet);
+            string exportStr = _mainNet.GetSting();
+            File.WriteAllText(file + @"_D.MNET", exportStr);
         }
 
-        private static Mnet MnetComb(Mnet Lnet, Mnet LnetC)
+        private static Mnet MnetComb(Mnet lnet, Mnet lnetC)
         {
-            NodeShiftRename(LnetC);
-            int DupC = 0;
+            NodeShiftRename(lnetC);
+            int dupC = 0;
             //Удаление Одинаковых Портов
-            List<Node> NodeToRemove = new List<Node>();
-            for (int i = 0; i < Lnet.nodes.Count; i++)
+            var nodeToRemove = new List<Node>();
+            foreach (Node node in lnet.Nodes)
             {
-                for (int j = 0; j < LnetC.nodes.Count; j++)
-                {
-                    if (Lnet.nodes[i].NodeName == LnetC.nodes[j].NodeName)
-                    {
-                        NodeToRemove.Add(LnetC.nodes[j]);
-                    }
-                }
+                nodeToRemove.AddRange(lnetC.Nodes.Where(t => node.NodeName == t.NodeName));
             }
-            for (int i = 0; i < NodeToRemove.Count; i++)
+            foreach (Node node in nodeToRemove)
             {
-                LnetC.RemoveNode(NodeToRemove[i].NodeName);
+                lnetC.RemoveNode(node.NodeName);
             }
 
             //Поиск Дублирующих Линий
 
-            List<Wire> WireToRemove = new List<Wire>();
+            var wireToRemove = new List<Wire>();
 
-            for (int i = 0; i < Lnet.wires.Count; i++)
+            for (int i = 0; i < lnet.Wires.Count; i++)
             {
-                for (int j = 0; j < LnetC.wires.Count; j++)
+                for (int j = 0; j < lnetC.Wires.Count; j++)
                 {
-                    if (Lnet.wires[i].SrcName == LnetC.wires[j].SrcName)
+                    if (lnet.Wires[i].SrcName == lnetC.Wires[j].SrcName)
                     {
-                        if (Lnet.wires[i].SrcPort == LnetC.wires[j].SrcPort)
+                        if (lnet.Wires[i].SrcPort == lnetC.Wires[j].SrcPort)
                         {
                             //Создание Dup
-                            Lnet.nodes.Add(new Node {NodeName = "DUPC" + DupC,NodeType = "DUP2" });
-                            Lnet.wires.Add(new Wire
+                            lnet.Nodes.Add(new Node {NodeName = "DUPC" + dupC, NodeType = "DUP2"});
+                            lnet.Wires.Add(new Wire
                             {
-                                SrcName = "DUPC" + DupC,
+                                SrcName = "DUPC" + dupC,
                                 SrcPort = "O0",
-                                DistName = Lnet.wires[i].DistName,
-                                DistPort = Lnet.wires[i].DistPort
+                                DistName = lnet.Wires[i].DistName,
+                                DistPort = lnet.Wires[i].DistPort
                             });
-                            Lnet.wires.Add(new Wire
+                            lnet.Wires.Add(new Wire
                             {
-                                SrcName = "DUPC" + DupC,
+                                SrcName = "DUPC" + dupC,
                                 SrcPort = "O1",
-                                DistName = LnetC.wires[j].DistName,
-                                DistPort = LnetC.wires[j].DistPort
+                                DistName = lnetC.Wires[j].DistName,
+                                DistPort = lnetC.Wires[j].DistPort
                             });
-                            Lnet.wires[i].DistName = "DUPC" + DupC;
-                            Lnet.wires[i].DistPort = "I0";
-                            WireToRemove.Add(LnetC.wires[j]);
-                            DupC++;
+                            lnet.Wires[i].DistName = "DUPC" + dupC;
+                            lnet.Wires[i].DistPort = "I0";
+                            wireToRemove.Add(lnetC.Wires[j]);
+                            dupC++;
                         }
                     }
                 }
             }
             //Удаление Дублирующих линий
-            for (int i = 0; i < WireToRemove.Count; i++)
+            foreach (Wire wire in wireToRemove)
             {
-                LnetC.RemoveWireFrom(WireToRemove[i].SrcName, WireToRemove[i].SrcPort);
+                lnetC.RemoveWireFrom(wire.SrcName, wire.SrcPort);
             }
             //Слияние
-            for (int i = 0; i < LnetC.wires.Count; i++)
+            for (int i = 0; i < lnetC.Wires.Count; i++)
             {
-                Lnet.wires.Add(LnetC.wires[i]);
+                lnet.Wires.Add(lnetC.Wires[i]);
             }
 
-            for (int i = 0; i < LnetC.nodes.Count; i++)
+            for (int i = 0; i < lnetC.Nodes.Count; i++)
             {
-                Lnet.nodes.Add(LnetC.nodes[i]);
+                lnet.Nodes.Add(lnetC.Nodes[i]);
             }
 
-            return Lnet;
+            return lnet;
         }
 
-        private static void NodeShiftRename(Mnet LnetC)
+        private static void NodeShiftRename(Mnet lnetC)
         {
-            for (int i = 0; i < LnetC.wires.Count; i++)
+            foreach (Wire wire in lnetC.Wires)
             {
-                if (LnetC.FindNode(LnetC.wires[i].DistName).NodeType != "INPort" && LnetC.FindNode(LnetC.wires[i].DistName).NodeType != "OUTPort")
+                if (lnetC.FindNode(wire.DistName).NodeType != "INPort" &&
+                    lnetC.FindNode(wire.DistName).NodeType != "OUTPort")
                 {
-                    LnetC.wires[i].DistName = "CC" + LnetC.wires[i].DistName;
+                    wire.DistName = "CC" + wire.DistName;
                 }
-                if (LnetC.FindNode(LnetC.wires[i].SrcName).NodeType != "INPort" && LnetC.FindNode(LnetC.wires[i].SrcName).NodeType != "OUTPort")
+                if (lnetC.FindNode(wire.SrcName).NodeType != "INPort" &&
+                    lnetC.FindNode(wire.SrcName).NodeType != "OUTPort")
                 {
-                    LnetC.wires[i].SrcName = "CC" + LnetC.wires[i].SrcName;
+                    wire.SrcName = "CC" + wire.SrcName;
                 }
             }
 
-            for (int i = 0; i < LnetC.nodes.Count; i++)
+            foreach (Node node in lnetC.Nodes)
             {
-                if (LnetC.nodes[i].NodeType != "INPort" && LnetC.nodes[i].NodeType != "OUTPort")
+                if (node.NodeType != "INPort" && node.NodeType != "OUTPort")
                 {
-                    LnetC.nodes[i].NodeName = "CC" + LnetC.nodes[i].NodeName;
+                    node.NodeName = "CC" + node.NodeName;
                 }
-            }
-        }
-
-        private static bool СheckCout(Node node, List<Wire> list)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                if (node.NodeName == list[i].SrcName)
-                {
-                    if (list[i].SrcPort == "cout")
-                        return true;
-                }
-            }
-            return false;
-        }
-               
-        private static void CombineAllWiresAndNodes(List<Mnet> LutsMnet)
-        {
-            for (int i = 0; i < LutsMnet.Count; i++)
-            {
-                for (int j=0;j<LutsMnet[i].nodes.Count;j++)
-                {
-                    MainNet.nodes.Add(LutsMnet[i].nodes[j]);
-                }
-
-                for (int j = 0; j < LutsMnet[i].wires.Count; j++)
-                {
-                    MainNet.wires.Add(LutsMnet[i].wires[j]);
-                }
-
             }
         }
 
-        private static void RpeplaceWireToCpoints(List<Cpoint> PortsRep)
+        private static bool СheckCout(Node node, IEnumerable<Wire> list)
         {
-            for (int i=0;i<PortsRep.Count;i++)
+            return list.Where(t => node.NodeName == t.SrcName).Any(t => t.SrcPort == "cout");
+        }
+
+        private static void CombineAllWiresAndNodes(IEnumerable<Mnet> lutsMnet)
+        {
+            foreach (Mnet mnet in lutsMnet)
             {
-                Wire tWire = MainNet.FindWireToPort(PortsRep[i].Name.Split('-')[0], PortsRep[i].Name.Split('-')[1]);
+                for (int j = 0; j < mnet.Nodes.Count; j++)
+                {
+                    _mainNet.Nodes.Add(mnet.Nodes[j]);
+                }
+
+                for (int j = 0; j < mnet.Wires.Count; j++)
+                {
+                    _mainNet.Wires.Add(mnet.Wires[j]);
+                }
+            }
+        }
+
+        private static void RpeplaceWireToCpoints(IEnumerable<Cpoint> portsRep)
+        {
+            foreach (Cpoint cpoint in portsRep)
+            {
+                Wire tWire = _mainNet.FindWireToPort(cpoint.Name.Split('-')[0], cpoint.Name.Split('-')[1]);
                 if (tWire != null)
                 {
-                    tWire.DistName = PortsRep[i].DistName;
-                    tWire.DistPort = PortsRep[i].DistPort;
+                    tWire.DistName = cpoint.DistName;
+                    tWire.DistPort = cpoint.DistPort;
                 }
-                Wire rWire = MainNet.FindWireFromPort(PortsRep[i].Name.Split('-')[0], PortsRep[i].Name.Split('-')[1]);
+                Wire rWire = _mainNet.FindWireFromPort(cpoint.Name.Split('-')[0], cpoint.Name.Split('-')[1]);
                 if (rWire != null)
                 {
-                    rWire.SrcName = PortsRep[i].DistName;
-                    rWire.SrcPort = PortsRep[i].DistPort;
+                    rWire.SrcName = cpoint.DistName;
+                    rWire.SrcPort = cpoint.DistPort;
                 }
             }
         }
 
-        private static void ReplacePortsByCpoints(List<Cpoint> PortsRep, List<Mnet> LutsMnet, List<Node> Luts)
+        private static void ReplacePortsByCpoints(List<Cpoint> portsRep, List<Mnet> lutsMnet, List<Node> luts)
         {
-            for (int i = 0; i < Luts.Count; i++)
+            for (int i = 0; i < luts.Count; i++)
             {
-                List<Node> INports = new List<Node>();
-                for (int j = 0; j < LutsMnet[i].nodes.Count; j++)
-                {
-                    if (LutsMnet[i].nodes[j].NodeType == "INPort")
-                    {
-                        INports.Add(LutsMnet[i].nodes[j]);
-                    }
-                }
-                List<Node> OUTports = new List<Node>();
-                for (int j = 0; j < LutsMnet[i].nodes.Count; j++)
-                {
-                    if (LutsMnet[i].nodes[j].NodeType == "OUTPort")
-                    {
-                        OUTports.Add(LutsMnet[i].nodes[j]);
-                    }
-                }
-                //Создание линков вместо портов
-                for (int j = 0; j < INports.Count; j++)
-                {
-                    Wire W = LutsMnet[i].FindWireFrom(INports[j].NodeName);
-                    if (W != null)
-                    {
-                        PortsRep.Add(new Cpoint { Name = Luts[i].NodeName + "-" + W.SrcName, DistName = W.DistName, DistPort = W.DistPort });
-                    }
-                }
+                List<Node> nports = lutsMnet[i].Nodes.Where(t => t.NodeType == "INPort").ToList();
+                List<Node> ouTports = lutsMnet[i].Nodes.Where(t => t.NodeType == "OUTPort").ToList();
 
-                for (int j = 0; j < OUTports.Count; j++)
-                {
-                    Wire W = LutsMnet[i].FindWireTo(OUTports[j].NodeName);
-                    if (W != null)
-                    {
-                        PortsRep.Add(new Cpoint { Name = Luts[i].NodeName + "-" + W.DistName, DistName = W.SrcName, DistPort = W.SrcPort });
-                    }
-                }
+                //Создание линков вместо портов
+                int i1 = i;
+                portsRep.AddRange(from t in nports
+                    select lutsMnet[i].FindWireFrom(t.NodeName)
+                    into w
+                    where w != null
+                    select
+                        new Cpoint
+                        {
+                            Name = luts[i1].NodeName + "-" + w.SrcName,
+                            DistName = w.DistName,
+                            DistPort = w.DistPort
+                        });
+
+                int i2 = i;
+                portsRep.AddRange(from t in ouTports
+                    select lutsMnet[i].FindWireTo(t.NodeName)
+                    into w
+                    where w != null
+                    select
+                        new Cpoint
+                        {
+                            Name = luts[i2].NodeName + "-" + w.DistName,
+                            DistName = w.SrcName,
+                            DistPort = w.SrcPort
+                        });
                 //Удаление портов
-                for (int j = 0; j < INports.Count; j++)
+                foreach (Node node in nports)
                 {
-                    LutsMnet[i].RemoveNode(INports[j].NodeName);
+                    lutsMnet[i].RemoveNode(node.NodeName);
                 }
-                for (int j = 0; j < OUTports.Count; j++)
+                foreach (Node node in ouTports)
                 {
-                    LutsMnet[i].RemoveNode(OUTports[j].NodeName);
+                    lutsMnet[i].RemoveNode(node.NodeName);
                 }
                 //Удаление Линков несуществующих портов
-                for (int j = 0; j < INports.Count; j++)
+                foreach (Node node in nports)
                 {
-                    LutsMnet[i].RemoveWireFrom(INports[j].NodeName, "O0");
+                    lutsMnet[i].RemoveWireFrom(node.NodeName, "O0");
                 }
-                for (int j = 0; j < OUTports.Count; j++)
+                foreach (Node node in ouTports)
                 {
-                    LutsMnet[i].RemoveWireTo(OUTports[j].NodeName,"I0");
+                    lutsMnet[i].RemoveWireTo(node.NodeName, "I0");
                 }
             }
         }
 
-        private static void RemoveLutFromMainNet(Mnet MainNet, List<Node> Luts)
+        private static void RemoveLutFromMainNet(Mnet mainNet, IEnumerable<Node> luts)
         {
-            for (int i = 0; i < Luts.Count; i++)
+            foreach (Node node in luts)
             {
-                MainNet.RemoveNode(Luts[i].NodeName);
+                mainNet.RemoveNode(node.NodeName);
             }
         }
-        private static void RenameLutNodes(List<Mnet> LutsMnet)
-        {
-            for (int i = 0; i < LutsMnet.Count; i++)
-            {
-                for (int j = 0; j < LutsMnet[i].nodes.Count; j++)
-                {
-                    if (LutsMnet[i].nodes[j].NodeType == "AND")
-                    {
-                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_AND_" + glANDindex);
-                        glANDindex++;
-                    }
-                    if (LutsMnet[i].nodes[j].NodeType == "OR")
-                    {
-                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_OR_" + glORindex);
-                        glORindex++;
-                    }
-                    if (LutsMnet[i].nodes[j].NodeType.StartsWith("DUP"))
-                    {
-                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_DUP_" + glDUPindex);
-                        glDUPindex++;
-                    
-                    }
-                    if (LutsMnet[i].nodes[j].NodeType.StartsWith("NOT"))
-                    {
-                        LutsMnet[i].RenameElement(LutsMnet[i].nodes[j].NodeName, "GL_NOT_" + glNOTindex);
-                        glNOTindex++;
 
+        private static void RenameLutNodes(IEnumerable<Mnet> lutsMnet)
+        {
+            foreach (Mnet mnet in lutsMnet)
+            {
+                foreach (Node node in mnet.Nodes)
+                {
+                    if (node.NodeType == "AND")
+                    {
+                        mnet.RenameElement(node.NodeName, "GL_AND_" + _glAnDindex);
+                        _glAnDindex++;
+                    }
+                    if (node.NodeType == "OR")
+                    {
+                        mnet.RenameElement(node.NodeName, "GL_OR_" + _glORindex);
+                        _glORindex++;
+                    }
+                    if (node.NodeType.StartsWith("DUP"))
+                    {
+                        mnet.RenameElement(node.NodeName, "GL_DUP_" + _glDuPindex);
+                        _glDuPindex++;
+                    }
+                    if (node.NodeType.StartsWith("NOT"))
+                    {
+                        mnet.RenameElement(node.NodeName, "GL_NOT_" + _glNoTindex);
+                        _glNoTindex++;
                     }
                 }
             }
         }
-
-        
     }
 }

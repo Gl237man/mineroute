@@ -1,204 +1,152 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MnetLutDecomposite
 {
     class Mnet
     {
-        public List<Node> nodes;
-        public List<Wire> wires;
+        public List<Node> Nodes;
+        public List<Wire> Wires;
 
-        public void ReadMnetFileBl(string FileName, BinLib.Blib BL)
+        public void ReadMnetFileBl(string fileName, BinLib.Blib bl)
         {
-            nodes = new List<Node>();
-            wires = new List<Wire>();
-            string[] tstr = BL.ReadAllLines(FileName);
+            Nodes = new List<Node>();
+            Wires = new List<Wire>();
+            string[] tstr = bl.ReadAllLines(fileName);
 
             for (int i = 0; i < tstr.Length; i++)
             {
                 tstr[i] = tstr[i].Replace("cin", "datac");
             }
 
-            for (int i = 0; i < tstr.Length; i++)
+            foreach (string t in tstr)
             {
-                if (tstr[i].Split(':')[0] == "NODE")
+                if (t.Split(':')[0] == "NODE")
                 {
-                    Node N = new Node();
-                    N.ReadFromString(tstr[i]);
-                    nodes.Add(N);
+                    var n = new Node();
+                    n.ReadFromString(t);
+                    Nodes.Add(n);
                 }
-                if (tstr[i].Split(':')[0] == "WIRE")
+                if (t.Split(':')[0] == "WIRE")
                 {
-                    Wire W = new Wire();
-                    W.ReadFromString(tstr[i]);
-                    wires.Add(W);
+                    var w = new Wire();
+                    w.ReadFromString(t);
+                    Wires.Add(w);
                 }
             }
         }
 
-        public void ReadMnetFile(string FileName)
+        public void ReadMnetFile(string fileName)
         {
-            nodes = new List<Node>();
-            wires = new List<Wire>();
-            string[] tstr = System.IO.File.ReadAllLines(FileName);
+            Nodes = new List<Node>();
+            Wires = new List<Wire>();
+            string[] tstr = System.IO.File.ReadAllLines(fileName);
 
             for (int i = 0; i < tstr.Length; i++)
             {
                 tstr[i] = tstr[i].Replace("cin", "datac");
             }
 
-                for (int i = 0; i < tstr.Length; i++)
+                foreach (string str in tstr)
                 {
-                    if (tstr[i].Split(':')[0] == "NODE")
+                    if (str.Split(':')[0] == "NODE")
                     {
-                        Node N = new Node();
-                        N.ReadFromString(tstr[i]);
-                        nodes.Add(N);
+                        var n = new Node();
+                        n.ReadFromString(str);
+                        Nodes.Add(n);
                     }
-                    if (tstr[i].Split(':')[0] == "WIRE")
+                    if (str.Split(':')[0] == "WIRE")
                     {
-                        Wire W = new Wire();
-                        W.ReadFromString(tstr[i]);
-                        wires.Add(W);
+                        var w = new Wire();
+                        w.ReadFromString(str);
+                        Wires.Add(w);
                     }
                 }
         }
-        public void RemoveNode(string NodeName)
+        public void RemoveNode(string nodeName)
         {
-            for (int i = 0; i < nodes.Count; i++)
+            for (int i = 0; i < Nodes.Count; i++)
             {
-                if (nodes[i].NodeName == NodeName)
+                if (Nodes[i].NodeName == nodeName)
                 {
-                    nodes.RemoveAt(i);
+                    Nodes.RemoveAt(i);
                     return;
                 }
             }
         }
         public void RemoveWireTo(string name,string port)
         {
-            for (int i = 0; i < wires.Count; i++)
+            for (int i = 0; i < Wires.Count; i++)
             {
-                if ((wires[i].DistName == name) && (wires[i].DistPort == port))
+                if ((Wires[i].DistName == name) && (Wires[i].DistPort == port))
                 {
-                    wires.RemoveAt(i);
+                    Wires.RemoveAt(i);
                     return;
                 }
             }
         }
         public void RemoveWireFrom(string name, string port)
         {
-            for (int i = 0; i < wires.Count; i++)
+            for (int i = 0; i < Wires.Count; i++)
             {
-                if ((wires[i].SrcName == name) && (wires[i].SrcPort == port))
+                if ((Wires[i].SrcName == name) && (Wires[i].SrcPort == port))
                 {
-                    wires.RemoveAt(i);
+                    Wires.RemoveAt(i);
                     return;
                 }
             }
         }
         public List<Node> GetLuts()
         {
-            List<Node> Luts = new List<Node>();
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                if (nodes[i].IsLut())
-                {
-                    Luts.Add(nodes[i]);
-                }
-            }
-            return Luts;
+            return Nodes.Where(t => t.IsLut()).ToList();
         }
 
-        internal void RenameElement(string From, string To)
+        internal void RenameElement(string @from, string to)
         {
-            for (int i = 0; i < nodes.Count; i++)
+            foreach (var node in Nodes)
             {
-                if (nodes[i].NodeName == From)
-                    nodes[i].NodeName = To;
+                if (node.NodeName == @from)
+                    node.NodeName = to;
             }
-            for (int i = 0; i < wires.Count; i++)
+            foreach (Wire wire in Wires)
             {
-                if (wires[i].DistName == From)
-                    wires[i].DistName = To;
-                if (wires[i].SrcName == From)
-                    wires[i].SrcName = To;
+                if (wire.DistName == @from)
+                    wire.DistName = to;
+                if (wire.SrcName == @from)
+                    wire.SrcName = to;
             }
         }
 
-        internal Wire FindWireFrom(string NodeName)
+        internal Wire FindWireFrom(string nodeName)
         {
-            for (int i = 0; i < wires.Count; i++)
-            {
-                if (wires[i].SrcName == NodeName)
-                {
-                    return wires[i];
-                }
-            }
-            return null;
+            return Wires.FirstOrDefault(t => t.SrcName == nodeName);
         }
 
-        internal Wire FindWireFromPort(string NodeName, string PortName)
+        internal Wire FindWireFromPort(string nodeName, string portName)
         {
-            for (int i = 0; i < wires.Count; i++)
-            {
-                if (wires[i].SrcName == NodeName && wires[i].SrcPort == PortName)
-                {
-                    return wires[i];
-                }
-            }
-            return null;
+            return Wires.FirstOrDefault(t => t.SrcName == nodeName && t.SrcPort == portName);
         }
 
-        internal Wire FindWireTo(string NodeName)
+        internal Wire FindWireTo(string nodeName)
         {
-            for (int i = 0; i < wires.Count; i++)
-            {
-                if (wires[i].DistName == NodeName)
-                {
-                    return wires[i];
-                }
-            }
-            return null;
+            return Wires.FirstOrDefault(t => t.DistName == nodeName);
         }
-        internal Wire FindWireToPort(string NodeName,string PortName)
+
+        internal Wire FindWireToPort(string nodeName,string portName)
         {
-            for (int i = 0; i < wires.Count; i++)
-            {
-                if (wires[i].DistName == NodeName && wires[i].DistPort == PortName)
-                {
-                    return wires[i];
-                }
-            }
-            return null;
+            return Wires.FirstOrDefault(t => t.DistName == nodeName && t.DistPort == portName);
         }
 
         internal string GetSting()
         {
-            string ostr = "";
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                ostr += nodes[i].ToString() + "\r\n";
-            }
+            string ostr = Nodes.Aggregate("", (current, t) => current + (t.ToString() + "\r\n"));
 
-            for (int i = 0; i < wires.Count; i++)
-            {
-                ostr += wires[i].ToString() + "\r\n";
-            }
-
-            return ostr;
+            return Wires.Aggregate(ostr, (current, t) => current + (t.ToString() + "\r\n"));
         }
 
         internal Node FindNode(string p)
         {
-            for (int i = 0; i < nodes.Count; i++)
-            {
-                if (nodes[i].NodeName == p)
-                    return nodes[i];
-            }
-            return null;
+            return Nodes.FirstOrDefault(t => t.NodeName == p);
         }
     }
 }

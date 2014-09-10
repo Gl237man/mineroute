@@ -1,102 +1,97 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace EspressoLutGen
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-            string CmdFile = "";
-            
+            string cmdFile = "";
+
             for (int i = 0; i <= 0xFFFF; i++)
             {
                 string s = LutFileGen(i);
-                Console.WriteLine("Lut_" + i.ToString("X4") + ".txt");
-                System.IO.File.WriteAllText("Lut_" + i.ToString("X4") + ".txt", s);
-                CmdFile += "echo " + i.ToString("X4") + "\r\n";
-                CmdFile += "espresso.exe " + "Lut_" + i.ToString("X4") + ".txt>"  + "Opt_" + i.ToString("X4") + ".txt" + "\r\n";
-                CmdFile += "del " + "Lut_" + i.ToString("X4") + ".txt" + "\r\n";
+                Console.WriteLine("Lut_{0}.txt", i.ToString("X4"));
+                File.WriteAllText(string.Format("Lut_{0}.txt", i.ToString("X4")), s);
+                cmdFile += string.Format("echo {0}\r\n", i.ToString("X4"));
+                cmdFile += string.Format("espresso.exe Lut_{0}.txt>Opt_{0}.txt\r\n", i.ToString("X4"));
+                cmdFile += string.Format("del Lut_{0}.txt\r\n", i.ToString("X4"));
             }
-            
+
             for (int i = 0; i <= 0x00FF; i++)
             {
                 string s = CoutFileGen(i);
-                Console.WriteLine("Cout_" + i.ToString("X2") + ".txt");
-                System.IO.File.WriteAllText("Cout_" + i.ToString("X2") + ".txt", s);
-                CmdFile += "echo " + i.ToString("X2") + "\r\n";
-                CmdFile += "espresso.exe " + "Cout_" + i.ToString("X2") + ".txt>" + "OptCo_" + i.ToString("X2") + ".txt" + "\r\n";
-                CmdFile += "del " + "Cout_" + i.ToString("X2") + ".txt" + "\r\n";
+                Console.WriteLine("Cout_{0}.txt", i.ToString("X2"));
+                File.WriteAllText(string.Format("Cout_{0}.txt", i.ToString("X2")), s);
+                cmdFile += string.Format("echo {0}\r\n", i.ToString("X2"));
+                cmdFile += string.Format("espresso.exe Cout_{0}.txt>OptCo_{0}.txt\r\n", i.ToString("X2"));
+                cmdFile += string.Format("del Cout_{0}.txt\r\n", i.ToString("X2"));
             }
-            System.IO.File.WriteAllText("Start.cmd", CmdFile);
-
-
+            File.WriteAllText("Start.cmd", cmdFile);
         }
 
 
-        private static string CoutFileGen(int LutValue)
+        private static string CoutFileGen(int lutValue)
         {
             string ostr = "";
 
-            int[] bmass = new int[8];
+            var bmass = new int[8];
 
             for (int i = 0; i < 8; i++)
             {
-                bmass[i] = LutValue >> i & 1;
+                bmass[i] = lutValue >> i & 1;
             }
 
-            ostr += ".i 3" + "\r\n";
-            ostr += ".o 1" + "\r\n";
-            ostr += ".ilb B C D" + "\r\n";
-            ostr += ".ob F" + "\r\n";
-            ostr += "0 0 0 " + bmass[0] + "\r\n";
-            ostr += "0 0 1 " + bmass[1] + "\r\n";
-            ostr += "0 1 0 " + bmass[2] + "\r\n";
-            ostr += "0 1 1 " + bmass[3] + "\r\n";
-            ostr += "1 0 0 " + bmass[4] + "\r\n";
-            ostr += "1 0 1 " + bmass[5] + "\r\n";
-            ostr += "1 1 0 " + bmass[6] + "\r\n";
-            ostr += "1 1 1 " + bmass[7] + "\r\n";
-            ostr += ".e" + "\r\n";
+            ostr += ".i 3\r\n";
+            ostr += ".o 1\r\n";
+            ostr += ".ilb B C D\r\n";
+            ostr += ".ob F\r\n";
+            ostr += string.Format("0 0 0 {0}\r\n", bmass[0]);
+            ostr += string.Format("0 0 1 {0}\r\n", bmass[1]);
+            ostr += string.Format("0 1 0 {0}\r\n", bmass[2]);
+            ostr += string.Format("0 1 1 {0}\r\n", bmass[3]);
+            ostr += string.Format("1 0 0 {0}\r\n", bmass[4]);
+            ostr += string.Format("1 0 1 {0}\r\n", bmass[5]);
+            ostr += string.Format("1 1 0 {0}\r\n", bmass[6]);
+            ostr += string.Format("1 1 1 {0}\r\n", bmass[7]);
+            ostr += ".e\r\n";
 
             return ostr;
         }
 
-        private static string LutFileGen(int LutValue)
+        private static string LutFileGen(int lutValue)
         {
             string ostr = "";
 
-            int[] bmass = new int[16];
+            var bmass = new int[16];
 
             for (int i = 0; i < 16; i++)
             {
-                bmass[i] = LutValue >> i & 1;
+                bmass[i] = lutValue >> i & 1;
             }
 
-            ostr += ".i 4" + "\r\n";
-            ostr += ".o 1" + "\r\n";
-            ostr += ".ilb A B C D" + "\r\n";
-            ostr += ".ob F" + "\r\n";
-            ostr += "0 0 0 0 " + bmass[0] + "\r\n";
-            ostr += "0 0 0 1 " + bmass[1] + "\r\n";
-            ostr += "0 0 1 0 " + bmass[2] + "\r\n";
-            ostr += "0 0 1 1 " + bmass[3] + "\r\n";
-            ostr += "0 1 0 0 " + bmass[4] + "\r\n";
-            ostr += "0 1 0 1 " + bmass[5] + "\r\n";
-            ostr += "0 1 1 0 " + bmass[6] + "\r\n";
-            ostr += "0 1 1 1 " + bmass[7] + "\r\n";
-            ostr += "1 0 0 0 " + bmass[8] + "\r\n";
-            ostr += "1 0 0 1 " + bmass[9] + "\r\n";
-            ostr += "1 0 1 0 " + bmass[10] + "\r\n";
-            ostr += "1 0 1 1 " + bmass[11] + "\r\n";
-            ostr += "1 1 0 0 " + bmass[12] + "\r\n";
-            ostr += "1 1 0 1 " + bmass[13] + "\r\n";
-            ostr += "1 1 1 0 " + bmass[14] + "\r\n";
-            ostr += "1 1 1 1 " + bmass[15] + "\r\n";
-            ostr += ".e" + "\r\n";
+            ostr += ".i 4\r\n";
+            ostr += ".o 1\r\n";
+            ostr += ".ilb A B C D\r\n";
+            ostr += ".ob F\r\n";
+            ostr += string.Format("0 0 0 0 {0}\r\n", bmass[0]);
+            ostr += string.Format("0 0 0 1 {0}\r\n", bmass[1]);
+            ostr += string.Format("0 0 1 0 {0}\r\n", bmass[2]);
+            ostr += string.Format("0 0 1 1 {0}\r\n", bmass[3]);
+            ostr += string.Format("0 1 0 0 {0}\r\n", bmass[4]);
+            ostr += string.Format("0 1 0 1 {0}\r\n", bmass[5]);
+            ostr += string.Format("0 1 1 0 {0}\r\n", bmass[6]);
+            ostr += string.Format("0 1 1 1 {0}\r\n", bmass[7]);
+            ostr += string.Format("1 0 0 0 {0}\r\n", bmass[8]);
+            ostr += string.Format("1 0 0 1 {0}\r\n", bmass[9]);
+            ostr += string.Format("1 0 1 0 {0}\r\n", bmass[10]);
+            ostr += string.Format("1 0 1 1 {0}\r\n", bmass[11]);
+            ostr += string.Format("1 1 0 0 {0}\r\n", bmass[12]);
+            ostr += string.Format("1 1 0 1 {0}\r\n", bmass[13]);
+            ostr += string.Format("1 1 1 0 {0}\r\n", bmass[14]);
+            ostr += string.Format("1 1 1 1 {0}\r\n", bmass[15]);
+            ostr += ".e\r\n";
 
             return ostr;
         }

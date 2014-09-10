@@ -3,7 +3,7 @@ using RouteUtils;
 
 namespace BinhlEmul
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main(string[] args)
         {
@@ -47,7 +47,7 @@ namespace BinhlEmul
             world.Tick();
             world.Tick();
 
-            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+            Console.WriteLine("O0={0}", world.GetPortValue("O0"));
 
             world.SetPortValue("I0", true);
             world.SetPortValue("I1", false);
@@ -56,7 +56,7 @@ namespace BinhlEmul
             world.Tick();
             world.Tick();
 
-            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+            Console.WriteLine("O0={0}", world.GetPortValue("O0"));
 
             world.SetPortValue("I0", false);
             world.SetPortValue("I1", true);
@@ -65,7 +65,7 @@ namespace BinhlEmul
             world.Tick();
             world.Tick();
 
-            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+            Console.WriteLine("O0={0}", world.GetPortValue("O0"));
 
             world.SetPortValue("I0", true);
             world.SetPortValue("I1", true);
@@ -74,7 +74,7 @@ namespace BinhlEmul
             world.Tick();
             world.Tick();
 
-            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+            Console.WriteLine("O0={0}", world.GetPortValue("O0"));
         }
     }
 }

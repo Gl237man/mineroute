@@ -62,7 +62,7 @@ namespace StarboundExport
             //CalcLincLengch
             double len = CalcComplexity(SBWires);
             Console.WriteLine("complexity:" + len);
-            //TODO
+            
             //draw image
             Image IMmain = DrawImage(SBNodes, SBWires);
             //export image
