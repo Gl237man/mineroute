@@ -68,7 +68,7 @@ namespace BinhlEmul
                                 ObjectMatrix[x, y, z] = new WorldObjects.RedstoneTorch(x, y, z, WorldObjects.Direction.backword,this);
                                 break;
                             case "-":
-                                ObjectMatrix[x, y, z] = new WorldObjects.RedstoneTorch(x, y, z, WorldObjects.Direction.left,this);
+                                ObjectMatrix[x, y, z] = new WorldObjects.RedstoneTorch(x, y, z, WorldObjects.Direction.forward,this);
                                 break;
                             case "*":
                                 ObjectMatrix[x, y, z] = new WorldObjects.RedstoneTorch(x, y, z, WorldObjects.Direction.down,this);
