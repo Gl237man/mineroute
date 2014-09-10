@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RouteUtils;
 
 namespace BinhlEmul
@@ -23,11 +20,11 @@ namespace BinhlEmul
             WSX = node.SizeX;
             WSY = node.SizeY;
             WSZ = node.SizeZ;
-            for (int x = 0; x < node.SizeX; x++)
+            for (var x = 0; x < node.SizeX; x++)
             {
-                for (int y = 0; y < node.SizeY; y++)
+                for (var y = 0; y < node.SizeY; y++)
                 {
-                    for (int z = 0; z < node.SizeZ; z++)
+                    for (var z = 0; z < node.SizeZ; z++)
                     {
                         switch (node.DataMatrix[x, WSY - y - 1, z])
                         {
@@ -73,8 +70,6 @@ namespace BinhlEmul
                             case "*":
                                 ObjectMatrix[x, y, z] = new WorldObjects.RedstoneTorch(x, y, z, WorldObjects.Direction.down,this);
                                 break;
-                            default:
-                                break;
                         }
                     }
                 }
@@ -84,24 +79,19 @@ namespace BinhlEmul
             InPorts = new List<IOPort>();
             OutPorts = new List<IOPort>();
 
-            for (int i = 0; i < node.InPorts.Length; i++)
+            foreach (var port in node.InPorts)
             {
-                int x = node.InPorts[i].PosX;
-                int y = WSY - node.InPorts[i].PosY - 1;
-                int z = 0;
-                for (int j = 0; j < WSZ; j++)
+                var x = port.PosX;
+                var y = WSY - port.PosY - 1;
+                var z = 0;
+                for (var j = 0; j < WSZ; j++)
                 {
                     if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.Cloth))
                     {
                         z = j;
                     }
                 }
-                IOPort p = new IOPort();
-                p.x = x;
-                p.y = y;
-                p.z = z;
-                p.Name = node.InPorts[i].Name;
-                p.value = false;
+                var p = new IOPort {x = x, y = y, z = z, Name = port.Name, value = false};
                 InPorts.Add(p);
                 ObjectMatrix[x, y, z] = new WorldObjects.RedstoneWire(x, y, z, this);
                 ((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).Blocked = true;
@@ -109,24 +99,19 @@ namespace BinhlEmul
                 //((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).IsActivated = true;
             }
 
-            for (int i = 0; i < node.OutPorts.Length; i++)
+            foreach (var port in node.OutPorts)
             {
-                int x = node.OutPorts[i].PosX;
-                int y = WSY - node.OutPorts[i].PosY - 1;
-                int z = 0;
-                for (int j = 0; j < WSZ; j++)
+                var x = port.PosX;
+                var y = WSY - port.PosY - 1;
+                var z = 0;
+                for (var j = 0; j < WSZ; j++)
                 {
                     if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.Cloth))
                     {
                         z = j;
                     }
                 }
-                IOPort p = new IOPort();
-                p.x = x;
-                p.y = y;
-                p.z = z;
-                p.Name = node.OutPorts[i].Name;
-                p.value = false;
+                var p = new IOPort {x = x, y = y, z = z, Name = port.Name, value = false};
                 OutPorts.Add(p);
                 ObjectMatrix[x, y, z] = new WorldObjects.RedstoneWire(x, y, z, this);
             }
@@ -135,27 +120,20 @@ namespace BinhlEmul
 
         public bool GetPortValue(string portName)
         {
-            for (int i = 0; i < OutPorts.Count; i++)
-            {
-                if (OutPorts[i].Name == portName)
-                {
-                    return OutPorts[i].value;
-                }
-            }
-            return false;
+            return (from port in OutPorts where port.Name == portName select port.value).FirstOrDefault();
         }
 
         public void SetPortValue(string portName, bool value)
         {
-            for (int i = 0; i < InPorts.Count; i++)
+            for (var i = 0; i < InPorts.Count; i++)
             {
                 if (InPorts[i].Name == portName)
                 {
                     InPorts[i].value = value;
                     if (value == true)
                     {
-                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).RedValue = 15;
-                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).IsActivated = true;
+                        ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z].RedValue = 15;
+                        ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z].IsActivated = true;
 
                     }
                     else
@@ -174,11 +152,11 @@ namespace BinhlEmul
             while (NotFullTick)
             {
                 NotFullTick = false;
-                for (int x = 0; x < WSX; x++)
+                for (var x = 0; x < WSX; x++)
                 {
-                    for (int y = 0; y < WSY; y++)
+                    for (var y = 0; y < WSY; y++)
                     {
-                        for (int z = 0; z < WSZ; z++)
+                        for (var z = 0; z < WSZ; z++)
                         {
                             if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.RedstoneWire))
                                 {
@@ -190,11 +168,11 @@ namespace BinhlEmul
 
             }
             //Оброботка тика блоков
-            for (int x = 0; x < WSX; x++)
+            for (var x = 0; x < WSX; x++)
             {
-                for (int y = 0; y < WSY; y++)
+                for (var y = 0; y < WSY; y++)
                 {
-                    for (int z = 0; z < WSZ; z++)
+                    for (var z = 0; z < WSZ; z++)
                     {
                         if (ObjectMatrix[x, y, z].GetType() != typeof(WorldObjects.RedstoneWire))
                         {
@@ -204,7 +182,7 @@ namespace BinhlEmul
                 }
             }
             //Обновление состояния портов
-            for (int i = 0; i < OutPorts.Count; i++)
+            for (var i = 0; i < OutPorts.Count; i++)
             {
                 if (ObjectMatrix[OutPorts[i].x, OutPorts[i].y, OutPorts[i].z].RedValue > 0)
                 {
