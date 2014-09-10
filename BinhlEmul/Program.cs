@@ -1,92 +1,80 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using RouteUtils;
 
 namespace BinhlEmul
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            string FileName = "";
-            if (args.Length < 1)
-            {
-                FileName = "OR";
-            }
-            else
-            {
-                FileName = args[0];
-            }
+            string fileName = args.Length < 1 ? "test" : args[0];
 
-            Node N = new Node(FileName + ".binhl");
+            var node = new Node(fileName + ".binhl");
 
-            World W = new World(N);
+            var world = new World(node);
 
-            W.SetPortValue("datain", false);
-            W.SetPortValue("clk", false);
-            W.SetPortValue("sclr", false);
-            for (int i = 0; i < 50; i++)
-            {
-                W.Tick();
-                Console.WriteLine("regout=" + W.GetPortValue("regout"));
-            }
-
-            W.SetPortValue("clk", true);
-            for (int i = 0; i < 50; i++)
-            {
-                W.Tick();
-                Console.WriteLine("regout=" + W.GetPortValue("regout"));
-            }
-
-            W.SetPortValue("clk", true);
-            for (int i = 0; i < 50; i++)
-            {
-                W.Tick();
-                Console.WriteLine("regout=" + W.GetPortValue("regout"));
-            }
-
-            //Test
             /*
-            W.SetPortValue("I0", false);
-            W.SetPortValue("I1", false);
-            W.Tick();
-            W.Tick();
-            W.Tick();
-            W.Tick();
+            world.SetPortValue("datain", false);
+            world.SetPortValue("clk", false);
+            world.SetPortValue("sclr", false);
+            for (var i = 0; i < 50; i++)
+            {
+                world.Tick();
+                Console.WriteLine("regout=" + world.GetPortValue("regout"));
+            }
 
-            Console.WriteLine("O0=" + W.GetPortValue("O0"));
+            world.SetPortValue("clk", true);
+            for (var i = 0; i < 50; i++)
+            {
+                world.Tick();
+                Console.WriteLine("regout=" + world.GetPortValue("regout"));
+            }
 
-            W.SetPortValue("I0", true);
-            W.SetPortValue("I1", false);
-            W.Tick();
-            W.Tick();
-            W.Tick();
-            W.Tick();
-
-            Console.WriteLine("O0=" + W.GetPortValue("O0"));
-
-            W.SetPortValue("I0", false);
-            W.SetPortValue("I1", true);
-            W.Tick();
-            W.Tick();
-            W.Tick();
-            W.Tick();
-
-            Console.WriteLine("O0=" + W.GetPortValue("O0"));
-
-            W.SetPortValue("I0", true);
-            W.SetPortValue("I1", true);
-            W.Tick();
-            W.Tick();
-            W.Tick();
-            W.Tick();
-
-            Console.WriteLine("O0=" + W.GetPortValue("O0"));
+            world.SetPortValue("clk", true);
+            for (int i = 0; i < 50; i++)
+            {
+                world.Tick();
+                Console.WriteLine("regout=" + world.GetPortValue("regout"));
+            }
             */
 
+            //Test
+
+            world.SetPortValue("I0", false);
+            world.SetPortValue("I1", false);
+            world.Tick();
+            world.Tick();
+            world.Tick();
+            world.Tick();
+
+            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+
+            world.SetPortValue("I0", true);
+            world.SetPortValue("I1", false);
+            world.Tick();
+            world.Tick();
+            world.Tick();
+            world.Tick();
+
+            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+
+            world.SetPortValue("I0", false);
+            world.SetPortValue("I1", true);
+            world.Tick();
+            world.Tick();
+            world.Tick();
+            world.Tick();
+
+            Console.WriteLine("O0=" + world.GetPortValue("O0"));
+
+            world.SetPortValue("I0", true);
+            world.SetPortValue("I1", true);
+            world.Tick();
+            world.Tick();
+            world.Tick();
+            world.Tick();
+
+            Console.WriteLine("O0=" + world.GetPortValue("O0"));
         }
     }
 }

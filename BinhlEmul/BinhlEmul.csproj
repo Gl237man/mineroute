@@ -34,11 +34,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IOPort.cs" />
@@ -47,6 +42,7 @@
     <Compile Include="World.cs" />
     <Compile Include="WorldObjects\Air.cs" />
     <Compile Include="WorldObjects\Cloth.cs" />
+    <Compile Include="WorldObjects\Direction.cs" />
     <Compile Include="WorldObjects\RedstoneRepiter.cs" />
     <Compile Include="WorldObjects\RedstoneTorch.cs" />
     <Compile Include="WorldObjects\RedstoneWire.cs" />

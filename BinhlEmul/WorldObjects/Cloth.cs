@@ -1,126 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BinhlEmul.WorldObjects
+﻿namespace BinhlEmul.WorldObjects
 {
-    class Cloth : WorldObject
+    internal class Cloth : WorldObject
     {
-        public Cloth(int X, int Y, int Z, World W)
-            : base(X, Y, Z,W)
+        public Cloth(int x, int y, int z, World world)
+            : base(x, y, z, world)
         {
-            
         }
 
         public override bool IsActivated
         {
-            get {
+            get
+            {
                 //Проверка активации проводом
-                if (GetObject(Direction.backword).GetType() == typeof(RedstoneWire))
-                {
-                    if (GetObject(Direction.backword).GetObject(Direction.left).GetType() != typeof(RedstoneWire))
-                    {
-                        if (GetObject(Direction.backword).GetObject(Direction.right).GetType() != typeof(RedstoneWire))
-                        {
-                            if (GetObject(Direction.backword).RedValue > 0) return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Backword).GetType() == typeof (RedstoneWire) &&
+                    (GetObject(Direction.Backword).GetObject(Direction.Left).GetType() != typeof (RedstoneWire) &&
+                     (GetObject(Direction.Backword).GetObject(Direction.Right).GetType() != typeof (RedstoneWire) &&
+                      GetObject(Direction.Backword).RedValue > 0))) return true;
 
-                if (GetObject(Direction.forward).GetType() == typeof(RedstoneWire))
-                {
-                    if (GetObject(Direction.forward).GetObject(Direction.left).GetType() != typeof(RedstoneWire))
-                    {
-                        if (GetObject(Direction.forward).GetObject(Direction.right).GetType() != typeof(RedstoneWire))
-                        {
-                            if (GetObject(Direction.forward).RedValue > 0) return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Forward).GetType() == typeof (RedstoneWire) &&
+                    (GetObject(Direction.Forward).GetObject(Direction.Left).GetType() != typeof (RedstoneWire) &&
+                     (GetObject(Direction.Forward).GetObject(Direction.Right).GetType() != typeof (RedstoneWire) &&
+                      GetObject(Direction.Forward).RedValue > 0))) return true;
 
-                if (GetObject(Direction.left).GetType() == typeof(RedstoneWire))
-                {
-                    if (GetObject(Direction.left).GetObject(Direction.forward).GetType() != typeof(RedstoneWire))
-                    {
-                        if (GetObject(Direction.left).GetObject(Direction.backword).GetType() != typeof(RedstoneWire))
-                        {
-                            if (GetObject(Direction.left).RedValue > 0) return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Left).GetType() == typeof (RedstoneWire) &&
+                    (GetObject(Direction.Left).GetObject(Direction.Forward).GetType() != typeof (RedstoneWire) &&
+                     (GetObject(Direction.Left).GetObject(Direction.Backword).GetType() != typeof (RedstoneWire) &&
+                      GetObject(Direction.Left).RedValue > 0))) return true;
 
-                if (GetObject(Direction.right).GetType() == typeof(RedstoneWire))
-                {
-                    if (GetObject(Direction.right).GetObject(Direction.forward).GetType() != typeof(RedstoneWire))
-                    {
-                        if (GetObject(Direction.right).GetObject(Direction.backword).GetType() != typeof(RedstoneWire))
-                        {
-                            if (GetObject(Direction.right).RedValue > 0) return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Right).GetType() == typeof (RedstoneWire) &&
+                    GetObject(Direction.Right).GetObject(Direction.Forward).GetType() != typeof (RedstoneWire) &&
+                    GetObject(Direction.Right).GetObject(Direction.Backword).GetType() != typeof (RedstoneWire) &&
+                    GetObject(Direction.Right).RedValue > 0) return true;
+
                 //Проверка активации повторителем
-                if (GetObject(Direction.backword).GetType() == typeof(RedstoneRepiter))
-                {
-                    if (((RedstoneRepiter)(GetObject(Direction.backword))).Direct == Direction.forward)
-                    {
-                        if (((RedstoneRepiter)(GetObject(Direction.backword))).RedValue>15)
-                        {
-                            return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Backword).GetType() == typeof (RedstoneRepiter) &&
+                    (((RedstoneRepiter) (GetObject(Direction.Backword))).Direct == Direction.Forward &&
+                     GetObject(Direction.Backword).RedValue > 15)) return true;
 
-                if (GetObject(Direction.forward).GetType() == typeof(RedstoneRepiter))
-                {
-                    if (((RedstoneRepiter)(GetObject(Direction.forward))).Direct == Direction.backword)
-                    {
-                        if (((RedstoneRepiter)(GetObject(Direction.forward))).RedValue > 15)
-                        {
-                            return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Forward).GetType() == typeof (RedstoneRepiter) &&
+                    (((RedstoneRepiter) (GetObject(Direction.Forward))).Direct == Direction.Backword &&
+                     GetObject(Direction.Forward).RedValue > 15)) return true;
 
-                if (GetObject(Direction.left).GetType() == typeof(RedstoneRepiter))
-                {
-                    if (((RedstoneRepiter)(GetObject(Direction.left))).Direct == Direction.backword)
-                    {
-                        if (((RedstoneRepiter)(GetObject(Direction.left))).RedValue > 15)
-                        {
-                            return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Left).GetType() == typeof (RedstoneRepiter) &&
+                    (((RedstoneRepiter) (GetObject(Direction.Left))).Direct == Direction.Backword &&
+                     GetObject(Direction.Left).RedValue > 15)) return true;
 
-                if (GetObject(Direction.right).GetType() == typeof(RedstoneRepiter))
-                {
-                    if (((RedstoneRepiter)(GetObject(Direction.right))).Direct == Direction.left)
-                    {
-                        if (((RedstoneRepiter)(GetObject(Direction.right))).RedValue > 15)
-                        {
-                            return true;
-                        }
-                    }
-                }
+                if (GetObject(Direction.Right).GetType() == typeof (RedstoneRepiter) &&
+                    (((RedstoneRepiter) (GetObject(Direction.Right))).Direct == Direction.Left &&
+                     GetObject(Direction.Right).RedValue > 15)) return true;
+
                 //Проверка активации факелом
-                if (GetObject(Direction.down).GetType() == typeof(RedstoneTorch))
-                {
-                    if (((RedstoneRepiter)(GetObject(Direction.down))).RedValue > 15)
-                        {
-                            return true;
-                        }
-                    
-                }
+                if (GetObject(Direction.Down).GetType() == typeof (RedstoneTorch) &&
+                    GetObject(Direction.Down).RedValue > 15) return true;
 
 
                 //Проверка активации проводом сверху
-                if (GetObject(Direction.up).GetType() == typeof(RedstoneWire))
-                {
-                    if (GetObject(Direction.up).RedValue > 0) return true;
-                }
+                if (GetObject(Direction.Up).GetType() == typeof (RedstoneWire) && GetObject(Direction.Up).RedValue > 0)
+                    return true;
 
                 return false;
             }
@@ -128,8 +64,6 @@ namespace BinhlEmul.WorldObjects
 
         public override void Tick()
         {
-            
-
         }
     }
 }

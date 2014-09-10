@@ -1,21 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BinhlEmul.WorldObjects
+﻿namespace BinhlEmul.WorldObjects
 {
-    class Air : WorldObject
+    internal class Air : WorldObject
     {
-        public Air(int X,int Y,int Z,World W):base (X,Y,Z,W)
+        public Air(int x, int y, int z, World world) : base(x, y, z, world)
         {
-            
         }
 
         public override void Tick()
         {
-            
         }
     }
 }

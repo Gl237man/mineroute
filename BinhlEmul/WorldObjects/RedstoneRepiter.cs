@@ -1,44 +1,40 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BinhlEmul.WorldObjects
+﻿namespace BinhlEmul.WorldObjects
 {
-    class RedstoneRepiter: WorldObject
+    internal class RedstoneRepiter : WorldObject
     {
-        public Direction Direct;
         public int Delay;
-        public int ost;
-        public RedstoneRepiter(int X, int Y, int Z, Direction dir,int Delay,World W) : base(X, Y, Z,W)
+        public Direction Direct;
+        public int TimeToStop;
+
+        public RedstoneRepiter(int x, int y, int z, Direction dir, int delay, World world) : base(x, y, z, world)
         {
             Direct = dir;
-            this.Delay = Delay;
-            ost = 0;
+            Delay = delay;
+            TimeToStop = 0;
         }
+
         public override void Tick()
-        {   
-            if (ost>0) ost--;
+        {
+            if (TimeToStop > 0) TimeToStop--;
 
-            if (GetObject(Direction.backword).IsActivated && Direct == Direction.forward)
+            if (GetObject(Direction.Backword).IsActivated && Direct == Direction.Forward)
             {
-                ost = Delay;
+                TimeToStop = Delay;
             }
-            if (GetObject(Direction.forward).IsActivated && Direct == Direction.backword)
+            if (GetObject(Direction.Forward).IsActivated && Direct == Direction.Backword)
             {
-                ost = Delay;
+                TimeToStop = Delay;
             }
-            if (GetObject(Direction.left).IsActivated && Direct == Direction.right)
+            if (GetObject(Direction.Left).IsActivated && Direct == Direction.Right)
             {
-                ost = Delay;
+                TimeToStop = Delay;
             }
-            if (GetObject(Direction.right).IsActivated && Direct == Direction.left)
+            if (GetObject(Direction.Right).IsActivated && Direct == Direction.Left)
             {
-                ost = Delay;
+                TimeToStop = Delay;
             }
 
-            if (ost > 0)
+            if (TimeToStop > 0)
             {
                 IsActivated = true;
                 RedValue = 16;
@@ -48,8 +44,6 @@ namespace BinhlEmul.WorldObjects
                 IsActivated = false;
                 RedValue = 0;
             }
-
         }
     }
-    
 }

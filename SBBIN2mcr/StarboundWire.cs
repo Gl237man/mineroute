@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SBBIN2mcr
 {
-    class StarboundWire
+    internal class StarboundWire
     {
+        public int endx;
+        public int endy;
         public int startx;
         public int starty;
 
-        public int endx;
-        public int endy;
-
         public StarboundWire()
-        { 
+        {
         }
+
         public StarboundWire(string fromstr)
         {
             startx = Convert.ToInt32(fromstr.Split(':')[1]);
@@ -27,7 +23,7 @@ namespace SBBIN2mcr
 
         public override string ToString()
         {
-            return "W:" + startx.ToString() + ":" + starty.ToString() + ":" + endx.ToString() + ":" + endy.ToString();
+            return "W:" + startx + ":" + starty + ":" + endx + ":" + endy;
         }
     }
 }

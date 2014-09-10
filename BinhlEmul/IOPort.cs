@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BinhlEmul
+﻿namespace BinhlEmul
 {
-    public class IOPort
+    public class IoPort
     {
         public string Name;
-        public int x;
-        public int y;
-        public int z;
-        public bool value;
+        public bool Value;
+        public int X;
+        public int Y;
+        public int Z;
     }
 }

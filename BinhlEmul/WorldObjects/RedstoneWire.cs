@@ -1,182 +1,119 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace BinhlEmul.WorldObjects
 {
-    class RedstoneWire: WorldObject
+    internal class RedstoneWire : WorldObject
     {
         public bool Blocked = false;
 
-        public RedstoneWire(int X, int Y, int Z,World W) : base(X, Y, Z,W)
+        public RedstoneWire(int x, int y, int z, World world) : base(x, y, z, world)
         {
-            
         }
 
         public override void Tick()
         {
-            int OldRedValue = RedValue;
-            int[] maxN = new int[12];
-            
+            int oldRedValue = RedValue;
+            var maxN = new int[12];
 
-            maxN[0] = GetObject(Direction.backword).RedValue;
-            maxN[1] = GetObject(Direction.forward).RedValue;
-            maxN[2] = GetObject(Direction.left).RedValue;
-            maxN[3] = GetObject(Direction.right).RedValue;
 
-            if (GetObject(Direction.backword).GetType() == typeof (RedstoneRepiter))
-            {
-                if (((RedstoneRepiter)(GetObject(Direction.backword))).Direct != Direction.forward)
-                {
+            maxN[0] = GetObject(Direction.Backword).RedValue;
+            maxN[1] = GetObject(Direction.Forward).RedValue;
+            maxN[2] = GetObject(Direction.Left).RedValue;
+            maxN[3] = GetObject(Direction.Right).RedValue;
+
+            // Проверка репитеров
+            if (GetObject(Direction.Backword).GetType() == typeof (RedstoneRepiter))
+                if (((RedstoneRepiter) (GetObject(Direction.Backword))).Direct != Direction.Forward)
                     maxN[0] = 0;
-                }
-            }
-            if (GetObject(Direction.forward).GetType() == typeof(RedstoneRepiter))
-            {
-                if (((RedstoneRepiter)(GetObject(Direction.forward))).Direct != Direction.backword)
-                {
+
+            if (GetObject(Direction.Forward).GetType() == typeof (RedstoneRepiter))
+                if (((RedstoneRepiter) (GetObject(Direction.Forward))).Direct != Direction.Backword)
                     maxN[1] = 0;
-                }
-            }
-            if (GetObject(Direction.left).GetType() == typeof(RedstoneRepiter))
-            {
-                if (((RedstoneRepiter)(GetObject(Direction.left))).Direct != Direction.right)
-                {
+
+            if (GetObject(Direction.Left).GetType() == typeof (RedstoneRepiter))
+                if (((RedstoneRepiter) (GetObject(Direction.Left))).Direct != Direction.Right)
                     maxN[2] = 0;
-                }
-            }
-            if (GetObject(Direction.right).GetType() == typeof(RedstoneRepiter))
-            {
-                if (((RedstoneRepiter)(GetObject(Direction.right))).Direct != Direction.left)
-                {
+
+            if (GetObject(Direction.Right).GetType() == typeof (RedstoneRepiter))
+                if (((RedstoneRepiter) (GetObject(Direction.Right))).Direct != Direction.Left)
                     maxN[3] = 0;
-                }
-            }
+
             //Подьем сигнала
-            if (GetObject(Direction.backword).GetType() == typeof(Air))
+            if (GetObject(Direction.Backword).GetType() == typeof (Air))
             {
-                if (GetObject(Direction.backword).GetObject(Direction.down).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[4] = GetObject(Direction.backword).GetObject(Direction.down).RedValue;
-                }
+                if (GetObject(Direction.Backword).GetObject(Direction.Down).GetType() == typeof (RedstoneWire))
+                    maxN[4] = GetObject(Direction.Backword).GetObject(Direction.Down).RedValue;
             }
             else
-            {
-                
-                    maxN[4] = 0;
-                
-            }
+                maxN[4] = 0;
 
-            if (GetObject(Direction.forward).GetType() == typeof(Air))
+
+            if (GetObject(Direction.Forward).GetType() == typeof (Air))
             {
-                if (GetObject(Direction.forward).GetObject(Direction.down).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[5] = GetObject(Direction.forward).GetObject(Direction.down).RedValue;
-                }
+                if (GetObject(Direction.Forward).GetObject(Direction.Down).GetType() == typeof (RedstoneWire))
+                    maxN[5] = GetObject(Direction.Forward).GetObject(Direction.Down).RedValue;
             }
             else
-            {
-               
-                    maxN[5] = 0;
-                
-            }
+                maxN[5] = 0;
 
-            if (GetObject(Direction.left).GetType() == typeof(Air))
+            if (GetObject(Direction.Left).GetType() == typeof (Air))
             {
-                if (GetObject(Direction.left).GetObject(Direction.down).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[6] = GetObject(Direction.left).GetObject(Direction.down).RedValue;
-                }
+                if (GetObject(Direction.Left).GetObject(Direction.Down).GetType() == typeof (RedstoneWire))
+                    maxN[6] = GetObject(Direction.Left).GetObject(Direction.Down).RedValue;
             }
             else
-            {
-               
-                    maxN[6] = 0;
+                maxN[6] = 0;
 
-            }
-
-            if (GetObject(Direction.right).GetType() == typeof(Air))
+            if (GetObject(Direction.Right).GetType() == typeof (Air))
             {
-                if (GetObject(Direction.right).GetObject(Direction.down).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[7] = GetObject(Direction.right).GetObject(Direction.down).RedValue;
-                }
+                if (GetObject(Direction.Right).GetObject(Direction.Down).GetType() == typeof (RedstoneWire))
+                    maxN[7] = GetObject(Direction.Right).GetObject(Direction.Down).RedValue;
             }
             else
-            {
-                
-                    maxN[7] = 0;
+                maxN[7] = 0;
 
-            }
-            
             //Спуск Сигнала
-            if (GetObject(Direction.backword).GetType() == typeof(Cloth))
+            if (GetObject(Direction.Backword).GetType() == typeof (Cloth))
             {
-                if (GetObject(Direction.backword).GetObject(Direction.up).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[8] = GetObject(Direction.backword).GetObject(Direction.up).RedValue;
-                }
+                if (GetObject(Direction.Backword).GetObject(Direction.Up).GetType() == typeof (RedstoneWire))
+                    maxN[8] = GetObject(Direction.Backword).GetObject(Direction.Up).RedValue;
             }
             else
-            {
                 maxN[8] = 0;
-            }
 
-            if (GetObject(Direction.forward).GetType() == typeof(Cloth))
+            if (GetObject(Direction.Forward).GetType() == typeof (Cloth))
             {
-                if (GetObject(Direction.forward).GetObject(Direction.up).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[9] = GetObject(Direction.forward).GetObject(Direction.up).RedValue;
-                }
+                if (GetObject(Direction.Forward).GetObject(Direction.Up).GetType() == typeof (RedstoneWire))
+                    maxN[9] = GetObject(Direction.Forward).GetObject(Direction.Up).RedValue;
             }
             else
-            {
                 maxN[9] = 0;
-            }
 
-            if (GetObject(Direction.left).GetType() == typeof(Cloth))
+            if (GetObject(Direction.Left).GetType() == typeof (Cloth))
             {
-                if (GetObject(Direction.left).GetObject(Direction.up).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[10] = GetObject(Direction.left).GetObject(Direction.up).RedValue;
-                }
+                if (GetObject(Direction.Left).GetObject(Direction.Up).GetType() == typeof (RedstoneWire))
+                    maxN[10] = GetObject(Direction.Left).GetObject(Direction.Up).RedValue;
             }
             else
-            {
                 maxN[10] = 0;
-            }
-            if (GetObject(Direction.right).GetType() == typeof(Cloth))
+
+            if (GetObject(Direction.Right).GetType() == typeof (Cloth))
             {
-                if (GetObject(Direction.right).GetObject(Direction.up).GetType() == typeof(RedstoneWire))
-                {
-                    maxN[11] = GetObject(Direction.right).GetObject(Direction.up).RedValue;
-                }
+                if (GetObject(Direction.Right).GetObject(Direction.Up).GetType() == typeof (RedstoneWire))
+                    maxN[11] = GetObject(Direction.Right).GetObject(Direction.Up).RedValue;
             }
             else
-            {
                 maxN[11] = 0;
-            }
 
 
-            int max = 0;
-            for (int i = 0; i < maxN.Length; i++)
-            {
-                if (maxN[i] > max) max = maxN[i];
-            }
+            int max = maxN.Max();
 
-            if (!Blocked)
-            {
-                RedValue = max - 1;
+            if (Blocked) return;
+            RedValue = max - 1;
 
-                if (RedValue > 0)
-                    IsActivated = true;
-                else
-                    IsActivated = false;
+            IsActivated = RedValue > 0;
 
-                if (OldRedValue != RedValue) InWorld.NotFullTick = true;
-            }
+            if (oldRedValue != RedValue) InWorld.NotFullTick = true;
         }
     }
 }
