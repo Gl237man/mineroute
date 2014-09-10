@@ -14,6 +14,8 @@ namespace BinhlEmul
         public int WSY;
         public int WSZ;
         public bool NotFullTick;
+        public List<IOPort> InPorts;
+        public List<IOPort> OutPorts;
 
         public World (Node node)
         {
@@ -77,6 +79,53 @@ namespace BinhlEmul
                     }
                 }
             }
+
+            //Загрузка портов
+            InPorts = new List<IOPort>();
+            OutPorts = new List<IOPort>();
+
+            for (int i = 0; i < node.InPorts.Length; i++)
+            {
+                int x = node.InPorts[i].PosX;
+                int y = WSY - node.InPorts[i].PosY - 1;
+                int z = 0;
+                for (int j = 0; j < WSZ; j++)
+                {
+                    if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.Cloth))
+                    {
+                        z = j;
+                    }
+                }
+                IOPort p = new IOPort();
+                p.x = x;
+                p.y = y;
+                p.z = z;
+                p.Name = node.InPorts[i].Name;
+                p.value = false;
+                InPorts.Add(p);
+            }
+
+            for (int i = 0; i < node.OutPorts.Length; i++)
+            {
+                int x = node.OutPorts[i].PosX;
+                int y = WSY - node.OutPorts[i].PosY - 1;
+                int z = 0;
+                for (int j = 0; j < WSZ; j++)
+                {
+                    if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.Cloth))
+                    {
+                        z = j;
+                    }
+                }
+                IOPort p = new IOPort();
+                p.x = x;
+                p.y = y;
+                p.z = z;
+                p.Name = node.OutPorts[i].Name;
+                p.value = false;
+                OutPorts.Add(p);
+            }
+
         }
 
         public void Tick()

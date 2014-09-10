@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace BinhlEmul
 {
-    class IOPort
+    public class IOPort
     {
+        public string Name;
         public int x;
         public int y;
         public int z;
+        public bool value;
     }
 }
