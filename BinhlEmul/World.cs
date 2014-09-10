@@ -13,6 +13,7 @@ namespace BinhlEmul
         public int WSX;
         public int WSY;
         public int WSZ;
+        public bool NotFullTick;
 
         public World (Node node)
         {
@@ -26,7 +27,7 @@ namespace BinhlEmul
                 {
                     for (int z = 0; z < node.SizeZ; z++)
                     {
-                        switch (node.DataMatrix[x,y,z])
+                        switch (node.DataMatrix[x, WSY - y - 1, z])
                         {
                             case "k":
                                 ObjectMatrix[x, y, z] = new WorldObjects.Cloth(x, y, z,this);
@@ -72,6 +73,43 @@ namespace BinhlEmul
                                 break;
                             default:
                                 break;
+                        }
+                    }
+                }
+            }
+        }
+
+        public void Tick()
+        {
+            NotFullTick = true;
+            while (NotFullTick)
+            {
+                NotFullTick = false;
+                for (int x = 0; x < WSX; x++)
+                {
+                    for (int y = 0; y < WSY; y++)
+                    {
+                        for (int z = 0; z < WSZ; z++)
+                        {
+                            if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.RedstoneWire))
+                            {
+                                ObjectMatrix[x, y, z].Tick();
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            for (int x = 0; x < WSX; x++)
+            {
+                for (int y = 0; y < WSY; y++)
+                {
+                    for (int z = 0; z < WSZ; z++)
+                    {
+                        if (ObjectMatrix[x, y, z].GetType() != typeof(WorldObjects.RedstoneWire))
+                        {
+                            ObjectMatrix[x, y, z].Tick();
                         }
                     }
                 }

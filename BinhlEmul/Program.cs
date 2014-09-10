@@ -24,7 +24,9 @@ namespace BinhlEmul
             Node N = new Node(FileName + ".binhl");
 
             World W = new World(N);
-
+            W.Tick();
+            W.Tick();
+            W.Tick();
 
 
         }

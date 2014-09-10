@@ -22,7 +22,7 @@ namespace BinhlEmul.WorldObjects
         public int Xcoord;
         public int Ycoord;
         public int Zcoord;
-        public bool IsActivated;
+        public virtual bool IsActivated{get;set;}
         public int RedValue;
 
         public abstract void Tick();
