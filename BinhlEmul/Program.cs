@@ -24,6 +24,8 @@ namespace BinhlEmul
             Node N = new Node(FileName + ".binhl");
 
             World W = new World(N);
+            W.SetPortValue("I0", true);
+            W.SetPortValue("I1", true);
             W.Tick();
             W.Tick();
             W.Tick();

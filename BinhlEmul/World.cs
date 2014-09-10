@@ -103,6 +103,10 @@ namespace BinhlEmul
                 p.Name = node.InPorts[i].Name;
                 p.value = false;
                 InPorts.Add(p);
+                ObjectMatrix[x, y, z] = new WorldObjects.RedstoneWire(x, y, z, this);
+                ((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).Blocked = true;
+                //((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).RedValue = 15;
+                //((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).IsActivated = true;
             }
 
             for (int i = 0; i < node.OutPorts.Length; i++)
@@ -124,12 +128,48 @@ namespace BinhlEmul
                 p.Name = node.OutPorts[i].Name;
                 p.value = false;
                 OutPorts.Add(p);
+                ObjectMatrix[x, y, z] = new WorldObjects.RedstoneWire(x, y, z, this);
             }
 
         }
 
+        public bool GetPortValue(string portName)
+        {
+            for (int i = 0; i < OutPorts.Count; i++)
+            {
+                if (OutPorts[i].Name == portName)
+                {
+                    return OutPorts[i].value;
+                }
+            }
+            return false;
+        }
+
+        public void SetPortValue(string portName, bool value)
+        {
+            for (int i = 0; i < InPorts.Count; i++)
+            {
+                if (InPorts[i].Name == portName)
+                {
+                    InPorts[i].value = value;
+                    if (value == true)
+                    {
+                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).RedValue = 15;
+                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).IsActivated = true;
+
+                    }
+                    else
+                    {
+                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).RedValue = 0;
+                        ((WorldObjects.RedstoneWire)ObjectMatrix[InPorts[i].x, InPorts[i].y, InPorts[i].z]).IsActivated = false;
+                    }
+                }
+            }
+        }
+
         public void Tick()
         {
+            //Оброботка тика проводов
             NotFullTick = true;
             while (NotFullTick)
             {
@@ -141,15 +181,15 @@ namespace BinhlEmul
                         for (int z = 0; z < WSZ; z++)
                         {
                             if (ObjectMatrix[x, y, z].GetType() == typeof(WorldObjects.RedstoneWire))
-                            {
-                                ObjectMatrix[x, y, z].Tick();
-                            }
+                                {
+                                    ObjectMatrix[x, y, z].Tick();
+                                }
                         }
                     }
                 }
 
             }
-
+            //Оброботка тика блоков
             for (int x = 0; x < WSX; x++)
             {
                 for (int y = 0; y < WSY; y++)
@@ -161,6 +201,18 @@ namespace BinhlEmul
                             ObjectMatrix[x, y, z].Tick();
                         }
                     }
+                }
+            }
+            //Обновление состояния портов
+            for (int i = 0; i < OutPorts.Count; i++)
+            {
+                if (ObjectMatrix[OutPorts[i].x, OutPorts[i].y, OutPorts[i].z].RedValue > 0)
+                {
+                    OutPorts[i].value = true;
+                }
+                else
+                {
+                    OutPorts[i].value = false;
                 }
             }
         }
