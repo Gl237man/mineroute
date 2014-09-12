@@ -5,34 +5,48 @@
         public int Delay;
         public Direction Direct;
         public int TimeToStop;
+        public bool Act;
+        public bool[] ActArch;
 
         public RedstoneRepiter(int x, int y, int z, Direction dir, int delay, World world) : base(x, y, z, world)
         {
             Direct = dir;
             Delay = delay;
             TimeToStop = 0;
+            Act = false;
+            ActArch = new bool[Delay];
         }
 
         public override void Tick()
         {
+            Act = false;
+
             if (TimeToStop > 0) TimeToStop--;
 
             if (GetObject(Direction.Backword).IsActivated && Direct == Direction.Forward)
             {
-                TimeToStop = Delay;
+                Act = true;
             }
             if (GetObject(Direction.Forward).IsActivated && Direct == Direction.Backword)
             {
-                TimeToStop = Delay;
+                Act = true;
             }
             if (GetObject(Direction.Left).IsActivated && Direct == Direction.Right)
             {
-                TimeToStop = Delay;
+                Act = true;
             }
             if (GetObject(Direction.Right).IsActivated && Direct == Direction.Left)
             {
-                TimeToStop = Delay;
+                Act = true;
             }
+
+            for (int i = 1; i < Delay; i++)
+            {
+                ActArch[i - 1] = ActArch[i];
+            }
+            ActArch[Delay - 1] = Act;
+
+            if (ActArch[0]) TimeToStop = Delay;
 
             if (TimeToStop > 0)
             {

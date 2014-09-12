@@ -42,7 +42,7 @@
                      GetObject(Direction.Forward).RedValue > 15)) return true;
 
                 if (GetObject(Direction.Left).GetType() == typeof (RedstoneRepiter) &&
-                    (((RedstoneRepiter) (GetObject(Direction.Left))).Direct == Direction.Backword &&
+                    (((RedstoneRepiter) (GetObject(Direction.Left))).Direct == Direction.Right &&
                      GetObject(Direction.Left).RedValue > 15)) return true;
 
                 if (GetObject(Direction.Right).GetType() == typeof (RedstoneRepiter) &&

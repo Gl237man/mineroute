@@ -34,11 +34,13 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IOPort.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Render.cs" />
     <Compile Include="World.cs" />
     <Compile Include="WorldObjects\Air.cs" />
     <Compile Include="WorldObjects\Cloth.cs" />
