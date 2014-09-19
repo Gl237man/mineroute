@@ -77,7 +77,7 @@ namespace EDF2MNET
                         Mainportlist.Add(mstr[2] + "-" +port.Name);
                         MainportlistT.Add("I");
                     }
-                    foreach (OUTPort port in node.OutPorts)
+                    foreach (OutPort port in node.OutPorts)
                     {
                         Mainportlist.Add(mstr[2] + "-" + port.Name);
                         MainportlistT.Add("O");

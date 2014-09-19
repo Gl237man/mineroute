@@ -13,7 +13,7 @@ namespace BinhlEmul
 
             var world = new World(node);
 
-            Render r = new Render(world);
+            var r = new Render(world);
 
             world.SetPortValue("datain", false);
             world.SetPortValue("clk", false);

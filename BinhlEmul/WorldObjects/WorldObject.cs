@@ -21,15 +21,19 @@
         public abstract void Tick();
 
 
+/*
         public int GetRedValue(Direction direct)
         {
             return GetObject(direct).RedValue;
         }
+*/
 
+/*
         public bool GetRedActivated(Direction direct)
         {
             return GetObject(direct).IsActivated;
         }
+*/
 
         public WorldObject GetObject(Direction direct)
         {

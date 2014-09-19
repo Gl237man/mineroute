@@ -10,24 +10,24 @@ namespace BinhlEmul
         private readonly List<IoPort> _inPorts;
         private readonly WorldObject[,,] _objectMatrix;
         private readonly List<IoPort> _outPorts;
-        public readonly int worldSizeX;
-        public readonly int worldSizeY;
-        public readonly int worldSizeZ;
+        public readonly int WorldSizeX;
+        public readonly int WorldSizeY;
+        public readonly int WorldSizeZ;
         public bool NotFullTick;
 
         public World(Node node)
         {
             _objectMatrix = new WorldObject[node.SizeX, node.SizeY, node.SizeZ];
-            worldSizeX = node.SizeX;
-            worldSizeY = node.SizeY;
-            worldSizeZ = node.SizeZ;
+            WorldSizeX = node.SizeX;
+            WorldSizeY = node.SizeY;
+            WorldSizeZ = node.SizeZ;
             for (int x = 0; x < node.SizeX; x++)
             {
                 for (int y = 0; y < node.SizeY; y++)
                 {
                     for (int z = 0; z < node.SizeZ; z++)
                     {
-                        switch (node.DataMatrix[x, worldSizeY - y - 1, z])
+                        switch (node.DataMatrix[x, WorldSizeY - y - 1, z])
                         {
                             case "k":
                                 _objectMatrix[x, y, z] = new Cloth(x, y, z, this);
@@ -83,9 +83,9 @@ namespace BinhlEmul
             foreach (INPort port in node.InPorts)
             {
                 int x = port.PosX;
-                int y = worldSizeY - port.PosY - 1;
+                int y = WorldSizeY - port.PosY - 1;
                 int z = 0;
-                for (int j = 0; j < worldSizeZ; j++)
+                for (int j = 0; j < WorldSizeZ; j++)
                 {
                     if (_objectMatrix[x, y, z].GetType() == typeof (Cloth))
                     {
@@ -100,12 +100,12 @@ namespace BinhlEmul
                 //((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).IsActivated = true;
             }
 
-            foreach (OUTPort port in node.OutPorts)
+            foreach (OutPort port in node.OutPorts)
             {
                 int x = port.PosX;
-                int y = worldSizeY - port.PosY - 1;
+                int y = WorldSizeY - port.PosY - 1;
                 int z = 0;
-                for (int j = 0; j < worldSizeZ; j++)
+                for (int j = 0; j < WorldSizeZ; j++)
                 {
                     if (_objectMatrix[x, y, z].GetType() == typeof (Cloth))
                     {
@@ -146,11 +146,11 @@ namespace BinhlEmul
             //Оброботка тика проводов
             TickWire();
             //Оброботка тика блоков
-            for (int x = 0; x < worldSizeX; x++)
+            for (int x = 0; x < WorldSizeX; x++)
             {
-                for (int y = 0; y < worldSizeY; y++)
+                for (int y = 0; y < WorldSizeY; y++)
                 {
-                    for (int z = 0; z < worldSizeZ; z++)
+                    for (int z = 0; z < WorldSizeZ; z++)
                     {
                         if (_objectMatrix[x, y, z].GetType() != typeof (RedstoneWire))
                         {
@@ -175,11 +175,11 @@ namespace BinhlEmul
             while (NotFullTick)
             {
                 NotFullTick = false;
-                for (int x = 0; x < worldSizeX; x++)
+                for (int x = 0; x < WorldSizeX; x++)
                 {
-                    for (int y = 0; y < worldSizeY; y++)
+                    for (int y = 0; y < WorldSizeY; y++)
                     {
-                        for (int z = 0; z < worldSizeZ; z++)
+                        for (int z = 0; z < WorldSizeZ; z++)
                         {
                             if (_objectMatrix[x, y, z].GetType() == typeof(RedstoneWire))
                             {
@@ -197,11 +197,11 @@ namespace BinhlEmul
             while (NotFullTick)
             {
                 NotFullTick = false;
-                for (int x = 0; x < worldSizeX; x++)
+                for (int x = 0; x < WorldSizeX; x++)
                 {
-                    for (int y = 0; y < worldSizeY; y++)
+                    for (int y = 0; y < WorldSizeY; y++)
                     {
-                        for (int z = 0; z < worldSizeZ; z++)
+                        for (int z = 0; z < WorldSizeZ; z++)
                         {
                             if (_objectMatrix[x, y, z].GetType() == typeof(RedstoneTorch))
                             {
@@ -215,9 +215,9 @@ namespace BinhlEmul
 
         public WorldObject GetObject(int xCoord, int yCoord, int zCoord)
         {
-            if (xCoord < 0 || xCoord >= worldSizeX) return new Air(xCoord, yCoord, zCoord, this);
-            if (yCoord < 0 || yCoord >= worldSizeY) return new Air(xCoord, yCoord, zCoord, this);
-            if (zCoord < 0 || zCoord >= worldSizeZ) return new Air(xCoord, yCoord, zCoord, this);
+            if (xCoord < 0 || xCoord >= WorldSizeX) return new Air(xCoord, yCoord, zCoord, this);
+            if (yCoord < 0 || yCoord >= WorldSizeY) return new Air(xCoord, yCoord, zCoord, this);
+            if (zCoord < 0 || zCoord >= WorldSizeZ) return new Air(xCoord, yCoord, zCoord, this);
 
             return _objectMatrix[xCoord, yCoord, zCoord];
         }

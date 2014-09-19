@@ -1,29 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using RouteUtils;
 
 namespace MNetSynt
 {
-    class Program
+    internal static class Program
     {
-        static List<Node> Nlist;
-        static List<string> Uname;
-        static List<int> CoordX;
-        static List<int> CoordY;
-        static List<int> PortNum;
-        static List<Wire> Wlist;
-        static int[] Wprior;
-        static string[, ,] mask;
-        static int[, ,] wavemap;
+        private static List<Node> _nlist;
+        private static List<string> _uname;
+        private static List<int> _coordX;
+        private static List<int> _coordY;
+        private static List<int> _portNum;
+        private static List<Wire> _wlist;
+        private static int[] _wprior;
+        private static string[,,] _mask;
+        private static int[,,] _wavemap;
 
-        static int SizeX;
-        static int SizeY;
+        private static int SizeX;
+        private static int _sizeY;
 
-        static int restartnum = 0;
-        static int SZMod = -50;
-        static bool Vmode = false;
-        static int  VsizeMod = -12;
-        static void Main(string[] args)
+        private static int _restartnum;
+        private static int _szMod = -50;
+        private static bool Vmode;
+        private static int VsizeMod = -12;
+
+        private static void Main(string[] args)
         {
             string FileName = "";
             if (args.Length < 1)
@@ -37,42 +39,42 @@ namespace MNetSynt
 
             int placewidch = 2;
             //ReadNet
-            string[] InFileStr = System.IO.File.ReadAllLines(FileName + ".MNET");
-            Nlist = new List<Node>();
-            Wlist = new List<Wire>();
-            Uname = new List<string>();
+            string[] InFileStr = File.ReadAllLines(FileName + ".MNET");
+            _nlist = new List<Node>();
+            _wlist = new List<Wire>();
+            _uname = new List<string>();
 
             for (int i = 0; i < InFileStr.Length; i++)
             {
                 string[] IfDat = InFileStr[i].Split(':');
                 if (IfDat[0] == "NODE")
                 {
-                    Nlist.Add(new Node(IfDat[1] + ".binhl"));
-                    Uname.Add(IfDat[2]);
+                    _nlist.Add(new Node(IfDat[1] + ".binhl"));
+                    _uname.Add(IfDat[2]);
                 }
                 if (IfDat[0] == "WIRE")
                 {
-                    Wlist.Add(new Wire(IfDat[1], IfDat[2]));
+                    _wlist.Add(new Wire(IfDat[1], IfDat[2]));
                 }
             }
 
-            Wprior = new int[Wlist.Count];
+            _wprior = new int[_wlist.Count];
 
-            for (int i = 0; i < Wprior.Length; i++)
+            for (int i = 0; i < _wprior.Length; i++)
             {
-                Wprior[i] = 0;
+                _wprior[i] = 0;
             }
 
-        restart:
-            Console.WriteLine("SZMod " + SZMod.ToString());
-            Console.WriteLine("VsizeMod " + VsizeMod.ToString());
-            Console.WriteLine("placewidch " + placewidch.ToString());
+            restart:
+            Console.WriteLine("SZMod " + _szMod);
+            Console.WriteLine("VsizeMod " + VsizeMod);
+            Console.WriteLine("placewidch " + placewidch);
 
-            restartnum++;
+            _restartnum++;
             Console.Write(".");
-            if (Wprior[0] > Wprior.Length)
+            if (_wprior[0] > _wprior.Length)
             {
-                for (int i = 0; i < Wprior.Length; i++)
+                for (int i = 0; i < _wprior.Length; i++)
                 {
                     //Wprior[i] = 0;
                     Console.Write("ERRR");
@@ -82,32 +84,31 @@ namespace MNetSynt
             }
 
 
-            if (restartnum > 100)
+            if (_restartnum > 100)
             {
-                
-                restartnum = 0;
+                _restartnum = 0;
                 if (Vmode)
                 {
-                    VsizeMod++; 
+                    VsizeMod++;
                 }
                 else
                 {
-                    SZMod++;
+                    _szMod++;
                 }
             }
             //wlist sort
-            for (int i = 0; i < Wprior.Length; i++)
+            for (int i = 0; i < _wprior.Length; i++)
             {
-                for (int j = 1; j < Wprior.Length; j++)
+                for (int j = 1; j < _wprior.Length; j++)
                 {
-                    if (Wprior[j - 1] < Wprior[j])
+                    if (_wprior[j - 1] < _wprior[j])
                     {
-                        int t0 = Wprior[j];
-                        Wprior[j] = Wprior[j - 1];
-                        Wprior[j - 1] = t0;
-                        Wire t1 = Wlist[j];
-                        Wlist[j] = Wlist[j - 1];
-                        Wlist[j - 1] = t1;
+                        int t0 = _wprior[j];
+                        _wprior[j] = _wprior[j - 1];
+                        _wprior[j - 1] = t0;
+                        Wire t1 = _wlist[j];
+                        _wlist[j] = _wlist[j - 1];
+                        _wlist[j - 1] = t1;
                     }
                 }
             }
@@ -120,106 +121,109 @@ namespace MNetSynt
             int outpnum = 0;
             int inpnum = 0;
 
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                if (Nlist[i].SizeX > maxx)
+                if (_nlist[i].SizeX > maxx)
                 {
-                    maxx = Nlist[i].SizeX;
+                    maxx = _nlist[i].SizeX;
                 }
-                if (Nlist[i].SizeY > maxy)
+                if (_nlist[i].SizeY > maxy)
                 {
-                    maxy = Nlist[i].SizeY;
+                    maxy = _nlist[i].SizeY;
                 }
-                if (Nlist[i].InPorts.Length > maxports)
+                if (_nlist[i].InPorts.Length > maxports)
                 {
-                    maxports = Nlist[i].InPorts.Length;
+                    maxports = _nlist[i].InPorts.Length;
                 }
-                if (Nlist[i].OutPorts.Length > maxports)
+                if (_nlist[i].OutPorts.Length > maxports)
                 {
-                    maxports = Nlist[i].OutPorts.Length;
+                    maxports = _nlist[i].OutPorts.Length;
                 }
-                if (Nlist[i].Name != "INPort")
+                if (_nlist[i].Name != "INPort")
                 {
-                    if (Nlist[i].Name != "OUTPort")
+                    if (_nlist[i].Name != "OUTPort")
                     {
                         NotPortNodeNum++;
                     }
                 }
 
-                if (Nlist[i].Name == "INPort")
+                if (_nlist[i].Name == "INPort")
                 {
                     inpnum++;
                 }
-                if (Nlist[i].Name == "OUTPort")
+                if (_nlist[i].Name == "OUTPort")
                 {
                     outpnum++;
                 }
-
             }
 
 
             if (!Vmode)
             {
-                SizeX = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1) * (maxx + maxports * 2) + inpnum * 2 + outpnum * 2 + SZMod;
-                SizeY = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1) * (maxy + maxports * 2) + inpnum * 2 + outpnum * 2 + SZMod;
-                if (SizeY < 1 || SizeX < 1)
+                SizeX = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1)*(maxx + maxports*2) + inpnum*2 + outpnum*2 +
+                        _szMod;
+                _sizeY = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1)*(maxy + maxports*2) + inpnum*2 + outpnum*2 +
+                         _szMod;
+                if (_sizeY < 1 || SizeX < 1)
                 {
-                    SZMod++;
-                   //goto restart;
+                    _szMod++;
+                    //goto restart;
                 }
             }
             else
             {
-                SizeX = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1) * (maxx + maxports * 2) + inpnum * 2 + outpnum * 2 + SZMod;
-                SizeY = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1) * (maxy + maxports * 2) + inpnum * 2 + outpnum * 2 + SZMod + VsizeMod;
-                if (SizeY < 1 || SizeX < 1)
+                SizeX = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1)*(maxx + maxports*2) + inpnum*2 + outpnum*2 +
+                        _szMod;
+                _sizeY = (Convert.ToInt32(Math.Sqrt(NotPortNodeNum)) + 1)*(maxy + maxports*2) + inpnum*2 + outpnum*2 +
+                         _szMod + VsizeMod;
+                if (_sizeY < 1 || SizeX < 1)
                 {
                     VsizeMod++;
                     goto restart;
                 }
             }
             SizeX = 128;
-            SizeY = 256;
+            _sizeY = 256;
             int pmax = Convert.ToInt32(Math.Sqrt(NotPortNodeNum));
             //int px = 0;
             //int py = 0;
 
-            CoordX = new List<int>();
-            CoordY = new List<int>();
+            _coordX = new List<int>();
+            _coordY = new List<int>();
 
             int tipn = 0;
             int topn = 0;
 
-            PortNum = new List<int>();
+            _portNum = new List<int>();
 
             //MultiLineSort
-            int[] RyadList = new int[Uname.Count];
+            var RyadList = new int[_uname.Count];
             PovtorSort:
-            int[] KFList = new int[Uname.Count];
+            var KFList = new int[_uname.Count];
             int kz = 0;
-            string s = Uname[0];
+            string s = _uname[0];
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                string Sname = Wlist[i].StartName.Split('-')[0];
-                string Ename = Wlist[i].EndName.Split('-')[0];
+                string Sname = _wlist[i].StartName.Split('-')[0];
+                string Ename = _wlist[i].EndName.Split('-')[0];
                 //finding Sindex
                 int Sidx = 0;
                 int Eidx = 0;
-                for (int j = 0; j < Uname.Count; j++)
+                for (int j = 0; j < _uname.Count; j++)
                 {
-                    if (Uname[j] == Sname)
+                    if (_uname[j] == Sname)
                     {
                         Sidx = j;
                     }
-                    if (Uname[j] == Ename)
+                    if (_uname[j] == Ename)
                     {
                         Eidx = j;
                     }
                 }
-                if (Nlist[Sidx].Name != "INPort")
+                if (_nlist[Sidx].Name != "INPort")
                 {
-                    if (Nlist[Eidx].Name != "OUTPort")
+                    if (_nlist[Eidx].Name != "OUTPort")
                     {
                         if (Sidx != Eidx)
                         {
@@ -231,9 +235,9 @@ namespace MNetSynt
                     }
                 }
             }
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                if (Nlist[i].InPorts.Length <= KFList[i]*2)
+                if (_nlist[i].InPorts.Length <= KFList[i]*2)
                 {
                     kz++;
                     RyadList[i]++;
@@ -242,33 +246,31 @@ namespace MNetSynt
             if (kz > 0) goto PovtorSort;
 
 
+            int RyadNum = Max(RyadList) + 1;
 
-            int RyadNum = Max(RyadList)+1;
-            
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                if (Nlist[i].Name != "INPort")
+                if (_nlist[i].Name != "INPort")
                 {
-                    if (Nlist[i].Name != "OUTPort")
+                    if (_nlist[i].Name != "OUTPort")
                     {
-                        CoordX.Add(0);
-                        CoordY.Add(0);
-                        PortNum.Add(0);
+                        _coordX.Add(0);
+                        _coordY.Add(0);
+                        _portNum.Add(0);
                     }
                 }
-                if (Nlist[i].Name == "INPort")
+                if (_nlist[i].Name == "INPort")
                 {
-
-                    CoordX.Add(tipn * 2 + 3);
-                    CoordY.Add(0);
-                    PortNum.Add(tipn);
+                    _coordX.Add(tipn*2 + 3);
+                    _coordY.Add(0);
+                    _portNum.Add(tipn);
                     tipn++;
                 }
-                if (Nlist[i].Name == "OUTPort")
+                if (_nlist[i].Name == "OUTPort")
                 {
-                    CoordX.Add(topn * 2 + 3);
-                    CoordY.Add(SizeY - 3);
-                    PortNum.Add(topn);
+                    _coordX.Add(topn*2 + 3);
+                    _coordY.Add(_sizeY - 3);
+                    _portNum.Add(topn);
                     topn++;
                 }
             }
@@ -289,45 +291,43 @@ namespace MNetSynt
             */
             //MultiLinePlace
 
-            int[] INPortInRyad = new int[RyadNum];
-            int[] OUTPortInRyad = new int[RyadNum];
-            int[] MaxVsizeObjInRyad = new int[RyadNum];
-            int[] MinVsizeObjInRyad = new int[RyadNum];
+            var INPortInRyad = new int[RyadNum];
+            var OUTPortInRyad = new int[RyadNum];
+            var MaxVsizeObjInRyad = new int[RyadNum];
+            var MinVsizeObjInRyad = new int[RyadNum];
             int INPortNum = 0;
             int OUTPortNum = 0;
             //pass1
-            int Tline = 3 + tipn * 2 + 1 +2;
+            int Tline = 3 + tipn*2 + 1 + 2;
 
             for (int i = 0; i < RyadNum; i++)
             {
                 MinVsizeObjInRyad[i] = 9999999;
                 int lastx = 2;
                 int n = 0;
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-                    
                     if (RyadList[j] == i)
                     {
-                        if (Nlist[j].Name != "INPort")
+                        if (_nlist[j].Name != "INPort")
                         {
-                            if (Nlist[j].Name != "OUTPort")
+                            if (_nlist[j].Name != "OUTPort")
                             {
-
-                                CoordX[j] = lastx;
-                                CoordY[j] = Tline;//(RyadList[j] + 1) * 40;
-                                lastx += Nlist[j].SizeX + n;
-                                INPortInRyad[i] += Nlist[j].InPorts.Length;
-                                OUTPortInRyad[i] += Nlist[j].OutPorts.Length;
-                                if (MaxVsizeObjInRyad[i] < Nlist[j].SizeY) MaxVsizeObjInRyad[i] = Nlist[j].SizeY;
-                                if (MinVsizeObjInRyad[i] > Nlist[j].SizeY) MinVsizeObjInRyad[i] = Nlist[j].SizeY;
+                                _coordX[j] = lastx;
+                                _coordY[j] = Tline; //(RyadList[j] + 1) * 40;
+                                lastx += _nlist[j].SizeX + n;
+                                INPortInRyad[i] += _nlist[j].InPorts.Length;
+                                OUTPortInRyad[i] += _nlist[j].OutPorts.Length;
+                                if (MaxVsizeObjInRyad[i] < _nlist[j].SizeY) MaxVsizeObjInRyad[i] = _nlist[j].SizeY;
+                                if (MinVsizeObjInRyad[i] > _nlist[j].SizeY) MinVsizeObjInRyad[i] = _nlist[j].SizeY;
                                 //n--;
                             }
                         }
-                        if (Nlist[j].Name == "INPort")
+                        if (_nlist[j].Name == "INPort")
                         {
                             INPortNum++;
                         }
-                        if (Nlist[j].Name == "OUTPort")
+                        if (_nlist[j].Name == "OUTPort")
                         {
                             OUTPortNum++;
                         }
@@ -340,19 +340,17 @@ namespace MNetSynt
                 MinVsizeObjInRyad[i] = 9999999;
                 int lastx = 2;
                 int n = 0;
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-
                     if (RyadList[j] == i)
                     {
-                        if (Nlist[j].Name != "INPort")
+                        if (_nlist[j].Name != "INPort")
                         {
-                            if (Nlist[j].Name != "OUTPort")
+                            if (_nlist[j].Name != "OUTPort")
                             {
-
-                                CoordX[j] = lastx;
-                                CoordY[j] = Tline + 0 + INPortInRyad[i] * 2 ;//(RyadList[j] + 1) * 40;
-                                lastx += Nlist[j].SizeX + n;
+                                _coordX[j] = lastx;
+                                _coordY[j] = Tline + 0 + INPortInRyad[i]*2; //(RyadList[j] + 1) * 40;
+                                lastx += _nlist[j].SizeX + n;
                                 //INPortInRyad[i] += Nlist[j].InPorts.Length;
                                 //OUTPortInRyad[i] += Nlist[j].OutPorts.Length;
                                 //if (MaxVsizeObjInRyad[i] < Nlist[j].SizeY) MaxVsizeObjInRyad[i] = Nlist[j].SizeY;
@@ -360,19 +358,18 @@ namespace MNetSynt
                                 //n--;
                             }
                         }
-                        
                     }
                 }
-                Tline += INPortInRyad[i] * 2 + MaxVsizeObjInRyad[i] + OUTPortInRyad[i] * 2 + 2;
+                Tline += INPortInRyad[i]*2 + MaxVsizeObjInRyad[i] + OUTPortInRyad[i]*2 + 2;
             }
-            SizeY = Tline + OUTPortNum * 2 + 4;
-            SizeX = SizeY;
+            _sizeY = Tline + OUTPortNum*2 + 4;
+            SizeX = _sizeY;
             //SizeY = 128;
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                if (Nlist[i].Name == "OUTPort")
+                if (_nlist[i].Name == "OUTPort")
                 {
-                    CoordY[i] = SizeY - 3;
+                    _coordY[i] = _sizeY - 3;
                 }
             }
 
@@ -415,72 +412,72 @@ namespace MNetSynt
             }
              */
             //makebasemask
-            mask = new string[SizeX, SizeY, 2];
+            _mask = new string[SizeX, _sizeY, 2];
 
             for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int j = 0; j < _sizeY; j++)
                 {
                     if (i == 0)
                     {
-                        mask[i, j, 0] = " ";
-                        mask[i, j, 1] = " ";
+                        _mask[i, j, 0] = " ";
+                        _mask[i, j, 1] = " ";
                     }
                     else
                     {
-                        mask[i, j, 0] = " ";
-                        mask[i, j, 1] = " ";
+                        _mask[i, j, 0] = " ";
+                        _mask[i, j, 1] = " ";
                     }
                 }
             }
 
             try
             {
-                for (int i = 0; i < Nlist.Count; i++)
+                for (int i = 0; i < _nlist.Count; i++)
                 {
-                    for (int j = 0; j < Nlist[i].SizeX; j++)
+                    for (int j = 0; j < _nlist[i].SizeX; j++)
                     {
-                        for (int k = 0; k < Nlist[i].SizeY; k++)
+                        for (int k = 0; k < _nlist[i].SizeY; k++)
                         {
-                            mask[CoordX[i] + j, CoordY[i] + k, 0] = "#";
-                            mask[CoordX[i] + j, CoordY[i] + k, 1] = "#";
+                            _mask[_coordX[i] + j, _coordY[i] + k, 0] = "#";
+                            _mask[_coordX[i] + j, _coordY[i] + k, 1] = "#";
                         }
                     }
                 }
             }
             catch
             {
-                SZMod++;
+                _szMod++;
                 goto restart;
             }
             //maskupdate
-            
+
 
             //DrawMask();
             //IOLonger
             tipn = 0;
             topn = 0;
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-                    if (Wlist[i].StartName.Split('-')[0] == Uname[j])
+                    if (_wlist[i].StartName.Split('-')[0] == _uname[j])
                     {
-                        for (int k = 0; k < Nlist[j].OutPorts.Length; k++)
+                        for (int k = 0; k < _nlist[j].OutPorts.Length; k++)
                         {
-                            if (Wlist[i].StartName.Split('-')[1] == Nlist[j].OutPorts[k].Name)
+                            if (_wlist[i].StartName.Split('-')[1] == _nlist[j].OutPorts[k].Name)
                             {
-                                Wlist[i].StartX = Nlist[j].OutPorts[k].PosX + CoordX[j];
-                                Wlist[i].StartY = Nlist[j].OutPorts[k].PosY + CoordY[j];
-                                mask[Wlist[i].StartX, Wlist[i].StartY, 0] = " ";
-                                mask[Wlist[i].StartX, Wlist[i].StartY, 1] = " ";
-                                for (int q = 0; q < (k + 1) * 2; q++)
+                                _wlist[i].StartX = _nlist[j].OutPorts[k].PosX + _coordX[j];
+                                _wlist[i].StartY = _nlist[j].OutPorts[k].PosY + _coordY[j];
+                                _mask[_wlist[i].StartX, _wlist[i].StartY, 0] = " ";
+                                _mask[_wlist[i].StartX, _wlist[i].StartY, 1] = " ";
+                                for (int q = 0; q < (k + 1)*2; q++)
                                 {
                                     try
                                     {
-                                        mask[Wlist[i].StartX - 1, Wlist[i].StartY + q, 0] = "x";
-                                        mask[Wlist[i].StartX + 1, Wlist[i].StartY + q, 0] = "x";
+                                        _mask[_wlist[i].StartX - 1, _wlist[i].StartY + q, 0] = "x";
+                                        _mask[_wlist[i].StartX + 1, _wlist[i].StartY + q, 0] = "x";
                                     }
                                     catch
                                     {
@@ -493,27 +490,26 @@ namespace MNetSynt
                 }
             }
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-                    if (Wlist[i].EndName.Split('-')[0] == Uname[j])
+                    if (_wlist[i].EndName.Split('-')[0] == _uname[j])
                     {
-                        for (int k = 0; k < Nlist[j].InPorts.Length; k++)
+                        for (int k = 0; k < _nlist[j].InPorts.Length; k++)
                         {
-                            if (Wlist[i].EndName.Split('-')[1] == Nlist[j].InPorts[k].Name)
+                            if (_wlist[i].EndName.Split('-')[1] == _nlist[j].InPorts[k].Name)
                             {
-                                Wlist[i].EndX = Nlist[j].InPorts[k].PosX + CoordX[j];
-                                Wlist[i].EndY = Nlist[j].InPorts[k].PosY + CoordY[j];
-                                mask[Wlist[i].EndX, Wlist[i].EndY, 0] = " ";
-                                mask[Wlist[i].EndX, Wlist[i].EndY, 1] = " ";
+                                _wlist[i].EndX = _nlist[j].InPorts[k].PosX + _coordX[j];
+                                _wlist[i].EndY = _nlist[j].InPorts[k].PosY + _coordY[j];
+                                _mask[_wlist[i].EndX, _wlist[i].EndY, 0] = " ";
+                                _mask[_wlist[i].EndX, _wlist[i].EndY, 1] = " ";
 
-                                for (int q = 0; q < (k+1) * 2; q++)
+                                for (int q = 0; q < (k + 1)*2; q++)
                                 {
-                                    mask[Wlist[i].EndX + 1, Wlist[i].EndY - q, 0] = "x";
-                                    mask[Wlist[i].EndX - 1, Wlist[i].EndY - q, 0] = "x";
+                                    _mask[_wlist[i].EndX + 1, _wlist[i].EndY - q, 0] = "x";
+                                    _mask[_wlist[i].EndX - 1, _wlist[i].EndY - q, 0] = "x";
                                 }
-
                             }
                         }
                     }
@@ -522,51 +518,52 @@ namespace MNetSynt
             //mask2
             for (int i = 0; i < RyadNum; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-
                     if (RyadList[j] == i)
                     {
-                        if (Nlist[j].Name != "INPort")
+                        if (_nlist[j].Name != "INPort")
                         {
-                            if (Nlist[j].Name != "OUTPort")
+                            if (_nlist[j].Name != "OUTPort")
                             {
-                                for (int port = 0; port < Nlist[j].InPorts.Length; port++)
+                                for (int port = 0; port < _nlist[j].InPorts.Length; port++)
                                 {
-                                    int portStx = Nlist[j].InPorts[port].PosX + CoordX[j];
-                                    int portSty = Nlist[j].InPorts[port].PosY + CoordY[j];
-                                    for (int k = 0; k < INPortInRyad[i] * 2 + 2; k++)
+                                    int portStx = _nlist[j].InPorts[port].PosX + _coordX[j];
+                                    int portSty = _nlist[j].InPorts[port].PosY + _coordY[j];
+                                    for (int k = 0; k < INPortInRyad[i]*2 + 2; k++)
                                     {
-                                        mask[portStx - 1, portSty - k, 0] = "X";
-                                        mask[portStx + 1, portSty - k, 0] = "X";
+                                        _mask[portStx - 1, portSty - k, 0] = "X";
+                                        _mask[portStx + 1, portSty - k, 0] = "X";
                                     }
-                                    portSty = portSty - INPortInRyad[i] * 2 + 0;
-                                    mask[portStx, portSty - 1, 0] = "X";
+                                    portSty = portSty - INPortInRyad[i]*2 + 0;
+                                    _mask[portStx, portSty - 1, 0] = "X";
                                     for (int k = portStx + 1; k < SizeX; k++)
                                     {
-                                        mask[k, portSty - 1, 0] = "X";
-                                        mask[k, portSty - 0, 0] = " ";
-                                        mask[k, portSty + 1, 0] = "X";
+                                        _mask[k, portSty - 1, 0] = "X";
+                                        _mask[k, portSty - 0, 0] = " ";
+                                        _mask[k, portSty + 1, 0] = "X";
                                     }
                                     INPortInRyad[i]--;
                                 }
-                                for (int port = 0; port < Nlist[j].OutPorts.Length; port++)
+                                for (int port = 0; port < _nlist[j].OutPorts.Length; port++)
                                 {
-                                    int portStx = Nlist[j].OutPorts[port].PosX + CoordX[j];
-                                    int portSty = Nlist[j].OutPorts[port].PosY + CoordY[j];
-                                    for (int k = 0; k < OUTPortInRyad[i] * 2 + 3 + MaxVsizeObjInRyad[i] - Nlist[j].SizeY; k++)
+                                    int portStx = _nlist[j].OutPorts[port].PosX + _coordX[j];
+                                    int portSty = _nlist[j].OutPorts[port].PosY + _coordY[j];
+                                    for (int k = 0;
+                                        k < OUTPortInRyad[i]*2 + 3 + MaxVsizeObjInRyad[i] - _nlist[j].SizeY;
+                                        k++)
                                     {
-                                        mask[portStx - 1, portSty + k, 0] = "X";
-                                        mask[portStx + 1, portSty + k, 0] = "X";
+                                        _mask[portStx - 1, portSty + k, 0] = "X";
+                                        _mask[portStx + 1, portSty + k, 0] = "X";
                                     }
 
-                                    portSty = portSty + OUTPortInRyad[i] * 2 + 1 + MaxVsizeObjInRyad[i] - Nlist[j].SizeY;
-                                    mask[portStx, portSty + 1, 0] = "X";
+                                    portSty = portSty + OUTPortInRyad[i]*2 + 1 + MaxVsizeObjInRyad[i] - _nlist[j].SizeY;
+                                    _mask[portStx, portSty + 1, 0] = "X";
                                     for (int k = portStx + 1; k < SizeX; k++)
                                     {
-                                        mask[k, portSty - 1, 0] = "X";
-                                        mask[k, portSty - 0, 0] = " ";
-                                        mask[k, portSty + 1, 0] = "X";
+                                        _mask[k, portSty - 1, 0] = "X";
+                                        _mask[k, portSty - 0, 0] = " ";
+                                        _mask[k, portSty + 1, 0] = "X";
                                     }
 
                                     OUTPortInRyad[i]--;
@@ -574,73 +571,70 @@ namespace MNetSynt
                             }
                         }
 
-                        if (Nlist[j].Name == "INPort")
+                        if (_nlist[j].Name == "INPort")
                         {
-                            for (int port = 0; port < Nlist[j].OutPorts.Length; port++)
+                            for (int port = 0; port < _nlist[j].OutPorts.Length; port++)
                             {
-                                int portStx = Nlist[j].OutPorts[port].PosX + CoordX[j];
-                                int portSty = Nlist[j].OutPorts[port].PosY + CoordY[j];
+                                int portStx = _nlist[j].OutPorts[port].PosX + _coordX[j];
+                                int portSty = _nlist[j].OutPorts[port].PosY + _coordY[j];
                                 //for (int k = 0; k < OUTPortNum * 2 + 3 + MaxVsizeObjInRyad[i] - Nlist[j].SizeY; k++)
-                                for (int k = 0; k < INPortNum * 2 + 3 + 0; k++)
+                                for (int k = 0; k < INPortNum*2 + 3 + 0; k++)
                                 {
-                                    mask[portStx - 1, portSty + k, 0] = "X";
-                                    mask[portStx + 1, portSty + k, 0] = "X";
+                                    _mask[portStx - 1, portSty + k, 0] = "X";
+                                    _mask[portStx + 1, portSty + k, 0] = "X";
                                 }
 
                                 //portSty = portSty + OUTPortNum * 2 + 1 + MaxVsizeObjInRyad[i] - Nlist[j].SizeY;
-                                portSty = portSty + INPortNum * 2 + 1 + 0;
-                                mask[portStx, portSty + 1, 0] = "X";
+                                portSty = portSty + INPortNum*2 + 1 + 0;
+                                _mask[portStx, portSty + 1, 0] = "X";
                                 for (int k = portStx + 1; k < SizeX; k++)
                                 {
-                                    mask[k, portSty - 1, 0] = "X";
-                                    mask[k, portSty - 0, 0] = " ";
-                                    mask[k, portSty + 1, 0] = "X";
+                                    _mask[k, portSty - 1, 0] = "X";
+                                    _mask[k, portSty - 0, 0] = " ";
+                                    _mask[k, portSty + 1, 0] = "X";
                                 }
 
                                 INPortNum--;
                             }
                         }
-                        if (Nlist[j].Name == "OUTPort")
+                        if (_nlist[j].Name == "OUTPort")
                         {
-                            for (int port = 0; port < Nlist[j].InPorts.Length; port++)
+                            for (int port = 0; port < _nlist[j].InPorts.Length; port++)
                             {
-                                int portStx = Nlist[j].InPorts[port].PosX + CoordX[j];
-                                int portSty = Nlist[j].InPorts[port].PosY + CoordY[j];
-                                for (int k = 0; k < OUTPortNum * 2 + 2; k++)
+                                int portStx = _nlist[j].InPorts[port].PosX + _coordX[j];
+                                int portSty = _nlist[j].InPorts[port].PosY + _coordY[j];
+                                for (int k = 0; k < OUTPortNum*2 + 2; k++)
                                 {
-                                    mask[portStx - 1, portSty - k, 0] = "X";
-                                    mask[portStx + 1, portSty - k, 0] = "X";
+                                    _mask[portStx - 1, portSty - k, 0] = "X";
+                                    _mask[portStx + 1, portSty - k, 0] = "X";
                                 }
-                                portSty = portSty - OUTPortNum * 2 + 0;
-                                mask[portStx, portSty - 1, 0] = "X";
+                                portSty = portSty - OUTPortNum*2 + 0;
+                                _mask[portStx, portSty - 1, 0] = "X";
                                 for (int k = portStx + 1; k < SizeX; k++)
                                 {
-                                    mask[k, portSty - 1, 0] = "X";
-                                    mask[k, portSty - 0, 0] = " ";
-                                    mask[k, portSty + 1, 0] = "X";
+                                    _mask[k, portSty - 1, 0] = "X";
+                                    _mask[k, portSty - 0, 0] = " ";
+                                    _mask[k, portSty + 1, 0] = "X";
                                 }
                                 OUTPortNum--;
                             }
                         }
-
                     }
                 }
             }
 
 
-
             for (int i = 0; i < RyadNum; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-
                     if (RyadList[j] == i)
                     {
-                        if (Nlist[j].Name != "INPort")
+                        if (_nlist[j].Name != "INPort")
                         {
-                            if (Nlist[j].Name != "OUTPort")
+                            if (_nlist[j].Name != "OUTPort")
                             {
-                                for (int port = 0; port < Nlist[j].InPorts.Length; port++)
+                                for (int port = 0; port < _nlist[j].InPorts.Length; port++)
                                 {
                                     //portStx = 
                                 }
@@ -650,106 +644,105 @@ namespace MNetSynt
                 }
             }
 
-            
+
             //goto maker;
 
 
-
             //Router
-            int Over9000 = SizeX + SizeY*2 ;
+            int Over9000 = SizeX + _sizeY*2;
 
             //DrawMask();
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
                 Console.Write(".");
-                wavemap = new int[SizeX, SizeY, 2];
+                _wavemap = new int[SizeX, _sizeY, 2];
 
                 int wlen = 1;
 
-                wavemap[Wlist[i].StartX, Wlist[i].StartY, 0] = 1;
+                _wavemap[_wlist[i].StartX, _wlist[i].StartY, 0] = 1;
 
                 for (int j = 1; j < Over9000; j++)
                 {
                     for (int k = 0; k < SizeX; k++)
                     {
-                        for (int l = 0; l < SizeY; l++)
+                        for (int l = 0; l < _sizeY; l++)
                         {
                             for (int m = 0; m < 2; m++)
                             {
-                                if (wavemap[k, l, m] == j && k - 1 >= 0)
+                                if (_wavemap[k, l, m] == j && k - 1 >= 0)
                                 {
-                                    if (wavemap[k - 1, l, m] == 0)
+                                    if (_wavemap[k - 1, l, m] == 0)
                                     {
-                                        if (mask[k - 1, l, m] == " ")
+                                        if (_mask[k - 1, l, m] == " ")
                                         {
-                                            wavemap[k - 1, l, m] = j+1;
+                                            _wavemap[k - 1, l, m] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (wavemap[k, l, m] == j && k + 1 < SizeX)
+                                if (_wavemap[k, l, m] == j && k + 1 < SizeX)
                                 {
-                                    if (wavemap[k + 1, l, m] == 0)
+                                    if (_wavemap[k + 1, l, m] == 0)
                                     {
-                                        if (mask[k + 1, l, m] == " ")
+                                        if (_mask[k + 1, l, m] == " ")
                                         {
-                                            wavemap[k + 1, l, m] = j+1;
+                                            _wavemap[k + 1, l, m] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (wavemap[k, l, m] == j && l - 1 >= 0)
+                                if (_wavemap[k, l, m] == j && l - 1 >= 0)
                                 {
-                                    if (wavemap[k, l - 1, m] == 0)
+                                    if (_wavemap[k, l - 1, m] == 0)
                                     {
-                                        if (mask[k, l - 1, m] == " ")
+                                        if (_mask[k, l - 1, m] == " ")
                                         {
-                                            wavemap[k, l - 1, m] = j+1;
+                                            _wavemap[k, l - 1, m] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (wavemap[k, l, m] == j && l + 1 < SizeY)
+                                if (_wavemap[k, l, m] == j && l + 1 < _sizeY)
                                 {
-                                    if (wavemap[k, l + 1, m] == 0)
+                                    if (_wavemap[k, l + 1, m] == 0)
                                     {
-                                        if (mask[k, l + 1, m] == " ")
+                                        if (_mask[k, l + 1, m] == " ")
                                         {
-                                            wavemap[k, l + 1, m] = j+1;
+                                            _wavemap[k, l + 1, m] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (wavemap[k, l, m] == j && m - 1 >= 0)
+                                if (_wavemap[k, l, m] == j && m - 1 >= 0)
                                 {
-                                    if (wavemap[k, l, m - 1] == 0)
+                                    if (_wavemap[k, l, m - 1] == 0)
                                     {
-                                        if (mask[k, l , m - 1] == " ")
+                                        if (_mask[k, l, m - 1] == " ")
                                         {
-                                            wavemap[k, l, m - 1] = j + 1;
+                                            _wavemap[k, l, m - 1] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (wavemap[k, l, m] == j && m + 1 <= 1)
+                                if (_wavemap[k, l, m] == j && m + 1 <= 1)
                                 {
-                                    if (wavemap[k, l, m + 1] == 0)
+                                    if (_wavemap[k, l, m + 1] == 0)
                                     {
-                                        if (mask[k, l, m + 1] == " ")
+                                        if (_mask[k, l, m + 1] == " ")
                                         {
-                                            wavemap[k, l, m + 1] = j + 1;
+                                            _wavemap[k, l, m + 1] = j + 1;
                                         }
                                     }
                                 }
 
-                                if (k == Wlist[i].EndX)
+                                if (k == _wlist[i].EndX)
                                 {
-                                    if (l == Wlist[i].EndY)
+                                    if (l == _wlist[i].EndY)
                                     {
                                         if (m == 0)
                                         {
-                                            if (wavemap[k, l, m] > 0)
+                                            if (_wavemap[k, l, m] > 0)
                                             {
                                                 wlen = j;
                                                 j = Over9000 + 1;
@@ -757,63 +750,61 @@ namespace MNetSynt
                                         }
                                     }
                                 }
-
-                            }   
+                            }
                         }
                     }
-                    
                 }
 
                 if (wlen == 1)
                 {
-                    Wprior[i]++;
+                    _wprior[i]++;
                     if (i == 0) placewidch++;
-                    Console.WriteLine("Unrouted "+ i.ToString());
+                    Console.WriteLine("Unrouted " + i);
                     goto restart;
                 }
 
                 //DrawWave(); //to debug
                 //BackTracing
-                Wlist[i].WirePointX = new int[wlen+1];
-                Wlist[i].WirePointY = new int[wlen+1];
-                Wlist[i].WirePointZ = new int[wlen+1];
-                Wlist[i].WirePointX[wlen] = Wlist[i].EndX;
-                Wlist[i].WirePointY[wlen] = Wlist[i].EndY;
-                Wlist[i].WirePointZ[wlen] = 0;
+                _wlist[i].WirePointX = new int[wlen + 1];
+                _wlist[i].WirePointY = new int[wlen + 1];
+                _wlist[i].WirePointZ = new int[wlen + 1];
+                _wlist[i].WirePointX[wlen] = _wlist[i].EndX;
+                _wlist[i].WirePointY[wlen] = _wlist[i].EndY;
+                _wlist[i].WirePointZ[wlen] = 0;
 
-                Wlist[i].WirePointX[0] = Wlist[i].StartX;
-                Wlist[i].WirePointY[0] = Wlist[i].StartY;
-                Wlist[i].WirePointZ[0] = 0;
+                _wlist[i].WirePointX[0] = _wlist[i].StartX;
+                _wlist[i].WirePointY[0] = _wlist[i].StartY;
+                _wlist[i].WirePointZ[0] = 0;
 
-                int tx = Wlist[i].EndX;
-                int ty = Wlist[i].EndY;
+                int tx = _wlist[i].EndX;
+                int ty = _wlist[i].EndY;
                 int tz = 0;
 
                 for (int j = 1; j < wlen; j++)
                 {
                     if ((tx - 1) > 0)
-                        if (wavemap[tx - 1, ty, tz] < wavemap[tx, ty, tz] && wavemap[tx - 1, ty, tz]>0)
+                        if (_wavemap[tx - 1, ty, tz] < _wavemap[tx, ty, tz] && _wavemap[tx - 1, ty, tz] > 0)
                         {
                             tx = tx - 1;
                             goto endselect;
                         }
 
                     if ((tx + 1) < SizeX)
-                        if (wavemap[tx + 1, ty, tz] < wavemap[tx, ty, tz] && wavemap[tx + 1, ty, tz] > 0)
+                        if (_wavemap[tx + 1, ty, tz] < _wavemap[tx, ty, tz] && _wavemap[tx + 1, ty, tz] > 0)
                         {
                             tx = tx + 1;
                             goto endselect;
                         }
 
                     if ((ty - 1) > 0)
-                        if (wavemap[tx, ty - 1, tz] < wavemap[tx, ty, tz] && wavemap[tx, ty - 1, tz] > 0)
+                        if (_wavemap[tx, ty - 1, tz] < _wavemap[tx, ty, tz] && _wavemap[tx, ty - 1, tz] > 0)
                         {
                             ty = ty - 1;
                             goto endselect;
                         }
 
-                    if ((ty + 1) < SizeY)
-                        if (wavemap[tx, ty + 1, tz] < wavemap[tx, ty, tz] && wavemap[tx, ty + 1, tz] > 0)
+                    if ((ty + 1) < _sizeY)
+                        if (_wavemap[tx, ty + 1, tz] < _wavemap[tx, ty, tz] && _wavemap[tx, ty + 1, tz] > 0)
                         {
                             ty = ty + 1;
                             goto endselect;
@@ -821,7 +812,7 @@ namespace MNetSynt
 
 
                     if ((tz + 1) < 2)
-                        if (wavemap[tx, ty, tz + 1] < wavemap[tx, ty, tz] && wavemap[tx, ty, tz + 1] > 0)
+                        if (_wavemap[tx, ty, tz + 1] < _wavemap[tx, ty, tz] && _wavemap[tx, ty, tz + 1] > 0)
                         {
                             tz = tz + 1;
                             goto endselect;
@@ -829,53 +820,48 @@ namespace MNetSynt
 
 
                     if ((tz - 1) >= 0)
-                        if (wavemap[tx, ty, tz - 1] < wavemap[tx, ty, tz] && wavemap[tx, ty, tz - 1] > 0)
+                        if (_wavemap[tx, ty, tz - 1] < _wavemap[tx, ty, tz] && _wavemap[tx, ty, tz - 1] > 0)
                         {
                             tz = tz - 1;
-                            goto endselect;
                         }
 
-                endselect:
+                    endselect:
 
-                    Wlist[i].WirePointX[wlen - j] = tx;
-                    Wlist[i].WirePointY[wlen - j] = ty;
-                    Wlist[i].WirePointZ[wlen - j] = tz;
+                    _wlist[i].WirePointX[wlen - j] = tx;
+                    _wlist[i].WirePointY[wlen - j] = ty;
+                    _wlist[i].WirePointZ[wlen - j] = tz;
                 }
 
                 // update mask
 
-                for (int j = 0; j < Wlist[i].WirePointX.Length; j++)
+                for (int j = 0; j < _wlist[i].WirePointX.Length; j++)
                 {
-                    mask[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], Wlist[i].WirePointZ[j]] = "#";
+                    _mask[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], _wlist[i].WirePointZ[j]] = "#";
 
-                    if (Wlist[i].WirePointX[j] - 1 > 0)
+                    if (_wlist[i].WirePointX[j] - 1 > 0)
                     {
-                        mask[Wlist[i].WirePointX[j] - 1, Wlist[i].WirePointY[j], Wlist[i].WirePointZ[j]] = "#";
+                        _mask[_wlist[i].WirePointX[j] - 1, _wlist[i].WirePointY[j], _wlist[i].WirePointZ[j]] = "#";
                     }
-                    if (Wlist[i].WirePointX[j] + 1 < SizeX)
+                    if (_wlist[i].WirePointX[j] + 1 < SizeX)
                     {
-                        mask[Wlist[i].WirePointX[j] + 1, Wlist[i].WirePointY[j], Wlist[i].WirePointZ[j]] = "#";
+                        _mask[_wlist[i].WirePointX[j] + 1, _wlist[i].WirePointY[j], _wlist[i].WirePointZ[j]] = "#";
                     }
-                    if (Wlist[i].WirePointY[j] - 1 > 0)
+                    if (_wlist[i].WirePointY[j] - 1 > 0)
                     {
-                        mask[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j] - 1, Wlist[i].WirePointZ[j]] = "#";
+                        _mask[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j] - 1, _wlist[i].WirePointZ[j]] = "#";
                     }
-                    if (Wlist[i].WirePointY[j] + 1 < SizeY)
+                    if (_wlist[i].WirePointY[j] + 1 < _sizeY)
                     {
-                        mask[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j] + 1, Wlist[i].WirePointZ[j]] = "#";
+                        _mask[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j] + 1, _wlist[i].WirePointZ[j]] = "#";
                     }
-
-                    
                 }
                 //Console.Clear();
                 //DrawMask();
-
-
             }
 
             //maker:
             //maker
-            Node outNode = new Node("4AND", SizeX, SizeY, 4);
+            var outNode = new Node("4AND", SizeX, _sizeY, 4);
 
             for (int j = 0; j < outNode.SizeX; j++)
             {
@@ -896,151 +882,170 @@ namespace MNetSynt
                 }
             }
 
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                for (int j = 0; j < Nlist[i].SizeX; j++)
+                for (int j = 0; j < _nlist[i].SizeX; j++)
                 {
-                    for (int k = 0; k < Nlist[i].SizeY; k++)
+                    for (int k = 0; k < _nlist[i].SizeY; k++)
                     {
-                        for (int l = 0; l < Nlist[i].SizeZ; l++)
+                        for (int l = 0; l < _nlist[i].SizeZ; l++)
                         {
-                            outNode.DataMatrix[CoordX[i] + j, CoordY[i] + k, l] = Nlist[i].DataMatrix[j,Nlist[i].SizeY - k - 1, l];
-                        }   
+                            outNode.DataMatrix[_coordX[i] + j, _coordY[i] + k, l] =
+                                _nlist[i].DataMatrix[j, _nlist[i].SizeY - k - 1, l];
+                        }
                     }
                 }
             }
             outNode.InPorts = new INPort[inpnum];
-            outNode.OutPorts = new OUTPort[outpnum];
+            outNode.OutPorts = new OutPort[outpnum];
 
             int tip = 0;
             int top = 0;
 
-            for (int i = 0; i < Nlist.Count; i++)
+            for (int i = 0; i < _nlist.Count; i++)
             {
-                if (Nlist[i].Name == "INPort")
+                if (_nlist[i].Name == "INPort")
                 {
-                    outNode.InPorts[tip] = new INPort(Uname[i], Nlist[i].InPorts[0].PosX + CoordX[i], Nlist[i].InPorts[0].PosY + CoordY[i]);
+                    outNode.InPorts[tip] = new INPort(_uname[i], _nlist[i].InPorts[0].PosX + _coordX[i],
+                        _nlist[i].InPorts[0].PosY + _coordY[i]);
                     tip++;
                 }
-                if (Nlist[i].Name == "OUTPort")
+                if (_nlist[i].Name == "OUTPort")
                 {
-                    outNode.OutPorts[top] = new OUTPort(Uname[i], Nlist[i].OutPorts[0].PosX + CoordX[i], Nlist[i].OutPorts[0].PosY + CoordY[i]);
+                    outNode.OutPorts[top] = new OutPort(_uname[i], _nlist[i].OutPorts[0].PosX + _coordX[i],
+                        _nlist[i].OutPorts[0].PosY + _coordY[i]);
                     top++;
                 }
             }
             //goto endmake;
-        
+
             //make wire
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                for (int j = 0; j < Wlist[i].WirePointX.Length; j++)
+                for (int j = 0; j < _wlist[i].WirePointX.Length; j++)
                 {
-                    if (Wlist[i].WirePointZ[j] == 0)
+                    if (_wlist[i].WirePointZ[j] == 0)
                     {
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 0] = "w";
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "#";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 0] = "w";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] = "#";
                     }
 
-                    if (Wlist[i].WirePointZ[j] == 1)
+                    if (_wlist[i].WirePointZ[j] == 1)
                     {
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 2] = "w";
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "#";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 2] = "w";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] = "#";
                     }
                 }
                 //upper - downer
-                for (int j = 1; j < Wlist[i].WirePointX.Length; j++)
+                for (int j = 1; j < _wlist[i].WirePointX.Length; j++)
                 {
-                    if (Wlist[i].WirePointZ[j] != Wlist[i].WirePointZ[j-1])
+                    if (_wlist[i].WirePointZ[j] != _wlist[i].WirePointZ[j - 1])
                     {
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 0] = "0";
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "w";
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 2] = "#";
-                        outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "0";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 0] = "0";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] = "w";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 2] = "#";
+                        outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] = "0";
                     }
                 }
                 //make wire repiters
                 int tlen = 2;
                 try
                 {
-                    for (int j = 2; j < Wlist[i].WirePointX.Length - 2; j++)
+                    for (int j = 2; j < _wlist[i].WirePointX.Length - 2; j++)
                     {
                         tlen++;
                         if (tlen > 13)
                         {
-                            if (Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j + 1] && Wlist[i].WirePointZ[j + 1] == Wlist[i].WirePointZ[j + 2] && Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j - 2])
+                            if (_wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j + 1] &&
+                                _wlist[i].WirePointZ[j + 1] == _wlist[i].WirePointZ[j + 2] &&
+                                _wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j - 2])
                             {
-                                if (Wlist[i].WirePointY[j - 1] == Wlist[i].WirePointY[j + 1])
+                                if (_wlist[i].WirePointY[j - 1] == _wlist[i].WirePointY[j + 1])
                                 {
-                                    if (Wlist[i].WirePointX[j - 1] < Wlist[i].WirePointX[j + 1])
+                                    if (_wlist[i].WirePointX[j - 1] < _wlist[i].WirePointX[j + 1])
                                     {
-                                        if (Wlist[i].WirePointZ[j] == 0)
+                                        if (_wlist[i].WirePointZ[j] == 0)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = ">";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] =
+                                                ">";
                                         }
 
-                                        if (Wlist[i].WirePointZ[j] == 1)
+                                        if (_wlist[i].WirePointZ[j] == 1)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = ">";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] =
+                                                ">";
                                         }
                                         tlen = 0;
                                     }
                                 }
                             }
 
-                            if (Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j + 1] && Wlist[i].WirePointZ[j + 1] == Wlist[i].WirePointZ[j + 2] && Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j - 2])
+                            if (_wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j + 1] &&
+                                _wlist[i].WirePointZ[j + 1] == _wlist[i].WirePointZ[j + 2] &&
+                                _wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j - 2])
                             {
-                                if (Wlist[i].WirePointY[j - 1] == Wlist[i].WirePointY[j + 1])
+                                if (_wlist[i].WirePointY[j - 1] == _wlist[i].WirePointY[j + 1])
                                 {
-                                    if (Wlist[i].WirePointX[j - 1] > Wlist[i].WirePointX[j + 1])
+                                    if (_wlist[i].WirePointX[j - 1] > _wlist[i].WirePointX[j + 1])
                                     {
-                                        if (Wlist[i].WirePointZ[j] == 0)
+                                        if (_wlist[i].WirePointZ[j] == 0)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "<";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] =
+                                                "<";
                                         }
 
-                                        if (Wlist[i].WirePointZ[j] == 1)
+                                        if (_wlist[i].WirePointZ[j] == 1)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "<";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] =
+                                                "<";
                                         }
                                         tlen = 0;
                                     }
                                 }
                             }
 
-                            if (Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j + 1] && Wlist[i].WirePointZ[j + 1] == Wlist[i].WirePointZ[j + 2] && Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j - 2])
+                            if (_wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j + 1] &&
+                                _wlist[i].WirePointZ[j + 1] == _wlist[i].WirePointZ[j + 2] &&
+                                _wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j - 2])
                             {
-                                if (Wlist[i].WirePointX[j - 1] == Wlist[i].WirePointX[j + 1])
+                                if (_wlist[i].WirePointX[j - 1] == _wlist[i].WirePointX[j + 1])
                                 {
-                                    if (Wlist[i].WirePointY[j - 1] > Wlist[i].WirePointY[j + 1])
+                                    if (_wlist[i].WirePointY[j - 1] > _wlist[i].WirePointY[j + 1])
                                     {
-                                        if (Wlist[i].WirePointZ[j] == 0)
+                                        if (_wlist[i].WirePointZ[j] == 0)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "v";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] =
+                                                "v";
                                         }
 
-                                        if (Wlist[i].WirePointZ[j] == 1)
+                                        if (_wlist[i].WirePointZ[j] == 1)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "v";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] =
+                                                "v";
                                         }
                                         tlen = 0;
                                     }
                                 }
                             }
 
-                            if (Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j + 1] && Wlist[i].WirePointZ[j + 1] == Wlist[i].WirePointZ[j + 2] && Wlist[i].WirePointZ[j - 1] == Wlist[i].WirePointZ[j - 2])
+                            if (_wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j + 1] &&
+                                _wlist[i].WirePointZ[j + 1] == _wlist[i].WirePointZ[j + 2] &&
+                                _wlist[i].WirePointZ[j - 1] == _wlist[i].WirePointZ[j - 2])
                             {
-                                if (Wlist[i].WirePointX[j - 1] == Wlist[i].WirePointX[j + 1])
+                                if (_wlist[i].WirePointX[j - 1] == _wlist[i].WirePointX[j + 1])
                                 {
-                                    if (Wlist[i].WirePointY[j - 1] < Wlist[i].WirePointY[j + 1])
+                                    if (_wlist[i].WirePointY[j - 1] < _wlist[i].WirePointY[j + 1])
                                     {
-                                        if (Wlist[i].WirePointZ[j] == 0)
+                                        if (_wlist[i].WirePointZ[j] == 0)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "^";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 1] =
+                                                "^";
                                         }
 
-                                        if (Wlist[i].WirePointZ[j] == 1)
+                                        if (_wlist[i].WirePointZ[j] == 1)
                                         {
-                                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "^";
+                                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 3] =
+                                                "^";
                                         }
                                         tlen = 0;
                                     }
@@ -1056,26 +1061,22 @@ namespace MNetSynt
                                     //j = Wlist[i].WirePointX.Length;
                                 }
                             }
-
-
                         }
-
-
                     }
                 }
                 catch
                 {
-                    for (int j = 0; j < Wlist[i].WirePointX.Length; j++)
+                    for (int j = 0; j < _wlist[i].WirePointX.Length; j++)
                     {
-                        if (Wlist[i].WirePointZ[j] == 0)
+                        if (_wlist[i].WirePointZ[j] == 0)
                         {
-                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 0] = "k";
+                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 0] = "k";
                             //outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 1] = "#";
                         }
 
-                        if (Wlist[i].WirePointZ[j] == 1)
+                        if (_wlist[i].WirePointZ[j] == 1)
                         {
-                            outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 2] = "k";
+                            outNode.DataMatrix[_wlist[i].WirePointX[j], _wlist[i].WirePointY[j], 2] = "k";
                             //outNode.DataMatrix[Wlist[i].WirePointX[j], Wlist[i].WirePointY[j], 3] = "#";
                         }
                     }
@@ -1083,36 +1084,32 @@ namespace MNetSynt
                     //placewidch++;
                     //goto restart;
                 }
-            
-
             }
 
             //end make
-        //endmake:
+            //endmake:
 
 
-
-            
             //DrawOutMask
-            
+
             tipn = 0;
             topn = 0;
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-                    if (Wlist[i].StartName.Split('-')[0] == Uname[j])
+                    if (_wlist[i].StartName.Split('-')[0] == _uname[j])
                     {
-                        for (int k = 0; k < Nlist[j].OutPorts.Length; k++)
+                        for (int k = 0; k < _nlist[j].OutPorts.Length; k++)
                         {
-                            if (Wlist[i].StartName.Split('-')[1] == Nlist[j].OutPorts[k].Name)
+                            if (_wlist[i].StartName.Split('-')[1] == _nlist[j].OutPorts[k].Name)
                             {
-                                Wlist[i].StartX = Nlist[j].OutPorts[k].PosX + CoordX[j];
-                                Wlist[i].StartY = Nlist[j].OutPorts[k].PosY + CoordY[j];
-                                mask[Wlist[i].StartX, Wlist[i].StartY, 0] = " ";
-                                mask[Wlist[i].StartX, Wlist[i].StartY, 1] = " ";
-                                for (int q = 0; q < (k + 1) * 2; q++)
+                                _wlist[i].StartX = _nlist[j].OutPorts[k].PosX + _coordX[j];
+                                _wlist[i].StartY = _nlist[j].OutPorts[k].PosY + _coordY[j];
+                                _mask[_wlist[i].StartX, _wlist[i].StartY, 0] = " ";
+                                _mask[_wlist[i].StartX, _wlist[i].StartY, 1] = " ";
+                                for (int q = 0; q < (k + 1)*2; q++)
                                 {
                                     try
                                     {
@@ -1130,33 +1127,32 @@ namespace MNetSynt
                 }
             }
 
-            for (int i = 0; i < Wlist.Count; i++)
+            for (int i = 0; i < _wlist.Count; i++)
             {
-                for (int j = 0; j < Nlist.Count; j++)
+                for (int j = 0; j < _nlist.Count; j++)
                 {
-                    if (Wlist[i].EndName.Split('-')[0] == Uname[j])
+                    if (_wlist[i].EndName.Split('-')[0] == _uname[j])
                     {
-                        for (int k = 0; k < Nlist[j].InPorts.Length; k++)
+                        for (int k = 0; k < _nlist[j].InPorts.Length; k++)
                         {
-                            if (Wlist[i].EndName.Split('-')[1] == Nlist[j].InPorts[k].Name)
+                            if (_wlist[i].EndName.Split('-')[1] == _nlist[j].InPorts[k].Name)
                             {
-                                Wlist[i].EndX = Nlist[j].InPorts[k].PosX + CoordX[j];
-                                Wlist[i].EndY = Nlist[j].InPorts[k].PosY + CoordY[j];
-                                mask[Wlist[i].EndX, Wlist[i].EndY, 0] = " ";
-                                mask[Wlist[i].EndX, Wlist[i].EndY, 1] = " ";
+                                _wlist[i].EndX = _nlist[j].InPorts[k].PosX + _coordX[j];
+                                _wlist[i].EndY = _nlist[j].InPorts[k].PosY + _coordY[j];
+                                _mask[_wlist[i].EndX, _wlist[i].EndY, 0] = " ";
+                                _mask[_wlist[i].EndX, _wlist[i].EndY, 1] = " ";
 
-                                for (int q = 0; q < (k + 1) * 2; q++)
+                                for (int q = 0; q < (k + 1)*2; q++)
                                 {
                                     //mask[Wlist[i].EndX + 1, Wlist[i].EndY - q, 0] = "X";
                                     //mask[Wlist[i].EndX - 1, Wlist[i].EndY - q, 0] = "X";
                                 }
-
                             }
                         }
                     }
                 }
             }
-                //drawe
+            //drawe
             /*
             for (int i = 0; i < RyadNum; i++)
             {
@@ -1219,7 +1215,7 @@ namespace MNetSynt
             {
                 for (int j = 0; j < outNode.SizeY; j++)
                 {
-                    if (mask[i, j, 0] == "X")
+                    if (_mask[i, j, 0] == "X")
                     {
                         //to Debug
                         //outNode.DataMatrix[i, j, 0] = "k";
@@ -1231,14 +1227,14 @@ namespace MNetSynt
             {
                 for (int j = 0; j < outNode.SizeY; j++)
                 {
-                    if (mask[i, j, 0] == "#")
+                    if (_mask[i, j, 0] == "#")
                     {
                         if (maxR < i)
                         {
                             maxR = i;
                         }
                     }
-                    if (mask[i, j, 1] == "#")
+                    if (_mask[i, j, 1] == "#")
                     {
                         if (maxR < i)
                         {
@@ -1248,7 +1244,7 @@ namespace MNetSynt
                 }
             }
 
-            outNode.SizeX = maxR+1;
+            outNode.SizeX = maxR + 1;
 
             //exporter
             Vmode = true;
@@ -1258,66 +1254,63 @@ namespace MNetSynt
             }
             else
             {
-
                 Vmode = true;
                 goto restart;
             }
-
         }
 
-		static int Max (int[] intList)
-		{
-			int max = intList [0];
+        private static int Max(int[] intList)
+        {
+            int max = intList[0];
 
-			for (int i=0; i<intList.Length; i++) 
-			{
-				if (intList[i]>max) max = intList[i];
-			}
+            for (int i = 0; i < intList.Length; i++)
+            {
+                if (intList[i] > max) max = intList[i];
+            }
 
-			return max;
-		}
+            return max;
+        }
+
         private static void DrawMask()
         {
             for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int j = 0; j < _sizeY; j++)
                 {
-                    Console.Write(mask[i, j, 0]);
+                    Console.Write(_mask[i, j, 0]);
                 }
                 Console.WriteLine();
             }
 
             for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int j = 0; j < _sizeY; j++)
                 {
-                    Console.Write(mask[i, j, 1]);
+                    Console.Write(_mask[i, j, 1]);
                 }
                 Console.WriteLine();
             }
-
         }
 
         private static void DrawWave()
         {
             for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int j = 0; j < _sizeY; j++)
                 {
-                    Console.Write(wavemap[i, j, 0].ToString("00"));
+                    Console.Write(_wavemap[i, j, 0].ToString("00"));
                 }
                 Console.WriteLine();
             }
 
             for (int i = 0; i < SizeX; i++)
             {
-                for (int j = 0; j < SizeY; j++)
+                for (int j = 0; j < _sizeY; j++)
                 {
-                    Console.Write(wavemap[i, j, 1].ToString("00"));
+                    Console.Write(_wavemap[i, j, 1].ToString("00"));
                 }
                 Console.WriteLine();
             }
-
         }
     }
 }

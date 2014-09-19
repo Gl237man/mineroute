@@ -1,42 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace BinhlEmul
 {
     
     class Render
     {
-        public World world;
+        private readonly World _world;
         public Render(World world)
         {
-            this.world = world;
+            _world = world;
         }
         public Image GetSingeLayeImage()
         {
-            Image i = new Bitmap(world.worldSizeX * 10, world.worldSizeY*10);
-            var gr = System.Drawing.Graphics.FromImage(i);
+            Image i = new Bitmap(_world.WorldSizeX * 10, _world.WorldSizeY*10);
+            var gr = Graphics.FromImage(i);
             gr.Clear(Color.Black);
-            for (int x = 0; x < world.worldSizeX; x++)
+            for (int x = 0; x < _world.WorldSizeX; x++)
             {
-                for (int y = 0; y < world.worldSizeY; y++)
+                for (int y = 0; y < _world.WorldSizeY; y++)
                 {
-                    for (int z = 0; z < world.worldSizeZ; z++)
+                    for (int z = 0; z < _world.WorldSizeZ; z++)
                     {
-                        if (world.GetObject(x,world.worldSizeY - y -1 , z).GetType() == typeof(WorldObjects.RedstoneWire))
+                        if (_world.GetObject(x,_world.WorldSizeY - y -1 , z).GetType() == typeof(WorldObjects.RedstoneWire))
                         {
-                            Color c = Color.FromArgb(50 + 12 * world.GetObject(x, world.worldSizeY - y - 1, z).RedValue, 0, 0);
+                            Color c = Color.FromArgb(50 + 12 * _world.GetObject(x, _world.WorldSizeY - y - 1, z).RedValue, 0, 0);
                             Brush b = new SolidBrush(c);
                             gr.FillRectangle(b, x * 10, y * 10, 10, 10);
                         }
 
-                        if (world.GetObject(x, world.worldSizeY - y - 1, z).GetType() == typeof(WorldObjects.RedstoneRepiter))
+                        if (_world.GetObject(x, _world.WorldSizeY - y - 1, z).GetType() == typeof(WorldObjects.RedstoneRepiter))
                         {
                             Color c = Color.FromArgb(0, 50, 0);
-                            if (world.GetObject(x, world.worldSizeY - y - 1, z).IsActivated)
+                            if (_world.GetObject(x, _world.WorldSizeY - y - 1, z).IsActivated)
                             {
                                 c = Color.FromArgb(0, 250, 0);
                             }
@@ -46,16 +41,16 @@ namespace BinhlEmul
                     }   
                 }
             }
-            for (int x = 0; x < world.worldSizeX; x++)
+            for (int x = 0; x < _world.WorldSizeX; x++)
             {
-                for (int y = 0; y < world.worldSizeY; y++)
+                for (int y = 0; y < _world.WorldSizeY; y++)
                 {
-                    for (int z = 0; z < world.worldSizeZ; z++)
+                    for (int z = 0; z < _world.WorldSizeZ; z++)
                     {
-                        if (world.GetObject(x, world.worldSizeY - y - 1, z).GetType() == typeof(WorldObjects.RedstoneTorch))
+                        if (_world.GetObject(x, _world.WorldSizeY - y - 1, z).GetType() == typeof(WorldObjects.RedstoneTorch))
                         {
                             Color c = Color.FromArgb(0, 0, 50);
-                            if (world.GetObject(x, world.worldSizeY - y - 1, z).IsActivated)
+                            if (_world.GetObject(x, _world.WorldSizeY - y - 1, z).IsActivated)
                             {
                                 c = Color.FromArgb(0, 0, 250);
                             }

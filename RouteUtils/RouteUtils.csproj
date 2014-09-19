@@ -36,6 +36,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Cpoint.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="OutPort.cs" />
     <Compile Include="Wire.cs" />
   </ItemGroup>
   <ItemGroup>
