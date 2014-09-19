@@ -60,7 +60,7 @@ namespace BinhlEmul
                                 _objectMatrix[x, y, z] = new RedstoneRepiter(x, y, z, Direction.Backword, 1, this);
                                 break;
                             case "=":
-                                _objectMatrix[x, y, z] = new RedstoneRepiter(x, y, z, Direction.Forward, 3, this);
+                                _objectMatrix[x, y, z] = new RedstoneRepiter(x, y, z, Direction.Forward, 2, this);
                                 break;
                             case "_":
                                 _objectMatrix[x, y, z] = new RedstoneTorch(x, y, z, Direction.Backword, this);
@@ -159,6 +159,8 @@ namespace BinhlEmul
                     }
                 }
             }
+            TickTorch();
+            TickTorch();
             TickTorch();
             //Обновление состояния портов
             foreach (IoPort t in _outPorts)
