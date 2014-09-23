@@ -14,48 +14,47 @@ namespace Binhl2JsWE
 
             var node = new Node(fileName + ".binhl");
             string genScript = "";
-            genScript += @"// $Id$" + "\r\n";
+            genScript += "// $Id$\r\n";
 
 
-            genScript += @"importPackage(Packages.java.io);" + "\r\n";
-            genScript += @"importPackage(Packages.java.awt);" + "\r\n";
-            genScript += @"importPackage(Packages.com.sk89q.worldedit);" + "\r\n";
-            genScript += @"importPackage(Packages.com.sk89q.worldedit.blocks);" + "\r\n";
-            genScript += @"var origin = player.getBlockOn();" + "\r\n";
-            genScript += @"var sess = context.remember();" + "\r\n";
+            genScript += "importPackage(Packages.java.io);\r\n";
+            genScript += "importPackage(Packages.java.awt);\r\n";
+            genScript += "importPackage(Packages.com.sk89q.worldedit);\r\n";
+            genScript += "importPackage(Packages.com.sk89q.worldedit.blocks);\r\n";
+            genScript += "var origin = player.getBlockOn();\r\n";
+            genScript += "var sess = context.remember();\r\n";
 
-            int tvn = 0;
-            int strn = 0;
+            int tempFunctionNum = 0;
+            int stringNums = 0;
 
-            var sb = new StringBuilder();
+            var stringBuilder = new StringBuilder();
 
-            sb.Append(@"function v" + tvn + " (){" + "\r\n");
-            for (int i = 0; i < node.SizeX; i++)
+            stringBuilder.AppendFormat("function v{0} (){{\r\n", tempFunctionNum);
+            for (int x = 0; x < node.SizeX; x++)
             {
-                for (int j = 0; j < node.SizeY; j++)
+                for (int y = 0; y < node.SizeY; y++)
                 {
-                    for (int k = 0; k < node.SizeZ; k++)
+                    for (int z = 0; z < node.SizeZ; z++)
                     {
-                        if (node.DataMatrix[i, j, k] == "0") continue;
-                        sb.Append(GetCoordSring(i, j, k));
-                        sb.Append(GetBlockStr(node.DataMatrix[i, j, k]));
-                        strn++;
-                        if (strn <= 200) continue;
-                        sb.Append(@"};" + "\r\n");
-                        sb.Append(@"v" + tvn + "();" + "\r\n");
-                        tvn++;
-                        Console.Write(tvn);
-                        sb.Append(@"function v" + tvn + " (){" + "\r\n");
-                        strn = 0;
-                        //DataMatrix[i, j, k] = "0";
+                        if (node.DataMatrix[x, y, z] == "0") continue;
+                        stringBuilder.Append(GetCoordSring(x, y, z));
+                        stringBuilder.Append(GetBlockStr(node.DataMatrix[x, y, z]));
+                        stringNums++;
+                        if (stringNums <= 200) continue;
+                        stringBuilder.Append("};\r\n");
+                        stringBuilder.AppendFormat("v{0}();\r\n", tempFunctionNum);
+                        tempFunctionNum++;
+                        Console.Write(tempFunctionNum);
+                        stringBuilder.AppendFormat("function v{0} (){{\r\n", tempFunctionNum);
+                        stringNums = 0;
                     }
                 }
             }
 
-            sb.Append(@"};" + "\r\n");
-            sb.Append(@"v" + tvn + "();" + "\r\n");
+            stringBuilder.Append("};\r\n");
+            stringBuilder.AppendFormat("v{0}();\r\n", tempFunctionNum);
 
-            genScript += sb.ToString();
+            genScript += stringBuilder.ToString();
 
             File.WriteAllText(fileName + ".js", genScript);
         }
