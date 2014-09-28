@@ -34,10 +34,11 @@ namespace Binhl2JsWE
             {
                 for (int y = 0; y < node.SizeY; y++)
                 {
+                    int iy = node.SizeY - y -1;
                     for (int z = 0; z < node.SizeZ; z++)
                     {
                         if (node.DataMatrix[x, y, z] == "0") continue;
-                        stringBuilder.Append(GetCoordSring(x, y, z));
+                        stringBuilder.Append(GetCoordSring(x, iy, z));
                         stringBuilder.Append(GetBlockStr(node.DataMatrix[x, y, z]));
                         stringNums++;
                         if (stringNums <= 200) continue;

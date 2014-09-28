@@ -20,7 +20,7 @@ namespace BinhlEmul
             world.SetPortValue("sclr", false);
 
             int tim = 0;
-
+            world.SetPortValue("datain", true);
             for (var i = 0; i < 10; i++)
             {
                 world.Tick();
@@ -44,7 +44,7 @@ namespace BinhlEmul
                 Console.WriteLine("regout=" + world.GetPortValue("regout"));
             }
 
-            world.SetPortValue("datain", true);
+            world.SetPortValue("datain", false);
 
             world.SetPortValue("clk", false);
             for (int i = 0; i < 10; i++)

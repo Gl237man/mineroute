@@ -151,7 +151,9 @@ namespace RouteUtils
                 {
                     for (int k = 0; k < SizeX; k++)
                     {
-                        SB.Append(DataMatrix[k, SizeY - j - 1, i]);
+                        //InvertExport!
+                        //SB.Append(DataMatrix[k, SizeY - j - 1, i]);
+                        SB.Append(DataMatrix[k, j, i]);
                     }
                     SB.Append("\r\n");
                 }
