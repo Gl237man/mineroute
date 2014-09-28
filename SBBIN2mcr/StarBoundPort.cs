@@ -1,22 +1,25 @@
 ﻿namespace SBBIN2mcr
 {
-    internal class StarBoundPort
+    internal abstract class StarBoundPort
     {
         public StarBoundNode NodeOwner;
-        public string PortName;
-        private int xshift;
-        private int yshift;
 
-        public int xcoord
-        {
-            get { return NodeOwner.xcoord + xshift; }
-            set { xshift = value; }
-        }
+       
 
-        public int ycoord
+/*
+        public int Xcoord
         {
-            get { return NodeOwner.ycoord + yshift; }
-            set { yshift = value; }
+            get { return NodeOwner.Xcoord + _xshift; }
+            set { _xshift = value; }
         }
+*/
+
+/*
+        public int Ycoord
+        {
+            get { return NodeOwner.Ycoord + _yshift; }
+            set { _yshift = value; }
+        }
+*/
     }
 }

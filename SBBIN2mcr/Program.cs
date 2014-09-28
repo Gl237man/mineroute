@@ -3,74 +3,82 @@ using System.IO;
 
 namespace SBBIN2mcr
 {
-    internal class Program
+    internal static class Program
     {
-        private const int syncpoint = 40;
-        private const int dDelay = 85;
-        private const int dmelay = 50;
+        private const int Syncpoint = 40;
+        private const int DDelay = 85;
+        private const int Dmelay = 50;
         private const int VMul = 25;
         private const int MoveSpeed = 88;
 
-        private const int x0 = 440;
-        private static int totalmoves;
-        private static int Clevel = 2;
+        private const int X0 = 440;
+        private static int _totalmoves;
+        private static int _clevel = 2;
 
         private static void Main(string[] args)
         {
             var nodes = new List<StarBoundNode>();
             var wires = new List<StarboundWire>();
-            LoadFile(nodes, wires, "test_D.SBBIN");
+            if (args.Length > 0)
+            {
+                LoadFile(nodes, wires, args[0]+".SBBIN");
+            }
+            else
+            {
+                LoadFile(nodes, wires, "test_D.SBBIN");    
+            }
+            
 
             string outfile = "";
             outfile += StartClic();
-            int xcoord = -1;
-            for (int i = 0; i < nodes.Count; i++)
+            int xcoord;
+            foreach (StarBoundNode t in nodes)
             {
-                string ToolName = nodes[i].NodeType;
+                string toolName = t.NodeType;
 
                 outfile += SyncToStart();
                 xcoord = -1;
 
-                outfile += SelectTool(ToolName);
+                outfile += SelectTool(toolName);
 
-                outfile += MoveTo(nodes[i].xcoord, ref xcoord);
+                outfile += MoveTo(t.Xcoord, ref xcoord);
 
-                outfile += PlaceAtY(nodes[i].ycoord);
+                outfile += PlaceAtY(t.Ycoord);
             }
             //Select zero tool
             outfile += GenKeyPress("D1");
 
-            for (int i = 0; i < wires.Count; i++)
+            foreach (StarboundWire t in wires)
             {
                 outfile += SyncToStart();
                 xcoord = -1;
-                outfile += MoveTo(wires[i].startx, ref xcoord);
-                outfile += ClickAtY(wires[i].starty);
+                outfile += MoveTo(t.Startx, ref xcoord);
+                outfile += ClickAtY(t.Starty);
                 outfile += SyncToStart();
                 xcoord = -1;
-                outfile += MoveTo(wires[i].endx, ref xcoord);
-                outfile += ClickAtY(wires[i].endy);
+                outfile += MoveTo(t.Endx, ref xcoord);
+                outfile += ClickAtY(t.Endy);
             }
 
             File.WriteAllText("T.mcr", outfile);
         }
 
-        private static string SetLevelAtY(int Ycoord)
+        private static string SetLevelAtY(int ycoord)
         {
             string outfile = "";
-            int needlevel = Ycoord/7;
+            int needlevel = ycoord/7;
 
-            while (Clevel != needlevel)
+            while (_clevel != needlevel)
             {
-                if (Clevel < needlevel)
+                if (_clevel < needlevel)
                 {
                     outfile += LevelDown();
-                    Clevel++;
+                    _clevel++;
                 }
-                if (Clevel > needlevel)
+                if (_clevel > needlevel)
                 {
                     outfile += LevelUp();
-                    Clevel--;
+                    _clevel--;
                 }
             }
 
@@ -103,20 +111,20 @@ namespace SBBIN2mcr
             return outfile;
         }
 
-        private static string ClickAtY(int Ycoord)
+        private static string ClickAtY(int ycoord)
         {
             string outS = "";
-            outS += SetLevelAtY(Ycoord);
+            outS += SetLevelAtY(ycoord);
 
-            Ycoord = Ycoord - Clevel*8;
-            int coord = x0 + Ycoord*VMul;
+            ycoord = ycoord - _clevel*8;
+            int coord = X0 + ycoord*VMul;
 
 
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 840 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 840 : " + coord + " : LeftButtonDown : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 840 : " + coord + " : LeftButtonUp : 0 : 0 : 0" + "\r\n";
 
             return outS;
@@ -147,7 +155,7 @@ namespace SBBIN2mcr
             string outfile = "";
 
 
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : A : KeyDown" + "\r\n";
             outfile += "DELAY : " + (10000) + "\r\n";
             outfile += "Keyboard : A : KeyUp" + "\r\n";
@@ -161,7 +169,7 @@ namespace SBBIN2mcr
             string outfile = "";
 
 
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : A : KeyDown" + "\r\n";
             outfile += "DELAY : " + (3000) + "\r\n";
             outfile += "Keyboard : A : KeyUp" + "\r\n";
@@ -174,22 +182,22 @@ namespace SBBIN2mcr
         {
             string outfile = "";
 
-            totalmoves++;
-            if (totalmoves > syncpoint)
+            _totalmoves++;
+            if (_totalmoves > Syncpoint)
             {
                 outfile += SyncToStart(xcoord);
                 xcoord = -1;
-                totalmoves = 0;
+                _totalmoves = 0;
             }
 
 
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyDown" + "\r\n";
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : D : KeyDown" + "\r\n";
             outfile += "DELAY : " + MoveSpeed + "\r\n";
             outfile += "Keyboard : D : KeyUp" + "\r\n";
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyUp" + "\r\n";
 
             xcoord++;
@@ -200,21 +208,21 @@ namespace SBBIN2mcr
         {
             string outfile = "";
 
-            totalmoves++;
-            if (totalmoves > syncpoint)
+            _totalmoves++;
+            if (_totalmoves > Syncpoint)
             {
                 outfile += SyncToStart(xcoord);
                 xcoord = -1;
-                totalmoves = 0;
+                _totalmoves = 0;
             }
 
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyDown" + "\r\n";
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : A : KeyDown" + "\r\n";
             outfile += "DELAY : " + MoveSpeed + "\r\n";
             outfile += "Keyboard : A : KeyUp" + "\r\n";
-            outfile += "DELAY : " + dmelay + "\r\n";
+            outfile += "DELAY : " + Dmelay + "\r\n";
             outfile += "Keyboard : ShiftLeft : KeyUp" + "\r\n";
 
             xcoord--;
@@ -225,11 +233,11 @@ namespace SBBIN2mcr
         {
             string outS = "";
 
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 200 : 200 : Move : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 200 : 200 : Move : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 200 : 200 : Move : 0 : 0 : 0" + "\r\n";
 
             return outS;
@@ -240,25 +248,25 @@ namespace SBBIN2mcr
             string outS = "";
             outS += SetLevelAtY(Ycoord);
 
-            Ycoord = Ycoord - Clevel*8;
+            Ycoord = Ycoord - _clevel*8;
 
-            int coord = x0 + Ycoord*VMul;
+            int coord = X0 + Ycoord*VMul;
 
 
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 865 : " + coord + " : Move : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 865 : " + coord + " : LeftButtonDown : 0 : 0 : 0" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
             outS += "Mouse : 865 : " + coord + " : LeftButtonUp : 0 : 0 : 0" + "\r\n";
 
             return outS;
         }
 
-        private static string SelectTool(string ToolName)
+        private static string SelectTool(string toolName)
         {
             string outStr = "";
-            switch (ToolName)
+            switch (toolName)
             {
                 case "OR_GATE":
                     outStr += GenKeyPress("D1");
@@ -284,20 +292,18 @@ namespace SBBIN2mcr
                     outStr += GenKeyPress("D1");
                     outStr += GenKeyPress("D7");
                     break;
-                default:
-                    break;
             }
             return outStr;
         }
 
-        private static string GenKeyPress(string KeyName)
+        private static string GenKeyPress(string keyName)
         {
             string outS = "";
 
-            outS += "DELAY : " + dDelay + "\r\n";
-            outS += "Keyboard : " + KeyName + " : KeyDown" + "\r\n";
-            outS += "DELAY : " + dDelay + "\r\n";
-            outS += "Keyboard : " + KeyName + " : KeyUp" + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
+            outS += "Keyboard : " + keyName + " : KeyDown" + "\r\n";
+            outS += "DELAY : " + DDelay + "\r\n";
+            outS += "Keyboard : " + keyName + " : KeyUp" + "\r\n";
 
             return outS;
         }
@@ -306,12 +312,12 @@ namespace SBBIN2mcr
         {
             string[] indat = File.ReadAllLines(filename);
 
-            for (int i = 0; i < indat.Length; i++)
+            foreach (string t in indat)
             {
-                if (indat[i].Split(':')[0] == "W")
-                    wires.Add(new StarboundWire(indat[i]));
-                if (indat[i].Split(':')[0] == "N")
-                    nodes.Add(new StarBoundNode(indat[i]));
+                if (t.Split(':')[0] == "W")
+                    wires.Add(new StarboundWire(t));
+                if (t.Split(':')[0] == "N")
+                    nodes.Add(new StarBoundNode(t));
             }
         }
     }
