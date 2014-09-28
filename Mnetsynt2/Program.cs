@@ -21,7 +21,7 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            string file = "test4";
+            string file = "test_D";
 
             if (args.Length > 0)
             {
@@ -130,6 +130,8 @@ namespace Mnetsynt2
                         int Twire = 0;
                         int mink = 999999;
                         int bestN = 0;
+
+                        //TODO Попробовать распаралелить
                         for (int k = 0; k < MainNetwork.wires.Count; k++)
                         {
                             if (!MainNetwork.wires[k].Placed)
@@ -658,17 +660,17 @@ namespace Mnetsynt2
 
         private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP, RouteUtils.Cpoint EP)
         {
-            int[,] AStarTable = new int[BaseSize, BaseSize];
+            var AStarTable = new int[BaseSize, BaseSize];
             AStarTable[SP.BaseX, SP.BaseY] = 1;
-            List<int> lsx = new List<int>();
-            List<int> lsy = new List<int>();
+            var lsx = new List<int>();
+            var lsy = new List<int>();
 
             lsx.Add(SP.BaseX);
             lsy.Add(SP.BaseY);
 
-            bool Calcing = true;
+            bool calcing = true;
 
-            while (Calcing)
+            while (calcing)
             {
                 int[] csx = lsx.ToArray();
                 int[] csy = lsy.ToArray();
@@ -683,7 +685,7 @@ namespace Mnetsynt2
                     int y = csy[i];
 
                     if (x == EP.BaseX && y == EP.BaseY)
-                        Calcing = false;
+                        calcing = false;
 
                     if (x > 1 && x < BaseSize - 2 && y > 1 && y < BaseSize - 2)
                     {
@@ -720,7 +722,7 @@ namespace Mnetsynt2
                         }
                     }
                 }
-                if (aded == 0) Calcing = false;
+                if (aded == 0) calcing = false;
             }
             return AStarTable;
         }
