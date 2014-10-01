@@ -347,6 +347,10 @@ namespace Mnetsynt2
                 //Обрезка
                 Console.WriteLine("Обрезка рабочей Облости");
                 RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
+                //Маркировка портов ввода вывода
+                OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.INPort(t.NodeName, t.x, t.y)).ToArray();
+                OutNodeO.OutPorts = MainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new RouteUtils.OutPort(t.NodeName, t.x, t.y)).ToArray();
+
                 Console.WriteLine("Экспорт");
                 OutNodeO.export( file + ".binhl");
         }
