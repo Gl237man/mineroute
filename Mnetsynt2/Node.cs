@@ -13,6 +13,8 @@ namespace Mnetsynt2
         public int x;
         public int y;
         public int z;
+        public bool placed;
+        public RouteUtils.Node mcNode;
         public override string ToString()
         {
             return "NODE:" + NodeType + ":" + NodeName;

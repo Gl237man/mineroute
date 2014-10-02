@@ -6,6 +6,12 @@ using System.Threading.Tasks;
 
 namespace Mnetsynt2
 {
+    enum PlaceModes
+    {
+        Compact1,
+        Fast,
+        Optimal
+    }
     class Program
     {
 
@@ -14,6 +20,8 @@ namespace Mnetsynt2
         /// Разряженность
         /// </summary>
         static int dolled = 1;
+
+        static PlaceModes placeMode = PlaceModes.Optimal;
 
         static bool WireOpt = true;
         static bool TypeSort = false;
@@ -43,21 +51,32 @@ namespace Mnetsynt2
             for (int i = 0; i < MainNetwork.nodes.Count; i++)
             {
                 mcNodes[i] = new RouteUtils.Node(MainNetwork.nodes[i].NodeType + ".binhl");
+                mcNodes[i].NodeName = MainNetwork.nodes[i].NodeName;
+                MainNetwork.nodes[i].mcNode = mcNodes[i];
             }
             Console.WriteLine("OK");
             //Place nodes
-            int PlaceLayer = 60;
-            int PortNum = CalcPortNum(MainNetwork);
+            int PlaceLayer = 0;
+            int BaseSize = 0;
 
-            int BaseSize = 5 * PortNum;
-
-
-            while (!TryPlace(MainNetwork, mcNodes, PlaceLayer, BaseSize))
+            //switch (placeMode) { }
+            switch (placeMode)
             {
-                BaseSize += 10;
-                Console.WriteLine("Размер:" + BaseSize.ToString());
+                case PlaceModes.Compact1:
+                    PlaceCompact(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
+                    break;
+                case PlaceModes.Fast:
+                    PlaceFast(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
+                    break;
+                case PlaceModes.Optimal:
+                    PlaceOptimal(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
+                    break;
+                default:
+                    break;
             }
-            BaseSize += PlaceLayer;
+
+            
+
 
             Console.WriteLine("Размещение ОК");
 
@@ -348,11 +367,184 @@ namespace Mnetsynt2
                 Console.WriteLine("Обрезка рабочей Облости");
                 RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
                 //Маркировка портов ввода вывода
-                OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.INPort(t.NodeName, t.x, t.y)).ToArray();
-                OutNodeO.OutPorts = MainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new RouteUtils.OutPort(t.NodeName, t.x, t.y)).ToArray();
+                OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.INPort(t.NodeName, t.x+1, t.y)).ToArray();
+                OutNodeO.OutPorts = MainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new RouteUtils.OutPort(t.NodeName, t.x+1, t.y)).ToArray();
 
                 Console.WriteLine("Экспорт");
                 OutNodeO.export( file + ".binhl");
+        }
+
+        private static void PlaceFast(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void PlaceOptimal(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
+        {
+            //Расчитать baseSize
+            PlaceLayer = 60;
+            int xStep = mcNodes.Select(t => t.SizeX).Max() + dolled;
+            int yStep = mcNodes.Select(t => t.SizeY).Max() + dolled;
+
+            BaseSize = (new int[] { Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * xStep, Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * yStep}).Max();
+            
+            //Разместить порты
+            var ports = MainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
+            int lastxcoord = 0;
+            foreach (var port in ports)
+            {
+                port.placed = true;
+                port.x = lastxcoord;
+                port.y = 1;
+                port.z = PlaceLayer;
+                lastxcoord += mcNodes.FirstOrDefault(t => t.NodeName == port.NodeName).SizeX + dolled;
+            }
+            //Расчитать матрицу связоности
+            int[,] connectionMatrix = new int[MainNetwork.nodes.Count, MainNetwork.nodes.Count];
+            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            {
+                for (int j = 0; j < MainNetwork.nodes.Count; j++)
+                {
+                    connectionMatrix[i, j] = MainNetwork.wires.Where(t => t.SrcName == MainNetwork.nodes[i].NodeName && t.DistName == MainNetwork.nodes[j].NodeName ||
+                                                                          t.SrcName == MainNetwork.nodes[j].NodeName && t.DistName == MainNetwork.nodes[i].NodeName).Count();
+                }
+            }
+
+            //Разместить ноды в ячейки
+            var unPlaced = MainNetwork.nodes.Where(t => !t.placed);
+            while (unPlaced.Count() > 0)
+            {
+                //Поиск нода максимально связанного с установленными
+                int[] localConnectionMatrix = new int[MainNetwork.nodes.Count];
+                for (int i = 0; i < MainNetwork.nodes.Count; i++)
+                {
+                    localConnectionMatrix[i] += MainNetwork.wires.Where(t => !MainNetwork.nodes[i].placed &&
+                                                                             (t.SrcName == MainNetwork.nodes[i].NodeName && MainNetwork.nodes.FirstOrDefault(n=>n.NodeName == t.DistName).placed)).Count();
+                    localConnectionMatrix[i] += MainNetwork.wires.Where(t => !MainNetwork.nodes[i].placed &&
+                                                                             (t.DistName == MainNetwork.nodes[i].NodeName && MainNetwork.nodes.FirstOrDefault(n => n.NodeName == t.SrcName).placed)).Count();
+                }
+                int maxConections = localConnectionMatrix.Max();
+                Node nodeToPlace = new Node();
+                for (int i = 0; i < MainNetwork.nodes.Count; i++)
+                {
+                    if (localConnectionMatrix[i] == maxConections)
+                    {
+                        nodeToPlace = MainNetwork.nodes[i];
+                    }
+                }
+                if (maxConections == 0)
+                {
+                    nodeToPlace = unPlaced.FirstOrDefault();
+                }
+                //Поиск места для установки
+                int[,] placeMatrix = new int[BaseSize,BaseSize];
+                var connectionsa = MainNetwork.wires.Where(k => k.SrcName == nodeToPlace.NodeName).Select(s => MainNetwork.nodes.FirstOrDefault(q => s.DistName == q.NodeName)).Where(l => l.placed);
+                var connectionsb = MainNetwork.wires.Where(k => k.DistName == nodeToPlace.NodeName).Select(s => MainNetwork.nodes.FirstOrDefault(q => s.SrcName == q.NodeName)).Where(l => l.placed);
+                var connections = connectionsa.Union(connectionsb);
+                var mcNode = mcNodes.FirstOrDefault(k => k.NodeName == nodeToPlace.NodeName);
+                int sizex = mcNode.SizeX + dolled;
+                int sizey = mcNode.SizeY + dolled;
+                var placedNodes = MainNetwork.nodes.Where(t=>t.placed);
+
+
+                int step = 3;
+
+                for (int i = 0; i < BaseSize; i+=step)
+                {
+                    for (int j = 0; j < BaseSize; j+=step)
+                    {
+                        bool collision = placedNodes.Where(t => CheckCollision(t, t.mcNode, i, j, mcNode)).Count() > 0;
+                        bool fit = i < i + sizex && 
+                                   j < j + sizey;
+                        if (!collision && fit)
+                        {
+                            foreach (Node n in connections)
+                            {
+                                placeMatrix[i, j] += (n.x - i) * (n.x - i) + (n.y - j) * (n.y - j);
+                            }
+                        }
+
+                    }
+                }
+                //Установка
+                int pcondMin = 90000000;
+                int xplace = 0;
+                int yplace = 0;
+                for (int i = 1; i < BaseSize; i++)
+                {
+                    for (int j = 1; j < BaseSize; j++)
+                    {
+                        if (placeMatrix[i, j] < pcondMin && placeMatrix[i, j]>0)
+                        {
+                            xplace = i;
+                            yplace = j;
+                            pcondMin = placeMatrix[i, j];
+                        }
+                    }
+                }
+                nodeToPlace.x = xplace;
+                nodeToPlace.y = yplace;
+                nodeToPlace.z = PlaceLayer;
+                nodeToPlace.placed = true;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("{0} - Осталось:{1}", nodeToPlace.NodeName, unPlaced.Count());
+                Console.ForegroundColor = ConsoleColor.White;
+             }
+            //foreach(Node node in )
+
+            BaseSize += PlaceLayer;
+            //Debug Draw Image
+            System.Drawing.Image im = new System.Drawing.Bitmap(BaseSize, BaseSize);
+            System.Drawing.Graphics Gr = System.Drawing.Graphics.FromImage(im);
+            Gr.Clear(System.Drawing.Color.Black);
+            foreach(var node in MainNetwork.nodes)
+            {
+                Gr.DrawRectangle(System.Drawing.Pens.Green, node.x, node.y, node.mcNode.SizeX, node.mcNode.SizeY);
+            }
+            im.Save("1.png");
+
+            //Увеличить плотность
+            //throw new NotImplementedException();
+        }
+
+        private static bool CheckCollision(Node t, RouteUtils.Node node1, int i, int j, RouteUtils.Node node2)
+        {
+            bool result = false;
+            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i, j);
+            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i + node2.SizeX, j);
+            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i, j + node2.SizeY);
+            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i + node2.SizeX, j + node2.SizeY);
+
+            
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x, t.y);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x + node1.SizeX, t.y);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x, t.y + node1.SizeY);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x + node1.SizeX, t.y + node1.SizeY);
+            
+            return result;
+        }
+
+        private static bool CheckCollisionBoxAndPoint(int ox, int oy, int sx, int sy, int px, int py)
+        {
+            return (ox <= px && oy <= py && ox + sx >= px && oy + sy >= py);
+        }
+
+
+
+        private static void PlaceCompact(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
+        {
+            PlaceLayer = 60;
+            int PortNum = CalcPortNum(MainNetwork);
+
+            BaseSize = 5 * PortNum;
+
+
+            while (!TryPlace(MainNetwork, mcNodes, PlaceLayer, BaseSize))
+            {
+                BaseSize += 10;
+                Console.WriteLine("Размер:" + BaseSize.ToString());
+            }
+            BaseSize += PlaceLayer;
         }
 
         private static int FindBestWireToRoute(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask)

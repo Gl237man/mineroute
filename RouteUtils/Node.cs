@@ -199,6 +199,8 @@ namespace RouteUtils
             }
             immain.Save("1.bmp");
         }
+
+        public string NodeName;
     }
 
     public class INPort
