@@ -390,7 +390,7 @@ namespace Mnetsynt2
             
             //Разместить порты
             var ports = MainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
-            int lastxcoord = 0;
+            int lastxcoord = 1;
             foreach (var port in ports)
             {
                 port.placed = true;
@@ -447,23 +447,27 @@ namespace Mnetsynt2
                 var placedNodes = MainNetwork.nodes.Where(t=>t.placed);
 
 
-                int step = 3;
+                int step = 5;
+                //TODO Оптимизировать с помощью масок
+                char[,] mask = new char[BaseSize, BaseSize];
+                foreach (var node in placedNodes)
+                {
+                    DrawAtMask(mask, node.x, node.y, node.mcNode.SizeX, node.mcNode.SizeY);
+                }
 
                 for (int i = 0; i < BaseSize; i+=step)
                 {
                     for (int j = 0; j < BaseSize; j+=step)
                     {
-                        bool collision = placedNodes.Where(t => CheckCollision(t, t.mcNode, i, j, mcNode)).Count() > 0;
-                        bool fit = i < i + sizex && 
-                                   j < j + sizey;
-                        if (!collision && fit)
-                        {
-                            foreach (Node n in connections)
-                            {
-                                placeMatrix[i, j] += (n.x - i) * (n.x - i) + (n.y - j) * (n.y - j);
-                            }
-                        }
-
+                        //bool collision = placedNodes.Where(t => CheckCollision(t, t.mcNode, i, j, mcNode)).Count() > 0;
+                        if (BaseSize > i + sizex + 1 && BaseSize > j + sizey + 1)
+                            if(!CheckMaskCollision(mask, nodeToPlace,i,j))
+                                {
+                                    foreach (Node n in connections)
+                                    {
+                                        placeMatrix[i, j] += (n.x - i) * (n.x - i) + (n.y - j) * (n.y - j);
+                                    }
+                                }
                     }
                 }
                 //Установка
@@ -505,6 +509,18 @@ namespace Mnetsynt2
 
             //Увеличить плотность
             //throw new NotImplementedException();
+        }
+
+        private static bool CheckMaskCollision(char[,] mask, Node node,int x,int y)
+        {
+            for (int i = 0; i < node.mcNode.SizeX; i++)
+            {
+                for (int j = 0; j < node.mcNode.SizeY; j++)
+                {
+                    if (mask[x + i, y + j] == 'X') return true;
+                }
+            }
+            return false;
         }
 
         private static bool CheckCollision(Node t, RouteUtils.Node node1, int i, int j, RouteUtils.Node node2)
