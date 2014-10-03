@@ -15,6 +15,11 @@ namespace BinhlEmul
         public readonly int WorldSizeZ;
         public bool NotFullTick;
 
+        public World()
+        {
+ 
+        }
+
         public World(Node node)
         {
             _objectMatrix = new WorldObject[node.SizeX, node.SizeY, node.SizeZ];

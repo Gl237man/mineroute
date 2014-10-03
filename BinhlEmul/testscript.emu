@@ -1,0 +1,38 @@
+﻿load ( TRIG_D  )
+wait (5)
+checkstruct()
+checkio()
+//Установка начального состояния
+set( datain, 0)
+set(clk, 0)
+set(sclr, 0)
+//Проверка на установку 1
+set(datain,1)
+wait(10)//Цикл тактового сигнала
+set(clk,1)
+wait(10)
+set(clk,0)
+read(regout)
+test(regout,1)
+//Проверка на установку 0
+set(datain,0)
+wait(10)//Цикл тактового сигнала
+set(clk,1)
+wait(10)
+set(clk,0)
+read(regout)
+test(regout,0)
+//Проверка на установку reset
+set(datain,1)
+wait(10)//Цикл тактового сигнала
+set(clk,1)
+wait(10)
+set(clk,0)
+read(regout)
+test(regout,1)
+set(sclr,1)
+wait(5)
+set(sclr,0)
+wait(5)
+read(regout)
+test(regout,0)
