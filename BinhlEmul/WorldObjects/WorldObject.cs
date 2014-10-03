@@ -19,6 +19,7 @@
         public virtual bool IsActivated { get; set; }
 
         public abstract void Tick();
+        public abstract bool testState();
 
 
 /*

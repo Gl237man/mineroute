@@ -17,6 +17,11 @@
             BlockTime = 0;
         }
 
+        public override bool testState()
+        {
+            return GetObject(PlaceBlockDirect).GetType() == typeof(Cloth);
+        }
+
         public override void Tick()
         {
             OldValue = IsActivated;

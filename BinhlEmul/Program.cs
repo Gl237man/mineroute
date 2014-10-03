@@ -21,6 +21,14 @@ namespace BinhlEmul
 
             foreach (string str in testfile)
             {
+                if (Regex.IsMatch(str, @"\bcheckio.*?\(.*?\)"))
+                {
+                    //TODO Реализовать проверку   
+                }
+                if (Regex.IsMatch(str, @"\bcheckstruct.*?\(.*?\)"))
+                {
+                    FTestStruct(world);
+                }
                 if (Regex.IsMatch(str, @"\bload.*?\(.*?\)"))
                 {
                     world = FLoad(str);
@@ -35,8 +43,7 @@ namespace BinhlEmul
                 }
                 if (Regex.IsMatch(str, @"\bread.*?\(.*?\)"))
                 {
-                    string port = Regex.Match(str, @"\(.*?\)").Value.Replace("(", "").Replace(")", "").Trim();
-                    Console.WriteLine("{0}={1}",port,world.GetPortValue(port));
+                    FRead(world, str);
                 }
                 if (Regex.IsMatch(str, @"\btest.*?\(.*?\)"))
                 {
@@ -69,6 +76,29 @@ namespace BinhlEmul
 
             r.GetSingeLayeImage().Save("I.png");
             */
+        }
+
+        private static void FTestStruct(World world)
+        {
+            bool tstruct = world.TestStruct();
+            if (tstruct)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Struct - OK");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Struct - ERROR");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+        }
+
+        private static void FRead(World world, string str)
+        {
+            string port = Regex.Match(str, @"\(.*?\)").Value.Replace("(", "").Replace(")", "").Trim();
+            Console.WriteLine("{0}={1}", port, world.GetPortValue(port));
         }
 
         private static void FTest(ref bool allTests, ref int numTests, World world, string str)

@@ -8,6 +8,11 @@
         public bool Act;
         public bool[] ActArch;
 
+        public override bool testState()
+        {
+            return GetObject(Direction.Down).GetType() == typeof(Cloth);
+        }
+
         public RedstoneRepiter(int x, int y, int z, Direction dir, int delay, World world) : base(x, y, z, world)
         {
             Direct = dir;

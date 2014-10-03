@@ -6,6 +6,11 @@
         {
         }
 
+        public override bool testState()
+        {
+            return true;
+        }
+
         public override void Tick()
         {
         }

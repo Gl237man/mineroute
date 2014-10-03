@@ -226,5 +226,23 @@ namespace BinhlEmul
 
             return _objectMatrix[xCoord, yCoord, zCoord];
         }
+
+        internal bool TestStruct()
+        {
+            for (int x = 0; x < WorldSizeX; x++)
+            {
+                for (int y = 0; y < WorldSizeY; y++)
+                {
+                    for (int z = 0; z < WorldSizeZ; z++)
+                    {
+                        if (!_objectMatrix[x, y, z].testState())
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
     }
 }

@@ -10,6 +10,11 @@ namespace BinhlEmul.WorldObjects
         {
         }
 
+        public override bool testState()
+        {
+            return GetObject(Direction.Down).GetType() == typeof(Cloth);
+        }
+
         public override void Tick()
         {
             int oldRedValue = RedValue;

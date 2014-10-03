@@ -7,6 +7,11 @@
         {
         }
 
+        public override bool testState()
+        {
+            return true;
+        }
+
         public override bool IsActivated
         {
             get
