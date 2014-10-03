@@ -1,0 +1,27 @@
+//Name:DUP2
+//in:1
+//out:2
+//in:I0:1:7
+//out:O0:1:1
+//out:O1:4:1
+//size:5:8
+//layers:7
+//layer:0
+load (DUP2)
+wait (5)
+checkstruct()
+checkio()
+//test0
+set  (I0,0)
+wait (5)
+read (O0)
+read (O1)
+test (O0,0)
+test (O1,0)
+//test1
+set  (I0,1)
+wait (5)
+read (O0)
+read (O1)
+test (O0,1)
+test (O1,1)

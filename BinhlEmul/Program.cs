@@ -90,13 +90,13 @@ namespace BinhlEmul
             if (uport)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Struct - OK");
+                Console.WriteLine("IO - OK");
                 Console.ForegroundColor = ConsoleColor.White;
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Struct - ERROR");
+                Console.WriteLine("IO - ERROR");
                 allTests = false;
                 Console.ForegroundColor = ConsoleColor.White;
             }

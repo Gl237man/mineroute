@@ -1,0 +1,19 @@
+//Name:NOT
+//in:1
+//out:1
+//in:I0:0:5
+//out:O0:2:2
+load (NOT)
+wait (5)
+checkstruct()
+checkio()
+//Проверка нуля
+set  (I0,0)
+wait (5)
+read (O0)
+test (O0,1)
+//Проверка Еденицы
+set  (I0,1)
+wait (5)
+read (O0)
+test (O0,0)

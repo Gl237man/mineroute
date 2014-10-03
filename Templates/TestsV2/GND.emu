@@ -1,0 +1,15 @@
+//Name:Const0
+//in:0
+//out:1
+//out:O0:1:4
+//size:3:5
+//layers:7
+//layer:0
+load (GND)
+wait (5)
+checkstruct()
+checkio()
+//Проверка нуля
+wait (5)
+read (O0)
+test (O0,0)
