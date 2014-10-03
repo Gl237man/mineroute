@@ -7,21 +7,23 @@ namespace BinhlEmul
 {
     public class World
     {
-        private readonly List<IoPort> _inPorts;
+        public readonly List<IoPort> inPorts;
         private readonly WorldObject[,,] _objectMatrix;
-        private readonly List<IoPort> _outPorts;
+        public readonly List<IoPort> outPorts;
         public readonly int WorldSizeX;
         public readonly int WorldSizeY;
         public readonly int WorldSizeZ;
         public bool NotFullTick;
+        public string worldName;
 
         public World()
         {
  
         }
 
-        public World(Node node)
+        public World(Node node, string fileName)
         {
+            worldName = fileName;
             _objectMatrix = new WorldObject[node.SizeX, node.SizeY, node.SizeZ];
             WorldSizeX = node.SizeX;
             WorldSizeY = node.SizeY;
@@ -82,8 +84,8 @@ namespace BinhlEmul
             }
 
             //Загрузка портов
-            _inPorts = new List<IoPort>();
-            _outPorts = new List<IoPort>();
+            inPorts = new List<IoPort>();
+            outPorts = new List<IoPort>();
 
             foreach (INPort port in node.InPorts)
             {
@@ -98,7 +100,7 @@ namespace BinhlEmul
                     }
                 }
                 var p = new IoPort {X = x, Y = y, Z = z, Name = port.Name, Value = false};
-                _inPorts.Add(p);
+                inPorts.Add(p);
                 _objectMatrix[x, y, z] = new RedstoneWire(x, y, z, this);
                 ((RedstoneWire) _objectMatrix[x, y, z]).Blocked = true;
                 //((WorldObjects.RedstoneWire)ObjectMatrix[x, y, z]).RedValue = 15;
@@ -118,19 +120,19 @@ namespace BinhlEmul
                     }
                 }
                 var p = new IoPort {X = x, Y = y, Z = z, Name = port.Name, Value = false};
-                _outPorts.Add(p);
+                outPorts.Add(p);
                 _objectMatrix[x, y, z] = new RedstoneWire(x, y, z, this);
             }
         }
 
         public bool GetPortValue(string portName)
         {
-            return (from port in _outPorts where port.Name == portName select port.Value).FirstOrDefault();
+            return (from port in outPorts where port.Name == portName select port.Value).FirstOrDefault();
         }
 
         public void SetPortValue(string portName, bool value)
         {
-            foreach (IoPort port in _inPorts.Where(port => port.Name == portName))
+            foreach (IoPort port in inPorts.Where(port => port.Name == portName))
             {
                 port.Value = value;
                 if (value)
@@ -168,7 +170,7 @@ namespace BinhlEmul
             TickTorch();
             TickTorch();
             //Обновление состояния портов
-            foreach (IoPort t in _outPorts)
+            foreach (IoPort t in outPorts)
             {
                 t.Value = _objectMatrix[t.X, t.Y, t.Z].RedValue > 0;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using RouteUtils;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace BinhlEmul
@@ -23,11 +24,11 @@ namespace BinhlEmul
             {
                 if (Regex.IsMatch(str, @"\bcheckio.*?\(.*?\)"))
                 {
-                    //TODO Реализовать проверку   
+                    allTests = FCheckIo(allTests, world);
                 }
                 if (Regex.IsMatch(str, @"\bcheckstruct.*?\(.*?\)"))
                 {
-                    FTestStruct(world);
+                    allTests = FTestStruct(world, allTests);
                 }
                 if (Regex.IsMatch(str, @"\bload.*?\(.*?\)"))
                 {
@@ -51,17 +52,21 @@ namespace BinhlEmul
                 }
             }
 
+            Log log = new Log(@"binhl.log"); 
+
             if (allTests)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("All Test - OK");
                 Console.ForegroundColor = ConsoleColor.White;
+                log.Write(world.worldName + " - OK");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("All Test - ERROR");
                 Console.ForegroundColor = ConsoleColor.White;
+                log.Write(world.worldName + " - ERROR");
             }
             /*
             string fileName = args.Length < 1 ? "TRIG_D" : args[0];
@@ -78,7 +83,45 @@ namespace BinhlEmul
             */
         }
 
-        private static void FTestStruct(World world)
+        private static bool FCheckIo(bool allTests, World world)
+        {
+            var ports = world.inPorts.Union(world.outPorts).ToList();
+            bool uport = CheckUnionPorts(ports);
+            if (uport)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Struct - OK");
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Struct - ERROR");
+                allTests = false;
+                Console.ForegroundColor = ConsoleColor.White;
+            }
+            return allTests;
+        }
+
+        private static bool CheckUnionPorts(System.Collections.Generic.List<IoPort> ports)
+        {
+            for (int i = 0; i < ports.Count; i++)
+            {
+                for (int j = 0; j < ports.Count; j++)
+                {
+                    if (i != j)
+                    {
+                        if (ports[i].X == ports[j].X && ports[i].Y == ports[j].Y)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        private static bool FTestStruct(World world,bool  altest)
         {
             bool tstruct = world.TestStruct();
             if (tstruct)
@@ -91,8 +134,10 @@ namespace BinhlEmul
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Struct - ERROR");
+                altest = false;
                 Console.ForegroundColor = ConsoleColor.White;
             }
+            return altest;
         }
 
         private static void FRead(World world, string str)
@@ -144,7 +189,7 @@ namespace BinhlEmul
             World world;
             string fName = Regex.Match(str, @"\(.*?\)").Value.Replace("(", "").Replace(")", "").Trim();
             var node = new Node(fName + ".binhl");
-            world = new World(node);
+            world = new World(node,fName);
             return world;
         }
     }
