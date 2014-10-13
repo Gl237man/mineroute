@@ -15,7 +15,8 @@ namespace MnetLutDecomposite
 
         private static void Main(string[] args)
         {
-            string file = args.Length == 0 ? "test" : args[0];
+            //string file = args.Length == 0 ? "test" : args[0];
+            string file = args.Length == 0 ? "lut_0003" : args[0];
 
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
@@ -51,6 +52,11 @@ namespace MnetLutDecomposite
 
             RpeplaceWireToCpoints(portsRep);
             CombineAllWiresAndNodes(lutsMnet);
+            //remove unused Wire
+            _mainNet.Wires.Remove(_mainNet.Wires.FirstOrDefault(t => t.DistPort == "dataa"));
+            _mainNet.Wires.Remove(_mainNet.Wires.FirstOrDefault(t => t.DistPort == "datab"));
+            _mainNet.Wires.Remove(_mainNet.Wires.FirstOrDefault(t => t.DistPort == "datac"));
+            _mainNet.Wires.Remove(_mainNet.Wires.FirstOrDefault(t => t.DistPort == "datad"));
             string exportStr = _mainNet.GetSting();
             File.WriteAllText(file + @"_D.MNET", exportStr);
         }

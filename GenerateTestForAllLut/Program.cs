@@ -50,15 +50,17 @@ namespace GenerateTestForAllLut
                 Console.WriteLine("lut_" + lutNum.ToString("X4") + ".emu - Generated");
             }
             //Gen test.CMD
+            StringBuilder sb = new StringBuilder();
             string CMDFile = "";
             for (int lutNum = 1; lutNum < 0xFFFF; lutNum++)
             {
-                CMDFile += "cd " + lutNum.ToString("X4").Substring(0, 1) + "\r\n";
-                CMDFile += "MnetLutDecomposite.exe " + "lut_" + lutNum.ToString("X4") + "\r\n";
-                CMDFile += "mnetsynt2.exe " + "lut_" + lutNum.ToString("X4") + "_D" + "\r\n";
-                CMDFile += "BinhlEmul.exe " + "lut_" + lutNum.ToString("X4") + ".emu" + "\r\n";
-                CMDFile += "cd .." + "\r\n";
+                sb.Append("cd " + lutNum.ToString("X4").Substring(0, 1) + "\r\n");
+                sb.Append("MnetLutDecomposite.exe " + "lut_" + lutNum.ToString("X4") + "\r\n");
+                sb.Append("mnetsynt2.exe " + "lut_" + lutNum.ToString("X4") + "_D" + "\r\n");
+                sb.Append("BinhlEmul.exe " + "lut_" + lutNum.ToString("X4") + ".emu" + "\r\n");
+                sb.Append("cd .." + "\r\n");
             }
+            CMDFile = sb.ToString();
             System.IO.File.WriteAllText("run.cmd", CMDFile);
 
         }
