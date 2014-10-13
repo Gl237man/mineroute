@@ -58,6 +58,10 @@ namespace BinhlEmul
                 {
                     FMTest(ref allTests, ref numTests, world, str);
                 }
+                if (Regex.IsMatch(str, @"\bdrawdebug.*?\(.*?\)"))
+                {
+                    world.debug = true;
+                }
             }
 
             Log log = new Log(@"binhl.log"); 
