@@ -15,6 +15,9 @@ namespace BinhlEmul
         public readonly int WorldSizeZ;
         public bool NotFullTick;
         public string worldName;
+        private Render R;
+        public int tick;
+        public bool debug;
 
         public World()
         {
@@ -23,6 +26,8 @@ namespace BinhlEmul
 
         public World(Node node, string fileName)
         {
+
+            debug = false;
             worldName = fileName;
             _objectMatrix = new WorldObject[node.SizeX, node.SizeY, node.SizeZ];
             WorldSizeX = node.SizeX;
@@ -94,9 +99,9 @@ namespace BinhlEmul
                 int z = 0;
                 for (int j = 0; j < WorldSizeZ; j++)
                 {
-                    if (_objectMatrix[x, y, z].GetType() == typeof (Cloth))
+                    if (_objectMatrix[x, y, j].GetType() == typeof (Cloth))
                     {
-                        z = j;
+                        z = j+1;
                     }
                 }
                 var p = new IoPort {X = x, Y = y, Z = z, Name = port.Name, Value = false};
@@ -114,15 +119,19 @@ namespace BinhlEmul
                 int z = 0;
                 for (int j = 0; j < WorldSizeZ; j++)
                 {
-                    if (_objectMatrix[x, y, z].GetType() == typeof (Cloth))
+                    if (_objectMatrix[x, y, j].GetType() == typeof (Cloth))
                     {
-                        z = j;
+                        z = j+1;
                     }
                 }
                 var p = new IoPort {X = x, Y = y, Z = z, Name = port.Name, Value = false};
                 outPorts.Add(p);
                 _objectMatrix[x, y, z] = new RedstoneWire(x, y, z, this);
             }
+
+            R = new Render(this);
+            
+
         }
 
         public bool GetPortValue(string portName)
@@ -150,6 +159,8 @@ namespace BinhlEmul
 
         public void Tick()
         {
+            tick++;
+            if (debug) R.GetSingeLayeImage().Save("I" + tick + ".png");
             //Оброботка тика проводов
             TickWire();
             //Оброботка тика блоков

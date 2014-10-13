@@ -386,7 +386,7 @@ namespace Mnetsynt2
             int xStep = mcNodes.Select(t => t.SizeX).Max() + dolled;
             int yStep = mcNodes.Select(t => t.SizeY).Max() + dolled;
 
-            BaseSize = (new int[] { Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * xStep, Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * yStep}).Max();
+            BaseSize = (new int[] { Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * xStep, Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * yStep}).Max() + 60;
             
             //Разместить порты
             var ports = MainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
