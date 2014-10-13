@@ -50,6 +50,14 @@ namespace BinhlEmul
                 {
                     FTest(ref allTests, ref numTests, world, str);
                 }
+                if (Regex.IsMatch(str, @"\bmultitest.*?\(.*?\)"))
+                {
+                    FMRead(world, str);
+                }
+                if (Regex.IsMatch(str, @"\bmultiread.*?\(.*?\)"))
+                {
+                    FMTest(ref allTests, ref numTests, world, str);
+                }
             }
 
             Log log = new Log(@"binhl.log"); 
@@ -81,6 +89,16 @@ namespace BinhlEmul
 
             r.GetSingeLayeImage().Save("I.png");
             */
+        }
+
+        private static void FMTest(ref bool allTests, ref int numTests, World world, string str)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void FMRead(World world, string str)
+        {
+            throw new NotImplementedException();
         }
 
         private static bool FCheckIo(bool allTests, World world)
