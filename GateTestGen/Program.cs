@@ -1,82 +1,81 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace GateTestGen
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             //AND Gen
             for (int wide = 2; wide < 9; wide++)
             {
-                string TestFile = "";
-                TestFile += "load ( AND" + wide + " )" + "\r\n";
-                TestFile += "wait (5)" + "\r\n";
-                TestFile += "checkstruct()" + "\r\n";
-                TestFile += "checkio()" + "\r\n";
-                int pow = Power(wide);
-                for (int i = 0; i < pow; i++)
+                string testFile = "";
+                testFile += string.Format("load ( AND{0} )\r\n", wide);
+                testFile += "wait (5)\r\n";
+                testFile += "checkstruct()\r\n";
+                testFile += "checkio()\r\n";
+                int power = Power(wide);
+                for (int i = 0; i < power; i++)
                 {
                     int[] bits = GetBits(i);
                     for (int j = 0; j < wide; j++)
                     {
-                        TestFile += "set(I" + j + ", " + bits[j] + ")" + "\r\n";
+                        testFile += string.Format("set(I{0}, {1})\r\n", j, bits[j]);
                     }
 
-                    TestFile += "wait(5)" + "\r\n";
-                    TestFile += "read(O0)" + "\r\n";
-                    TestFile += "test(O0 , " + Convert.ToInt32(i == pow-1) + ")" + "\r\n";
+                    testFile += "wait(5)\r\n";
+                    testFile += "read(O0)\r\n";
+                    testFile += string.Format("test(O0 , {0})\r\n", Convert.ToInt32(i == power - 1));
                 }
-                System.IO.File.WriteAllText("AND" + wide + ".emu", TestFile);
-                Console.WriteLine("AND" + wide);
+                File.WriteAllText(string.Format("AND{0}.emu", wide), testFile);
+                Console.WriteLine("AND{0}", wide);
             }
             //OR Gen
             for (int wide = 2; wide < 9; wide++)
             {
-                string TestFile = "";
-                TestFile += "load ( OR" + wide + " )" + "\r\n";
-                TestFile += "wait (5)" + "\r\n";
-                TestFile += "checkstruct()" + "\r\n";
-                TestFile += "checkio()" + "\r\n";
-                int pow = Power(wide);
-                for (int i = 0; i < pow; i++)
+                string testFile = "";
+                testFile += string.Format("load ( OR{0} )\r\n", wide);
+                testFile += "wait (5)\r\n";
+                testFile += "checkstruct()\r\n";
+                testFile += "checkio()\r\n";
+                int power = Power(wide);
+                for (int i = 0; i < power; i++)
                 {
                     int[] bits = GetBits(i);
                     for (int j = 0; j < wide; j++)
                     {
-                        TestFile += "set(I" + j + ", " + bits[j] + ")" + "\r\n";
+                        testFile += string.Format("set(I{0}, {1})\r\n", j, bits[j]);
                     }
 
-                    TestFile += "wait(5)" + "\r\n";
-                    TestFile += "read(O0)" + "\r\n";
-                    TestFile += "test(O0 , " + Convert.ToInt32(i != 0) + ")" + "\r\n";
+                    testFile += "wait(5)\r\n";
+                    testFile += "read(O0)\r\n";
+                    testFile += string.Format("test(O0 , {0})\r\n", Convert.ToInt32(i != 0));
                 }
-                System.IO.File.WriteAllText("OR" + wide + ".emu", TestFile);
-                Console.WriteLine("OR" + wide);
+                File.WriteAllText(string.Format("OR{0}.emu", wide), testFile);
+                Console.WriteLine("OR{0}", wide);
             }
         }
-        private static int Power(int i)
+
+        private static int Power(int wide)
         {
-            int p = 1;
-            for (int q = 0; q < i; q++)
+            int power = 1;
+            for (int i = 0; i < wide; i++)
             {
-                p = p * 2;
+                power = power*2;
             }
-            return p;
+            return power;
         }
-        private static int[] GetBits(int i)
+
+        private static int[] GetBits(int val)
         {
-            int[] k = new int[16];
-            for (int j = 0; j < 16; j++)
+            var bits = new int[16];
+            for (int i = 0; i < 16; i++)
             {
-                k[j] = i & 1;
-                i = i >> 1;
+                bits[i] = val & 1;
+                val = val >> 1;
             }
-            return k;
+            return bits;
         }
     }
 }

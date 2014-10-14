@@ -273,18 +273,15 @@ namespace GenMnetFromOptLut
 
         private static void GenNegateInPorts(string[] nStr)
         {
-            for (int i = 0; i < nStr.Length; i++)
+            foreach (string t in nStr)
             {
                 for (int j = 0; j < _matrixSize; j++)
                 {
-                    if (nStr[i].Substring(j, 1) == "0")
+                    if (t.Substring(j, 1) == "0" && !NinExist(j))
                     {
-                        if (!NinExist(j))
-                        {
-                            _nodes.Add(new Node {NodeName = "NOTDat" + j, NodeType = "NOT"});
-                            CreateWireFromCpoint(FindMcPoint("BIN" + j), "NOTDat" + j, "I0");
-                            _mcpoint.Add(new Cpoint {DistName = "NOTDat" + j, DistPort = "O0", Name = "NIN" + j});
-                        }
+                        _nodes.Add(new Node {NodeName = "NOTDat" + j, NodeType = "NOT"});
+                        CreateWireFromCpoint(FindMcPoint("BIN" + j), "NOTDat" + j, "I0");
+                        _mcpoint.Add(new Cpoint {DistName = "NOTDat" + j, DistPort = "O0", Name = "NIN" + j});
                     }
                 }
             }

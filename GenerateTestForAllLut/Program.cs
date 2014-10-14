@@ -1,79 +1,73 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace GenerateTestForAllLut
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            //int lutNum = 0x5632;
             //Gen MNET
             for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
             {
-                string MNETFile = "";
-                MNETFile += "NODE:INPort:I0" + "\r\n";
-                MNETFile += "NODE:INPort:I1" + "\r\n";
-                MNETFile += "NODE:INPort:I2" + "\r\n";
-                MNETFile += "NODE:INPort:I3" + "\r\n";
-                MNETFile += "NODE:OUTPort:nout" + "\r\n";
-                MNETFile += "NODE:OUTPort:cout" + "\r\n";
-                MNETFile += "NODE:C2LUT_" + lutNum.ToString("X4") + "_datac:lut1" + "\r\n";
-                MNETFile += "WIRE:lut1-cout:cout-I0" + "\r\n";
-                MNETFile += "WIRE:lut1-combout:nout-I0" + "\r\n";
-                MNETFile += "WIRE:I0-O0:lut1-dataa" + "\r\n";
-                MNETFile += "WIRE:I1-O0:lut1-datab" + "\r\n";
-                MNETFile += "WIRE:I2-O0:lut1-datac" + "\r\n";
-                MNETFile += "WIRE:I3-O0:lut1-datad" + "\r\n";
-                System.IO.File.WriteAllText(lutNum.ToString("X4").Substring(0, 1) + @"\lut_" + lutNum.ToString("X4") + ".MNET", MNETFile);
+                string mnetFile = "";
+                mnetFile += "NODE:INPort:I0\r\n";
+                mnetFile += "NODE:INPort:I1\r\n";
+                mnetFile += "NODE:INPort:I2\r\n";
+                mnetFile += "NODE:INPort:I3\r\n";
+                mnetFile += "NODE:OUTPort:nout\r\n";
+                mnetFile += "NODE:OUTPort:cout\r\n";
+                mnetFile += string.Format("NODE:C2LUT_{0}_datac:lut1\r\n", lutNum.ToString("X4"));
+                mnetFile += "WIRE:lut1-cout:cout-I0\r\n";
+                mnetFile += "WIRE:lut1-combout:nout-I0\r\n";
+                mnetFile += "WIRE:I0-O0:lut1-dataa\r\n";
+                mnetFile += "WIRE:I1-O0:lut1-datab\r\n";
+                mnetFile += "WIRE:I2-O0:lut1-datac\r\n";
+                mnetFile += "WIRE:I3-O0:lut1-datad\r\n";
+                System.IO.File.WriteAllText(string.Format("{0}\\lut_{1}.MNET", lutNum.ToString("X4").Substring(0, 1), lutNum.ToString("X4")), mnetFile);
                 //Gen Test
-                string TestFile = "";
-                TestFile += "load ( lut_" + lutNum.ToString("X4") + "_D )" + "\r\n";
-                TestFile += "wait (50)" + "\r\n";
-                TestFile += "checkstruct()" + "\r\n";
-                TestFile += "checkio()" + "\r\n";
+                string testFile = "";
+                testFile += string.Format("load ( lut_{0}_D )\r\n", lutNum.ToString("X4"));
+                testFile += "wait (50)\r\n";
+                testFile += "checkstruct()\r\n";
+                testFile += "checkio()\r\n";
                 for (int i = 0; i < 16; i++)
                 {
                     int[] bits = GetBits(i);
-                    TestFile += "set(I0, " + bits[0] + ")" + "\r\n";
-                    TestFile += "set(I1, " + bits[1] + ")" + "\r\n";
-                    TestFile += "set(I2, " + bits[2] + ")" + "\r\n";
-                    TestFile += "set(I3, " + bits[3] + ")" + "\r\n";
-                    TestFile += "wait(120)" + "\r\n";
-                    TestFile += "read(nout)" + "\r\n";
-                    TestFile += "test(nout , " + GetBits(lutNum)[i] + ")" + "\r\n";
+                    testFile += string.Format("set(I0, {0})\r\n", bits[0]);
+                    testFile += string.Format("set(I1, {0})\r\n", bits[1]);
+                    testFile += string.Format("set(I2, {0})\r\n", bits[2]);
+                    testFile += string.Format("set(I3, {0})\r\n", bits[3]);
+                    testFile += "wait(120)\r\n";
+                    testFile += "read(nout)\r\n";
+                    testFile += string.Format("test(nout , {0})\r\n", GetBits(lutNum)[i]);
                 }
-                System.IO.File.WriteAllText(lutNum.ToString("X4").Substring(0,1)+ @"\lut_" + lutNum.ToString("X4") + ".emu", TestFile);
-                Console.WriteLine("lut_" + lutNum.ToString("X4") + ".emu - Generated");
+                System.IO.File.WriteAllText(string.Format("{0}\\lut_{1}.emu", lutNum.ToString("X4").Substring(0,1), lutNum.ToString("X4")), testFile);
+                Console.WriteLine("lut_{0}.emu - Generated", lutNum.ToString("X4"));
             }
             //Gen test.CMD
-            StringBuilder sb = new StringBuilder();
-            string CMDFile = "";
+            var builder = new StringBuilder();
             for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
             {
-                sb.Append("cd " + lutNum.ToString("X4").Substring(0, 1) + "\r\n");
-                sb.Append("MnetLutDecomposite.exe " + "lut_" + lutNum.ToString("X4") + "\r\n");
-                sb.Append("mnetsynt2.exe " + "lut_" + lutNum.ToString("X4") + "_D" + "\r\n");
-                sb.Append("BinhlEmul.exe " + "lut_" + lutNum.ToString("X4") + ".emu" + "\r\n");
-                sb.Append("cd .." + "\r\n");
+                builder.AppendFormat("cd {0}\r\n", lutNum.ToString("X4").Substring(0, 1));
+                builder.AppendFormat("MnetLutDecomposite.exe lut_{0}\r\n", lutNum.ToString("X4"));
+                builder.AppendFormat("mnetsynt2.exe lut_{0}_D\r\n", lutNum.ToString("X4"));
+                builder.AppendFormat("BinhlEmul.exe lut_{0}.emu\r\n", lutNum.ToString("X4"));
+                builder.Append("cd ..\r\n");
             }
-            CMDFile = sb.ToString();
-            System.IO.File.WriteAllText("run.cmd", CMDFile);
-
+            string cmdFile = builder.ToString();
+            System.IO.File.WriteAllText("run.cmd", cmdFile);
         }
 
-        private static int[] GetBits(int i)
+        private static int[] GetBits(int val)
         {
-            int[] k = new int[16];
-            for (int j = 0; j < 16; j++)
+            var bits = new int[16];
+            for (int i = 0; i < 16; i++)
             {
-                k[j] = i & 1;
-                i = i >> 1;
+                bits[i] = val & 1;
+                val = val >> 1;
             }
-            return k;
+            return bits;
         }
     }
 }
