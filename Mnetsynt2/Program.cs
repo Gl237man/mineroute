@@ -449,7 +449,7 @@ namespace Mnetsynt2
 
 
                 int step = 5;
-                //TODO Оптимизировать с помощью масок
+                
                 char[,] mask = new char[BaseSize, BaseSize];
                 foreach (var node in placedNodes)
                 {

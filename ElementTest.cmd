@@ -33,4 +33,10 @@ BinhlEmul.exe DUP20.emu
 BinhlEmul.exe DUP21.emu
 BinhlEmul.exe DUP22.emu
 BinhlEmul.exe DUP23.emu
-
+BinhlEmul.exe AND2.emu
+BinhlEmul.exe AND3.emu
+BinhlEmul.exe AND4.emu
+BinhlEmul.exe AND5.emu
+BinhlEmul.exe AND6.emu
+BinhlEmul.exe AND7.emu
+BinhlEmul.exe AND8.emu

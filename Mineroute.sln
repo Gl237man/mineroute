@@ -49,6 +49,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "old", "old", "{24805407-532
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateTestForAllLut", "GenerateTestForAllLut\GenerateTestForAllLut.csproj", "{90104485-C3F7-45FA-BA32-D3C9D934A8D2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GateTestGen", "GateTestGen\GateTestGen.csproj", "{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -241,6 +243,16 @@ Global
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2}.Release|x86.ActiveCfg = Release|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,6 +271,7 @@ Global
 		{51FE403A-90C6-493A-AD84-F2E575FF7F2D} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 		{7342AB11-B517-4355-8346-B132C99DA828} = {786FFE51-BB62-4AB5-BC6E-50FFAB988A2D}
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
+		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
