@@ -18,7 +18,7 @@ namespace BinhlEmul
             bool allTests = true;
             int numTests = 0;
 
-            World world = new World();
+            var world = new World();
 
             foreach (string str in testfile)
             {
@@ -64,7 +64,7 @@ namespace BinhlEmul
                 }
             }
 
-            Log log = new Log(@"binhl.log"); 
+            var log = new Log(@"binhl.log"); 
 
             if (allTests)
             {
@@ -127,20 +127,7 @@ namespace BinhlEmul
 
         private static bool CheckUnionPorts(System.Collections.Generic.List<IoPort> ports)
         {
-            for (int i = 0; i < ports.Count; i++)
-            {
-                for (int j = 0; j < ports.Count; j++)
-                {
-                    if (i != j)
-                    {
-                        if (ports[i].X == ports[j].X && ports[i].Y == ports[j].Y)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+            return !ports.Where((t1, i) => ports.Where((t, j) => i != j).Any(t => t1.X == t.X && t1.Y == t.Y)).Any();
         }
 
         private static bool FTestStruct(World world,bool  altest)
@@ -208,10 +195,9 @@ namespace BinhlEmul
 
         private static World FLoad(string str)
         {
-            World world;
             string fName = Regex.Match(str, @"\(.*?\)").Value.Replace("(", "").Replace(")", "").Trim();
             var node = new Node(fName + ".binhl");
-            world = new World(node,fName);
+            var world = new World(node,fName);
             return world;
         }
     }

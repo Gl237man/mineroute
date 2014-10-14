@@ -40,3 +40,10 @@ BinhlEmul.exe AND5.emu
 BinhlEmul.exe AND6.emu
 BinhlEmul.exe AND7.emu
 BinhlEmul.exe AND8.emu
+BinhlEmul.exe OR2.emu
+BinhlEmul.exe OR3.emu
+BinhlEmul.exe OR4.emu
+BinhlEmul.exe OR5.emu
+BinhlEmul.exe OR6.emu
+BinhlEmul.exe OR7.emu
+BinhlEmul.exe OR8.emu
