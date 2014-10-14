@@ -16,7 +16,7 @@ namespace MnetLutDecomposite
         private static void Main(string[] args)
         {
             //string file = args.Length == 0 ? "test" : args[0];
-            string file = args.Length == 0 ? "lut_0003" : args[0];
+            string file = args.Length == 0 ? "lut_00FE" : args[0];
 
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");

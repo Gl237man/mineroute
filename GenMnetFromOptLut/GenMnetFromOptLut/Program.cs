@@ -15,8 +15,7 @@ namespace GenMnetFromOptLut
 
         private static void Main()
         {
-            //string OMnet = GenMnet(@"Result\A\Opt_AF62.txt");
-            //string OMnet = GenMnet(@"Result\F\Opt_FCCC.txt");
+
 
             for (int i = 1; i < 0xFFFE; i++)
             {
@@ -35,8 +34,8 @@ namespace GenMnetFromOptLut
                     .Replace("combout", "cout");
                 File.WriteAllText(@"MNETLib\OptCo\lutc_" + adr + ".MNET", omCnet);
             }
-            //calc max len
-            //CalcMax();
+
+
         }
 
 /*

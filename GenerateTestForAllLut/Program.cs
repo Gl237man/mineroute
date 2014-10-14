@@ -12,7 +12,7 @@ namespace GenerateTestForAllLut
         {
             //int lutNum = 0x5632;
             //Gen MNET
-            for (int lutNum = 1; lutNum < 0xFFFF; lutNum++)
+            for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
             {
                 string MNETFile = "";
                 MNETFile += "NODE:INPort:I0" + "\r\n";
@@ -52,7 +52,7 @@ namespace GenerateTestForAllLut
             //Gen test.CMD
             StringBuilder sb = new StringBuilder();
             string CMDFile = "";
-            for (int lutNum = 1; lutNum < 0xFFFF; lutNum++)
+            for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
             {
                 sb.Append("cd " + lutNum.ToString("X4").Substring(0, 1) + "\r\n");
                 sb.Append("MnetLutDecomposite.exe " + "lut_" + lutNum.ToString("X4") + "\r\n");
@@ -68,7 +68,7 @@ namespace GenerateTestForAllLut
         private static int[] GetBits(int i)
         {
             int[] k = new int[16];
-            for (int j = 0; j < 15; j++)
+            for (int j = 0; j < 16; j++)
             {
                 k[j] = i & 1;
                 i = i >> 1;

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
+# Visual Studio Express 2013 for Windows Desktop
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binhl2JsWE", "Binhl2JsWE\Binhl2JsWE.csproj", "{CF8DDE97-CCC4-461B-BB50-2460719F155E}"
@@ -259,6 +259,9 @@ Global
 		{51FE403A-90C6-493A-AD84-F2E575FF7F2D} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 		{7342AB11-B517-4355-8346-B132C99DA828} = {786FFE51-BB62-4AB5-BC6E-50FFAB988A2D}
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = vqm2MNET\vqm2MNET.csproj

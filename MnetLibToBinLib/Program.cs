@@ -8,16 +8,15 @@ namespace MnetLibToBinLib
         {
             var binlib = new BinLib.Blib();
 
-            for (int i = 1; i <= 0xFD; i++)
+            for (int i = 0; i <= 0xFF; i++)
             {
-                //OptCo_
                 string fileName = "lutc_" + i.ToString("X2") + ".MNET";
                 string fullName = @"MNETLib\OptCo\" + fileName;
                 string[] s = System.IO.File.ReadAllLines(fullName);
                 binlib.WriteAllLines(fileName, s);
             }
 
-            for (int i = 1; i <= 0xFFFD; i++)
+            for (int i = 0; i <= 0xFFFF; i++)
             {
                 string fileName = "lut_" + i.ToString("X4") + ".MNET";
                 string fullName = @"MNETLib\" + i.ToString("X4").Substring(0, 1) + @"\" + fileName;
