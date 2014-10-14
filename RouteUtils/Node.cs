@@ -1,25 +1,27 @@
 using System;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace RouteUtils
 {
     public class Node
     {
-        public string[,,] DataMatrix;
-        public INPort[] InPorts;
-        public string Name;
+        public readonly string[,,] DataMatrix;
+        public InPort[] InPorts;
+        public readonly string Name;
         public OutPort[] OutPorts;
         public int SizeX;
         public int SizeY;
         public int SizeZ;
-        public string[,,] mask;
+        public string[,,] Mask;
+        public string NodeName;
 
         public Node(string name, int sx, int sy, int sz)
         {
             Name = name;
-            InPorts = new INPort[0];
+            InPorts = new InPort[0];
             OutPorts = new OutPort[0];
             SizeX = sx;
             SizeY = sy;
@@ -42,42 +44,42 @@ namespace RouteUtils
             string[] infdat = File.ReadAllLines(fileName);
             int stnum = 0;
             //Reading Name
-            string[] SpStrName = infdat[stnum].Split(':');
-            Name = SpStrName[1];
+            string[] spStrName = infdat[stnum].Split(':');
+            Name = spStrName[1];
 
             stnum++;
-            string[] SpStrInNum = infdat[stnum].Split(':');
-            InPorts = new INPort[Convert.ToInt32(SpStrInNum[1])];
+            string[] spStrInNum = infdat[stnum].Split(':');
+            InPorts = new InPort[Convert.ToInt32(spStrInNum[1])];
 
             stnum++;
-            string[] SpStrOutNum = infdat[stnum].Split(':');
-            OutPorts = new OutPort[Convert.ToInt32(SpStrOutNum[1])];
+            string[] spStrOutNum = infdat[stnum].Split(':');
+            OutPorts = new OutPort[Convert.ToInt32(spStrOutNum[1])];
 
             for (int i = 0; i < InPorts.Length; i++)
             {
                 stnum++;
-                string[] SpStrInPort = infdat[stnum].Split(':');
-                InPorts[i] = new INPort(SpStrInPort[1], Convert.ToInt32(SpStrInPort[2]), Convert.ToInt32(SpStrInPort[3]));
+                string[] spStrInPort = infdat[stnum].Split(':');
+                InPorts[i] = new InPort(spStrInPort[1], Convert.ToInt32(spStrInPort[2]), Convert.ToInt32(spStrInPort[3]));
             }
 
             for (int i = 0; i < OutPorts.Length; i++)
             {
                 stnum++;
-                string[] SpStrOutPort = infdat[stnum].Split(':');
-                OutPorts[i] = new OutPort(SpStrOutPort[1], Convert.ToInt32(SpStrOutPort[2]),
-                    Convert.ToInt32(SpStrOutPort[3]));
+                string[] spStrOutPort = infdat[stnum].Split(':');
+                OutPorts[i] = new OutPort(spStrOutPort[1], Convert.ToInt32(spStrOutPort[2]),
+                    Convert.ToInt32(spStrOutPort[3]));
             }
 
             stnum++;
-            string[] SpStrSize = infdat[stnum].Split(':');
+            string[] spStrSize = infdat[stnum].Split(':');
 
-            SizeX = Convert.ToInt32(SpStrSize[1]);
-            SizeY = Convert.ToInt32(SpStrSize[2]);
+            SizeX = Convert.ToInt32(spStrSize[1]);
+            SizeY = Convert.ToInt32(spStrSize[2]);
 
             stnum++;
-            string[] SpStrLayers = infdat[stnum].Split(':');
+            string[] spStrLayers = infdat[stnum].Split(':');
 
-            SizeZ = Convert.ToInt32(SpStrLayers[1]);
+            SizeZ = Convert.ToInt32(spStrLayers[1]);
 
             DataMatrix = new string[SizeX, SizeY, SizeZ];
             for (int i = 0; i < SizeX; i++)
@@ -94,8 +96,8 @@ namespace RouteUtils
             for (int i = 0; i < SizeZ; i++)
             {
                 stnum++;
-                string[] SpStrLayer = infdat[stnum].Split(':');
-                int lnum = Convert.ToInt32(SpStrLayer[1]);
+                string[] spStrLayer = infdat[stnum].Split(':');
+                int lnum = Convert.ToInt32(spStrLayer[1]);
 
                 for (int j = 0; j < SizeY; j++)
                 {
@@ -109,7 +111,7 @@ namespace RouteUtils
             }
         }
 
-        public void PlaceAnotherNode(Node node, int Xcoord, int Ycoord, int ZCoord)
+        public void PlaceAnotherNode(Node node, int xCoord, int yCoord, int zCoord)
         {
             for (int x = 0; x < node.SizeX; x++)
             {
@@ -117,55 +119,45 @@ namespace RouteUtils
                 {
                     for (int z = 0; z < node.SizeZ; z++)
                     {
-                        DataMatrix[Xcoord + x, Ycoord + y, ZCoord + z] = node.DataMatrix[x, y, z];
+                        DataMatrix[xCoord + x, yCoord + y, zCoord + z] = node.DataMatrix[x, y, z];
                     }
                 }
             }
         }
 
-        public void export(string FileName)
+        public void Export(string fileName)
         {
             string ostr = "";
-            ostr += "Name:" + Name + "\r\n";
-            ostr += "in:" + InPorts.Length + "\r\n";
-            ostr += "out:" + OutPorts.Length + "\r\n";
+            ostr += string.Format("Name:{0}\r\n", Name);
+            ostr += string.Format("in:{0}\r\n", InPorts.Length);
+            ostr += string.Format("out:{0}\r\n", OutPorts.Length);
 
-            for (int i = 0; i < InPorts.Length; i++)
+            ostr = InPorts.Aggregate(ostr, (current, t) => current + ("in:" + t.Name + ":" + t.PosX + ":" + t.PosY + "\r\n"));
+            ostr = OutPorts.Aggregate(ostr, (current, t) => current + ("out:" + t.Name + ":" + t.PosX + ":" + t.PosY + "\r\n"));
+
+            ostr += string.Format("size:{0}:{1}\r\n", SizeX, SizeY);
+            ostr += string.Format("layers:{0}\r\n", SizeZ);
+
+            var builder = new StringBuilder();
+
+            for (int z = 0; z < SizeZ; z++)
             {
-                ostr += "in:" + InPorts[i].Name + ":" + InPorts[i].PosX + ":" + InPorts[i].PosY + "\r\n";
-            }
-            for (int i = 0; i < OutPorts.Length; i++)
-            {
-                ostr += "out:" + OutPorts[i].Name + ":" + OutPorts[i].PosX + ":" + OutPorts[i].PosY + "\r\n";
-            }
-
-            ostr += "size:" + SizeX + ":" + SizeY + "\r\n";
-            ostr += "layers:" + SizeZ + "\r\n";
-
-            var SB = new StringBuilder();
-
-            for (int i = 0; i < SizeZ; i++)
-            {
-                SB.Append("layer:" + i + "\r\n");
-                for (int j = 0; j < SizeY; j++)
+                builder.Append("layer:" + z + "\r\n");
+                for (int y = 0; y < SizeY; y++)
                 {
-                    for (int k = 0; k < SizeX; k++)
+                    for (int x = 0; x < SizeX; x++)
                     {
-                        //InvertExport!
-                        //SB.Append(DataMatrix[k, SizeY - j - 1, i]);
-                        SB.Append(DataMatrix[k, j, i]);
+                        builder.Append(DataMatrix[x, y, z]);
                     }
-                    SB.Append("\r\n");
+                    builder.Append("\r\n");
                 }
             }
-            ostr += SB.ToString();
-            //ostr = ostr.Replace("0", " ");
+            ostr += builder.ToString();
 
-            //DrawImg();
-
-            File.WriteAllText(FileName, ostr);
+            File.WriteAllText(fileName, ostr);
         }
 
+/*
         private void DrawImg()
         {
             int ms = 10;
@@ -199,21 +191,8 @@ namespace RouteUtils
             }
             immain.Save("1.bmp");
         }
+*/
 
-        public string NodeName;
-    }
-
-    public class INPort
-    {
-        public string Name;
-        public int PosX;
-        public int PosY;
-
-        public INPort(string name, int x, int y)
-        {
-            Name = name;
-            PosX = x;
-            PosY = y;
-        }
+        
     }
 }

@@ -92,7 +92,7 @@ namespace BinhlEmul
             inPorts = new List<IoPort>();
             outPorts = new List<IoPort>();
 
-            foreach (INPort port in node.InPorts)
+            foreach (InPort port in node.InPorts)
             {
                 int x = port.PosX;
                 int y = WorldSizeY - port.PosY - 1;

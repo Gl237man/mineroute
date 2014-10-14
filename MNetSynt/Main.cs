@@ -896,7 +896,7 @@ namespace MNetSynt
                     }
                 }
             }
-            outNode.InPorts = new INPort[inpnum];
+            outNode.InPorts = new InPort[inpnum];
             outNode.OutPorts = new OutPort[outpnum];
 
             int tip = 0;
@@ -906,7 +906,7 @@ namespace MNetSynt
             {
                 if (_nlist[i].Name == "INPort")
                 {
-                    outNode.InPorts[tip] = new INPort(_uname[i], _nlist[i].InPorts[0].PosX + _coordX[i],
+                    outNode.InPorts[tip] = new InPort(_uname[i], _nlist[i].InPorts[0].PosX + _coordX[i],
                         _nlist[i].InPorts[0].PosY + _coordY[i]);
                     tip++;
                 }
@@ -1250,7 +1250,7 @@ namespace MNetSynt
             Vmode = true;
             if (Vmode)
             {
-                outNode.export(FileName + ".binhl");
+                outNode.Export(FileName + ".binhl");
             }
             else
             {

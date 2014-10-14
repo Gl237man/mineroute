@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
 namespace RouteUtils
 {
     public class Wire
     {
-        public string StartName;
-        public string EndName;
+        public readonly string StartName;
+        public readonly string EndName;
 
         public int StartX;
         public int StartY;
@@ -19,18 +16,13 @@ namespace RouteUtils
         public int[] WirePointY;
         public int[] WirePointZ;
         public bool[] Rep;
-        public bool[] CanRep;
+        private bool[] _canRep;
         public string[] RepNp;
-        public bool Synced = false;
+        public bool Synced;
 
-        public int calcRepCount()
+        public int CalcRepCount()
         {
-            int c = 0;
-            for (int i = 0; i < Rep.Length; i++)
-            {
-                if (Rep[i]) c++;
-            }
-            return c;
+            return Rep.Count(t => t);
         }
 
         public Wire(string stName, string edName)
@@ -42,7 +34,7 @@ namespace RouteUtils
         public void PlaceRepeaters()
         {
             Rep = new bool[WirePointX.Length];
-            CanRep = new bool[WirePointX.Length];
+            _canRep = new bool[WirePointX.Length];
             RepNp = new string[WirePointX.Length];
             CalcPlaceMap();
             int pos = PlaceReapeterForward(1);
@@ -68,7 +60,7 @@ namespace RouteUtils
             bool placed = false;
             while (!placed)
             {
-                if (CanRep[p])
+                if (_canRep[p])
                 {
                     PlaceRepeater(p);
                     placed = true;
@@ -83,15 +75,15 @@ namespace RouteUtils
 
         private void CalcPlaceMap()
         {
-            CanRep[0] = false;
-            CanRep[WirePointX.Length - 1] = false;
+            _canRep[0] = false;
+            _canRep[WirePointX.Length - 1] = false;
             for (int i = 1; i < WirePointX.Length-1; i++)
             {
-                CanRep[i] = false;
+                _canRep[i] = false;
                 if (WirePointX[i - 1] == WirePointX[i + 1])
-                    CanRep[i] = true;
+                    _canRep[i] = true;
                 if (WirePointY[i - 1] == WirePointY[i + 1])
-                    CanRep[i] = true;
+                    _canRep[i] = true;
             }
         }
 
@@ -100,7 +92,7 @@ namespace RouteUtils
             bool placed = false;
             while (!placed)
             {
-                if (CanRep[p])
+                if (_canRep[p])
                 {
                     PlaceRepeater(p);
                     placed = true;
@@ -140,14 +132,14 @@ namespace RouteUtils
             }
         }
 
-        public void repCompincate(int p)
+        public void RepCompincate(int p)
         {
             int cpoint = 1;
             while(p>0)
             {
                 if (!Rep[cpoint])
                 {
-                    if (CanRep[cpoint])
+                    if (_canRep[cpoint])
                     {
                         PlaceRepeater(cpoint);
                         p--;

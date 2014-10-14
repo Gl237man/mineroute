@@ -94,7 +94,7 @@ namespace Mnetsynt2
                         BaseX = mcNodes[i].InPorts[j].PosX + MainNetwork.nodes[i].x,
                         BaseY = mcNodes[i].InPorts[j].PosY + MainNetwork.nodes[i].y,
                         PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].InPorts[j].Name,
-                        indat = true
+                        Indat = true
                     });
 
                 }
@@ -106,7 +106,7 @@ namespace Mnetsynt2
                         BaseX = mcNodes[i].OutPorts[j].PosX + MainNetwork.nodes[i].x,
                         BaseY = mcNodes[i].OutPorts[j].PosY + MainNetwork.nodes[i].y,
                         PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].OutPorts[j].Name,
-                        indat = false
+                        Indat = false
                     });
 
                 }
@@ -238,11 +238,11 @@ namespace Mnetsynt2
 
             for (int i = 0; i < Cpoints.Count; i++)
             {
-                if (Cpoints[i].usedLayer >= 10)
+                if (Cpoints[i].UsedLayer >= 10)
                 {
-                    Cpoints[i].usedLayer -= 4;
+                    Cpoints[i].UsedLayer -= 4;
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 11] = "W";
-                    if (Cpoints[i].indat)
+                    if (Cpoints[i].Indat)
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 10] = "^";
                     else
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 10] = "v";
@@ -253,11 +253,11 @@ namespace Mnetsynt2
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 10] = "#";
                 }
 
-                if (Cpoints[i].usedLayer >= 22)
+                if (Cpoints[i].UsedLayer >= 22)
                 {
-                    Cpoints[i].usedLayer -= 3;
+                    Cpoints[i].UsedLayer -= 3;
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 23] = "W";
-                    if (Cpoints[i].indat)
+                    if (Cpoints[i].Indat)
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 22] = "^";
                     else
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 22] = "v";
@@ -268,11 +268,11 @@ namespace Mnetsynt2
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 29, PlaceLayer - 22] = "#";
                 }
 
-                if (Cpoints[i].usedLayer >= 34)
+                if (Cpoints[i].UsedLayer >= 34)
                 {
-                    Cpoints[i].usedLayer -= 3;
+                    Cpoints[i].UsedLayer -= 3;
                     OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 35] = "W";
-                    if (Cpoints[i].indat)
+                    if (Cpoints[i].Indat)
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "^";
                     else
                         OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "v";
@@ -284,7 +284,7 @@ namespace Mnetsynt2
                 }
 
 
-                for (int j = 0; j < Cpoints[i].usedLayer; j++)
+                for (int j = 0; j < Cpoints[i].UsedLayer; j++)
                 {
                     if (j <= 10)
                     {
@@ -326,13 +326,13 @@ namespace Mnetsynt2
             int SyncLen = 0;
             for (int i = 0; i < WiresToSync.Count; i++)
             {
-                if (WiresToSync[i].calcRepCount() > SyncLen)
-                    SyncLen = WiresToSync[i].calcRepCount();
+                if (WiresToSync[i].CalcRepCount() > SyncLen)
+                    SyncLen = WiresToSync[i].CalcRepCount();
             }
 
             for (int i = 0; i < WiresToSync.Count; i++)
             {
-                WiresToSync[i].repCompincate(SyncLen - WiresToSync[i].calcRepCount());
+                WiresToSync[i].RepCompincate(SyncLen - WiresToSync[i].CalcRepCount());
                 WiresToSync[i].Synced = true;
             }
 
@@ -368,11 +368,11 @@ namespace Mnetsynt2
                 Console.WriteLine("Обрезка рабочей Облости");
                 RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
                 //Маркировка портов ввода вывода
-                OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.INPort(t.NodeName, t.x+1, t.y)).ToArray();
+                OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.InPort(t.NodeName, t.x+1, t.y)).ToArray();
                 OutNodeO.OutPorts = MainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new RouteUtils.OutPort(t.NodeName, t.x+1, t.y)).ToArray();
 
                 Console.WriteLine("Экспорт");
-                OutNodeO.export( file + ".binhl");
+                OutNodeO.Export( file + ".binhl");
         }
 
         private static void PlaceFast(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
@@ -568,7 +568,7 @@ namespace Mnetsynt2
         {
             for (int j = 0; j < Cpoints.Count; j++)
             {
-                if (Cpoints[j].usedLayer == 0)
+                if (Cpoints[j].UsedLayer == 0)
                     DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
@@ -771,7 +771,7 @@ namespace Mnetsynt2
             //PlaceMaskCpoint
             for (int j = 0; j < Cpoints.Count; j++)
             {
-                if (Cpoints[j].usedLayer == 0)
+                if (Cpoints[j].UsedLayer == 0)
                 DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
@@ -816,8 +816,8 @@ namespace Mnetsynt2
                 }
                 MainNetwork.wires[WireNum].Placed = true;
 
-                SP.usedLayer = CurrentWireLayer;
-                EP.usedLayer = CurrentWireLayer;
+                SP.UsedLayer = CurrentWireLayer;
+                EP.UsedLayer = CurrentWireLayer;
             }
             SP.BaseY -= CurrentWireLayer;
             EP.BaseY -= CurrentWireLayer;

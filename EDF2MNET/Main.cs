@@ -72,7 +72,7 @@ namespace EDF2MNET
                     string[] mstr = parseStr.Split(' ');
                     ostr += "NODE:" + mstr[6] + ":" + mstr[2] + "\n";
                     var node = new Node(mstr[6] + ".binhl");
-                    foreach (INPort port in node.InPorts)
+                    foreach (InPort port in node.InPorts)
                     {
                         Mainportlist.Add(mstr[2] + "-" +port.Name);
                         MainportlistT.Add("I");
