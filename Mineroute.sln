@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetUtils", "NetUtils\NetUti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutOptimise", "MnetLutOptimise\MnetLutOptimise.csproj", "{488C33EE-F695-43B7-B4BD-B4550A69B197}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NANDTGenerator", "NANDTGenerator\NANDTGenerator.csproj", "{88079724-C354-4B4D-8ECD-594A724159C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -277,6 +279,16 @@ Global
 		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|x86.ActiveCfg = Release|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -297,6 +309,7 @@ Global
 		{90104485-C3F7-45FA-BA32-D3C9D934A8D2} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 		{A11BC02F-DC66-430F-A5FB-1965EE6EEEAA} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 		{ECB764AF-ABD9-4029-9892-28926ED3373B} = {2CFC47C4-1D04-4ADD-A6F9-B62BF173C7DA}
+		{88079724-C354-4B4D-8ECD-594A724159C3} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = vqm2MNET\vqm2MNET.csproj

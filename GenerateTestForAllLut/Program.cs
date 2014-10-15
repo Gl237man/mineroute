@@ -27,7 +27,7 @@ namespace GenerateTestForAllLut
                 System.IO.File.WriteAllText(string.Format("{0}\\lut_{1}.MNET", lutNum.ToString("X4").Substring(0, 1), lutNum.ToString("X4")), mnetFile);
                 //Gen Test
                 string testFile = "";
-                testFile += string.Format("load ( lut_{0}_D )\r\n", lutNum.ToString("X4"));
+                testFile += string.Format("load ( lut_{0}_D_O )\r\n", lutNum.ToString("X4"));
                 testFile += "wait (50)\r\n";
                 testFile += "checkstruct()\r\n";
                 testFile += "checkio()\r\n";
