@@ -1,6 +1,6 @@
-﻿namespace MnetLutDecomposite
+﻿namespace NetUtils
 {
-    class Wire
+    public class Wire
     {
         public string SrcName;
         public string DistName;

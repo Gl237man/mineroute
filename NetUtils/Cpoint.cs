@@ -1,6 +1,6 @@
-﻿namespace MnetLutDecomposite
+﻿namespace NetUtils
 {
-    class Cpoint
+    public class Cpoint
     {
         public string Name;
         public string DistName;

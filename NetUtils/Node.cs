@@ -1,6 +1,6 @@
-﻿namespace MnetLutDecomposite
+﻿namespace NetUtils
 {
-    class Node
+    public class Node
     {
         public bool HaveCout;
         public string NodeType;

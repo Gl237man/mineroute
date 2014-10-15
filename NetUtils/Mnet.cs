@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MnetLutDecomposite
+namespace NetUtils
 {
-    class Mnet
+    public class Mnet
     {
         public List<Node> Nodes;
         public List<Wire> Wires;
@@ -101,7 +101,7 @@ namespace MnetLutDecomposite
             return Nodes.Where(t => t.IsLut()).ToList();
         }
 
-        internal void RenameElement(string @from, string to)
+        public void RenameElement(string @from, string to)
         {
             foreach (var node in Nodes)
             {
@@ -117,34 +117,34 @@ namespace MnetLutDecomposite
             }
         }
 
-        internal Wire FindWireFrom(string nodeName)
+        public Wire FindWireFrom(string nodeName)
         {
             return Wires.FirstOrDefault(t => t.SrcName == nodeName);
         }
 
-        internal Wire FindWireFromPort(string nodeName, string portName)
+        public Wire FindWireFromPort(string nodeName, string portName)
         {
             return Wires.FirstOrDefault(t => t.SrcName == nodeName && t.SrcPort == portName);
         }
 
-        internal Wire FindWireTo(string nodeName)
+        public Wire FindWireTo(string nodeName)
         {
             return Wires.FirstOrDefault(t => t.DistName == nodeName);
         }
 
-        internal Wire FindWireToPort(string nodeName,string portName)
+        public Wire FindWireToPort(string nodeName,string portName)
         {
             return Wires.FirstOrDefault(t => t.DistName == nodeName && t.DistPort == portName);
         }
 
-        internal string GetSting()
+        public string GetSting()
         {
             string ostr = Nodes.Aggregate("", (current, t) => current + (t.ToString() + "\r\n"));
 
             return Wires.Aggregate(ostr, (current, t) => current + (t.ToString() + "\r\n"));
         }
 
-        internal Node FindNode(string p)
+        public Node FindNode(string p)
         {
             return Nodes.FirstOrDefault(t => t.NodeName == p);
         }

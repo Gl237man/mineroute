@@ -2,7 +2,7 @@
 {
     internal abstract class StarBoundPort
     {
-        public StarBoundNode NodeOwner;
+        //public StarBoundNode NodeOwner;
 
        
 
