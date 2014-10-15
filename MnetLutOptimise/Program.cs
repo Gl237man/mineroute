@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NetUtils;
 
 namespace MnetLutOptimise
 {
-    class Program
+    static class Program
     {
         private static Mnet _mainNet;
-        private static int lineCount = 0;
+        private static int _lineCount;
 
         static void Main(string[] args)
         {
             
-            string file = args.Length == 0 ? "lut_0006_D" : args[0];
+            string file = args.Length == 0 ? "lut_000B_D" : args[0];
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
             Console.WriteLine("Всего Соеденений " + _mainNet.Wires.Count);
@@ -26,27 +24,28 @@ namespace MnetLutOptimise
             Console.WriteLine();
             //NAND оптимизация
 
-            TransNOT();
+            TransNot();
             
-            string ElementName = "AND";
+            //string ElementName = "AND";
             
             Console.WriteLine("Оптимизация NOT");
-            Console.WriteLine("До Оптимизации " + _mainNet.Nodes.Where(t => t.NodeType.Contains("NOT")).Count());
+            Console.WriteLine("До Оптимизации " + _mainNet.Nodes.Count(t => t.NodeType.Contains("NOT")));
             List<Node> allAnd = _mainNet.Nodes.Where(t => t.NodeType.Contains("AND")).ToList();
             var allNot = _mainNet.Nodes.Where(t => t.NodeType == "NOT");
-            List<Wire> allNotWire = new List<Wire>();
+            var allNotWire = new List<Wire>();
             foreach (Node node in allNot)
             {
                 allNotWire.AddRange(_mainNet.Wires.Where(t => t.SrcName == node.NodeName));
             }
             foreach (Node node in allAnd)
             {
-                List<Wire> wireNotToAnd = allNotWire.Where(t => t.DistName == node.NodeName).ToList();
-                List<Wire> allWiresToAnd = _mainNet.Wires.Where(t => t.DistName == node.NodeName).ToList();
-                List<Wire> allWiresToNot = new List<Wire>();
-                List<Node> allNotTodel = new List<Node>();
-                int[] bits = new int[allWiresToAnd.Count];
+                var wireNotToAnd = allNotWire.Where(t => t.DistName == node.NodeName).ToList();
+                var allWiresToAnd = _mainNet.Wires.Where(t => t.DistName == node.NodeName).ToList();
+                var allWiresToNot = new List<Wire>();
+                var allNotTodel = new List<Node>();
+                var bits = new int[allWiresToAnd.Count];
                 //Заполнение битов
+                /*
                 for (int i = 0; i < allWiresToAnd.Count; i++)
                 {
                     if (wireNotToAnd.Contains(allWiresToAnd[i]))
@@ -54,10 +53,28 @@ namespace MnetLutOptimise
                         bits[i] = 1;
                     }
                 }
+                 */
                 foreach(Wire wire in wireNotToAnd)
                 {
                     allNotTodel.Add(_mainNet.Nodes.FirstOrDefault(t => t.NodeName == wire.SrcName));
                     allWiresToNot.Add(_mainNet.Wires.FirstOrDefault(t => t.DistName == wire.SrcName));
+                }
+
+                
+                //Перенос соеденений
+                for (int i = 0; i < allWiresToAnd.Count; i++)
+                {
+                    //if (bits[i] == 1)
+                    //{
+                    Wire twire = _mainNet.Wires.First(t => t.DistName == allWiresToAnd[i].SrcName);
+                    if (_mainNet.Nodes.First(t => t.NodeName == twire.DistName).NodeType == "NOT")
+                    {
+                        allWiresToAnd[i].SrcName = twire.SrcName;
+                        allWiresToAnd[i].SrcPort = twire.SrcPort;
+                        bits[i] = 1;
+                    }
+                    //}
+                    allWiresToAnd[i].DistPort = "I" + i;
                 }
 
                 //Получения числа
@@ -68,37 +85,51 @@ namespace MnetLutOptimise
                     val = val << 1;
                 }
                 val = val >> 1;
+
+                //val = RevertVal(val, allWiresToAnd.Count);
+
                 //Преобразование and
                 node.NodeType = "NANDT" + bits.Length + "_" + val.ToString("X2");
-                //Перенос соеденений
-                for (int i = 0; i < allWiresToAnd.Count; i++)
-                {
-                    if (bits[i] == 1)
-                    {
-                        Wire twire = _mainNet.Wires.FirstOrDefault(t => t.DistName == allWiresToAnd[i].SrcName);
-                        
-                        allWiresToAnd[i].SrcName = twire.SrcName;
-                        allWiresToAnd[i].SrcPort = twire.SrcPort;
-                    }
-                }
+
                 //Удаление ненужных соеденений и нодов
                 foreach (var t in allWiresToNot) _mainNet.Wires.Remove(t);
                 foreach (var t in allNotTodel) _mainNet.Nodes.Remove(t);
                 
             }
 
-            Console.WriteLine("После Оптимизации " + _mainNet.Nodes.Where(t => t.NodeType.Contains("NOT")).Count());
+            Console.WriteLine("После Оптимизации " + _mainNet.Nodes.Count(t => t.NodeType.Contains("NOT")));
 
             Console.WriteLine("Соеденений после оптимизации " + _mainNet.Wires.Count);
             System.IO.File.WriteAllText(file + @"_O.MNET" ,_mainNet.GetSting());
         }
 
-        private static void TransNOT()
+/*
+        private static int RevertVal(int val, int p)
+        {
+            int[] bits = new int[p];
+            for (int i = 0; i < p; i++)
+            {
+                bits[i] = val & 1;
+                val = val >> 1;
+            }
+
+            val = 0;
+            for (int i = 0; i < p; i++)
+            {
+                val = val | bits[i];
+                val = val << 1;
+            }
+            val = val >> 1;
+            return val;
+        }
+*/
+
+        private static void TransNot()
         {
             var allDup = _mainNet.Nodes.Where(t => t.NodeType.Contains("DUP"));
-            var allNot = _mainNet.Nodes.Where(t => t.NodeType == "NOT");
-            List<Wire> allNotWire = new List<Wire>();
-            List<Wire> allNotToDup = new List<Wire>();
+            var allNot = _mainNet.Nodes.Where(t => t.NodeType == "NOT").ToList();
+            var allNotWire = new List<Wire>();
+            var allNotToDup = new List<Wire>();
             foreach (Node node in allNot)
             {
                 allNotWire.AddRange(_mainNet.Wires.Where(t => t.SrcName == node.NodeName));
@@ -110,32 +141,30 @@ namespace MnetLutOptimise
             //Перенос нота после ДУП
             foreach (Wire wire in allNotToDup)
             {
-                var wireToNOT = _mainNet.Wires.FirstOrDefault(q => q.DistName == allNot.FirstOrDefault(t => t.NodeName == wire.SrcName).NodeName);
+                var wireToNot = _mainNet.Wires.First(q => q.DistName == allNot.First(t => t.NodeName == wire.SrcName).NodeName);
                 //Удалить NOT
-                _mainNet.Nodes.Remove(allNot.FirstOrDefault(t => t.NodeName == wireToNOT.DistName));
+                _mainNet.Nodes.Remove(allNot.FirstOrDefault(t => t.NodeName == wireToNot.DistName));
                 //Перенисти соеденение на DUP
-                wireToNOT.DistName = wire.DistName;
+                wireToNot.DistName = wire.DistName;
                 //Создать NOTы c DUP
-                var dup = _mainNet.Nodes.FirstOrDefault(t => t.NodeName == wireToNOT.DistName);
-                List<Wire> WiresFromDup = _mainNet.Wires.Where(t => t.SrcName == dup.NodeName).ToList();
-                List<Node> newNots = new List<Node>();
-                List<Wire> newWires = new List<Wire>();
-                for (int i = 0; i < WiresFromDup.Count; i++)
+                var dup = _mainNet.Nodes.First(t => t.NodeName == wireToNot.DistName);
+                List<Wire> wiresFromDup = _mainNet.Wires.Where(t => t.SrcName == dup.NodeName).ToList();
+                var newNots = new List<Node>();
+                for (int i = 0; i < wiresFromDup.Count; i++)
                 {
-                    newNots.Add(new Node { NodeName = "OPTNOT_" + lineCount, NodeType = "NOT" });
-                    lineCount++;
+                    newNots.Add(new Node { NodeName = "OPTNOT_" + _lineCount, NodeType = "NOT" });
+                    _lineCount++;
                 }
                 //Создать новые соеденения с NOT
-                for (int i = 0; i < WiresFromDup.Count; i++)
+                var newWires = wiresFromDup.Select((t, i) => new Wire
                 {
-                    newWires.Add(new Wire { SrcName = newNots[i].NodeName, SrcPort = "O0", 
-                                            DistName = WiresFromDup[i].DistName, DistPort = WiresFromDup[i].DistPort });
-                }
+                    SrcName = newNots[i].NodeName, SrcPort = "O0", DistName = t.DistName, DistPort = t.DistPort
+                }).ToList();
                 //Перенести старые соеденения с DUP
-                for (int i = 0; i < WiresFromDup.Count; i++)
+                for (int i = 0; i < wiresFromDup.Count; i++)
                 {
-                    WiresFromDup[i].DistName = newNots[i].NodeName;
-                    WiresFromDup[i].DistPort = "I0";
+                    wiresFromDup[i].DistName = newNots[i].NodeName;
+                    wiresFromDup[i].DistPort = "I0";
                 }
                 //добавить новые соеденения и ноды
                 _mainNet.Wires.AddRange(newWires);
@@ -148,55 +177,55 @@ namespace MnetLutOptimise
             //List<Wire> notToDup = allNot.Where()
         }
 
-        private static void Optimise(string ElementName)
+        private static void Optimise(string elementName)
         {
-            Console.WriteLine("Оптимизация " + ElementName);
-            Console.WriteLine("До Оптимизации " + _mainNet.Nodes.Where(t => t.NodeType.Contains(ElementName)).Count());
-            bool OpNeed = true;
-            while (OpNeed)
+            Console.WriteLine("Оптимизация {0}", elementName);
+            Console.WriteLine("До Оптимизации {0}", _mainNet.Nodes.Count(t => t.NodeType.Contains(elementName)));
+            bool opNeed = true;
+            while (opNeed)
             {
                 
                 //Оптимизация AND
-                var allAnd = _mainNet.Nodes.Where(t => t.NodeType.Contains(ElementName));
+                var allAnd = _mainNet.Nodes.Where(t => t.NodeType.Contains(elementName)).ToList();
                 //Поиск 2х связаных AND
-                Wire AndConnection = _mainNet.Wires.FirstOrDefault(t =>
+                Wire andConnection = _mainNet.Wires.FirstOrDefault(t =>
                     allAnd.FirstOrDefault(al => al.NodeName == t.DistName) != null &&
                     allAnd.FirstOrDefault(al => al.NodeName == t.SrcName) != null);
-                if (AndConnection != null)
+                if (andConnection != null)
                 {
-                    Node AndBase = allAnd.FirstOrDefault(al => al.NodeName == AndConnection.DistName);
-                    Node AndConnected = allAnd.FirstOrDefault(al => al.NodeName == AndConnection.SrcName);
-                    var ConnectedWires = _mainNet.Wires.Where(t => (t.DistName == AndBase.NodeName
-                                                                   || t.DistName == AndConnected.NodeName) && t != AndConnection);
+                    Node andBase = allAnd.First(al => al.NodeName == andConnection.DistName);
+                    Node andConnected = allAnd.First(al => al.NodeName == andConnection.SrcName);
+                    var connectedWires = _mainNet.Wires.Where(t => (t.DistName == andBase.NodeName
+                                                                   || t.DistName == andConnected.NodeName) && t != andConnection).ToArray();
                     //Создание нового нода
-                    Node NewAnd = new Node { NodeName = "OPT" + ElementName + lineCount, NodeType = ElementName + ConnectedWires.Count() };
-                    lineCount++;
+                    var newAnd = new Node { NodeName = "OPT" + elementName + _lineCount, NodeType = elementName + connectedWires.Count() };
+                    _lineCount++;
                     //Перенос соеденений
-                    List<Wire> ConnectionWireList = ConnectedWires.ToList();
-                    for (int i = 0; i < ConnectionWireList.Count; i++)
+                    List<Wire> connectionWireList = connectedWires.ToList();
+                    for (int i = 0; i < connectionWireList.Count; i++)
                     {
-                        ConnectionWireList[i].DistName = NewAnd.NodeName;
-                        ConnectionWireList[i].DistPort = "I" + i;
+                        connectionWireList[i].DistName = newAnd.NodeName;
+                        connectionWireList[i].DistPort = "I" + i;
                     }
                     //Перенос исходящего соеденения
-                    Wire OutConn = _mainNet.Wires.FirstOrDefault(t => t.SrcName == AndBase.NodeName);
-                    OutConn.SrcName = NewAnd.NodeName;
+                    Wire outConn = _mainNet.Wires.First(t => t.SrcName == andBase.NodeName);
+                    outConn.SrcName = newAnd.NodeName;
                     //Удалене старых нодов
-                    _mainNet.Nodes.Remove(AndBase);
-                    _mainNet.Nodes.Remove(AndConnected);
+                    _mainNet.Nodes.Remove(andBase);
+                    _mainNet.Nodes.Remove(andConnected);
                     //Удаление лишнего соеденения
-                    _mainNet.Wires.Remove(AndConnection);
+                    _mainNet.Wires.Remove(andConnection);
                     //Добовление нового нода
-                    _mainNet.Nodes.Add(NewAnd);
+                    _mainNet.Nodes.Add(newAnd);
                     
 
                 }
                 else
                 {
-                    OpNeed = false;
+                    opNeed = false;
                 }
             }
-            Console.WriteLine("После Оптимизации " + _mainNet.Nodes.Where(t => t.NodeType.Contains(ElementName)).Count());
+            Console.WriteLine("После Оптимизации {0}", _mainNet.Nodes.Count(t => t.NodeType.Contains(elementName)));
         }
     }
 }
