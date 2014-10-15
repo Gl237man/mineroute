@@ -7,6 +7,8 @@ copy Mnetsynt2\bin\Debug\*.exe MCtest\
 copy Mnetsynt2\bin\Debug\*.dll MCtest\
 copy Binhl2JsWE\bin\Debug\*.exe MCtest\
 copy Binhl2JsWE\bin\Debug\*.dll MCtest\
+copy MnetLutOptimise\bin\Debug\*.exe MCtest\
+copy MnetLutOptimise\bin\Debug\*.dll MCtest\
 copy RunMCTest.cmd MCtest\
 copy MNETLib.BinLib MCtest\
 del MCtest\*.vshost.exe

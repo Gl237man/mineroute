@@ -29,8 +29,8 @@ namespace Mnetsynt2
 
         static void Main(string[] args)
         {
-            //string file = "test_D";
-            string file = "lut_00FF_D";
+            string file = "test_D_O";
+            //string file = "lut_00FF_D_O";
 
             if (args.Length > 0)
             {

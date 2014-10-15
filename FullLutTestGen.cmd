@@ -9,6 +9,8 @@ copy GenerateTestForAllLut\bin\Debug\*.exe LUTtest\
 copy GenerateTestForAllLut\bin\Debug\*.dll LUTtest\
 copy BinhlEmul\bin\Debug\*.exe LUTtest\
 copy BinhlEmul\bin\Debug\*.dll LUTtest\
+copy MnetLutOptimise\bin\Debug\*.exe LUTtest\
+copy MnetLutOptimise\bin\Debug\*.dll LUTtest\
 copy MNETLib.BinLib LUTtest\
 del LUTtest\*.vshost.exe
 copy Templates\V2\*.binhl LUTtest\

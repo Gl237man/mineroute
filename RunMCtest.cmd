@@ -1,5 +1,6 @@
 vqm2MNET test
 MnetLutDecomposite test
-Mnetsynt2 test_D
-Binhl2JsWE test_D
+MnetLutOptimise test_D
+Mnetsynt2 test_D_O
+Binhl2JsWE test_D_O
 

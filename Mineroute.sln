@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GateTestGen", "GateTestGen\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetUtils", "NetUtils\NetUtils.csproj", "{ECB764AF-ABD9-4029-9892-28926ED3373B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutOptimise", "MnetLutOptimise\MnetLutOptimise.csproj", "{488C33EE-F695-43B7-B4BD-B4550A69B197}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -265,6 +267,16 @@ Global
 		{ECB764AF-ABD9-4029-9892-28926ED3373B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ECB764AF-ABD9-4029-9892-28926ED3373B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ECB764AF-ABD9-4029-9892-28926ED3373B}.Release|x86.ActiveCfg = Release|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Any CPU.Build.0 = Release|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{488C33EE-F695-43B7-B4BD-B4550A69B197}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
