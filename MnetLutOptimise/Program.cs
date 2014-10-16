@@ -13,7 +13,7 @@ namespace MnetLutOptimise
         static void Main(string[] args)
         {
             
-            string file = args.Length == 0 ? "lut_000B_D" : args[0];
+            string file = args.Length == 0 ? "lut_0100_D" : args[0];
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
             Console.WriteLine("Всего Соеденений " + _mainNet.Wires.Count);
@@ -66,12 +66,15 @@ namespace MnetLutOptimise
                 {
                     //if (bits[i] == 1)
                     //{
-                    Wire twire = _mainNet.Wires.First(t => t.DistName == allWiresToAnd[i].SrcName);
-                    if (_mainNet.Nodes.First(t => t.NodeName == twire.DistName).NodeType == "NOT")
+                    Wire twire = _mainNet.Wires.FirstOrDefault(t => t.DistName == allWiresToAnd[i].SrcName);
+                    if (twire != null)
                     {
-                        allWiresToAnd[i].SrcName = twire.SrcName;
-                        allWiresToAnd[i].SrcPort = twire.SrcPort;
-                        bits[i] = 1;
+                        if (_mainNet.Nodes.First(t => t.NodeName == twire.DistName).NodeType == "NOT")
+                        {
+                            allWiresToAnd[i].SrcName = twire.SrcName;
+                            allWiresToAnd[i].SrcPort = twire.SrcPort;
+                            bits[i] = 1;
+                        }
                     }
                     //}
                     allWiresToAnd[i].DistPort = "I" + i;
