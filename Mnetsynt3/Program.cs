@@ -47,15 +47,38 @@ namespace Mnetsynt3
             }
 
             MainNetwork.wireGroups = new List<WireGroup>();
+            
             //Перевести соеденения DUP в группы
             Console.WriteLine("Конвертирование DUP");
             var dupList = MainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+
+            //Обьеденение DUP
+            var dupdupWires = MainNetwork.wires.Where(t => dupList.FirstOrDefault(a => a.NodeName == t.SrcName) != null &&
+                                                           dupList.FirstOrDefault(a => a.NodeName == t.DistName) != null);
+
+            while (dupdupWires.Count() > 0)
+            {
+                var wire = dupdupWires.First();
+                var firstDup = dupList.FirstOrDefault(a => a.NodeName == wire.SrcName);
+                var secondDup = dupList.FirstOrDefault(a => a.NodeName == wire.DistName);
+                var fromSecondWires = MainNetwork.wires.Where(t => t.SrcName == secondDup.NodeName).ToList();
+                foreach (var w in fromSecondWires)
+                {
+                    w.SrcName = firstDup.NodeName;
+                }
+                MainNetwork.wires.Remove(wire);
+                MainNetwork.nodes.Remove(secondDup);
+            }
+
+            dupList = MainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+
             var delinwirelist = new List<Wire>();
             var deloutwirelist = new List<Wire>();
             foreach (Node node in dupList)
             {
-                var inWires = MainNetwork.wires.Where(t => t.DistName == node.NodeName).ToList();
-                var outWires = MainNetwork.wires.Where(t => t.SrcName == node.NodeName).ToList();
+                string targetNodeName = node.NodeName;
+                var inWires = MainNetwork.wires.Where(t => t.DistName == targetNodeName).ToList();
+                var outWires = MainNetwork.wires.Where(t => t.SrcName == targetNodeName).ToList();
                 foreach (var t in outWires)
                 {
                     t.SrcName = inWires.First().SrcName;
@@ -65,6 +88,9 @@ namespace Mnetsynt3
                 delinwirelist.AddRange(inWires);
                 deloutwirelist.AddRange(outWires);
             }
+
+
+
             foreach (var t in delinwirelist) MainNetwork.wires.Remove(t);
             foreach (var t in dupList) MainNetwork.nodes.Remove(t);
 
@@ -164,6 +190,52 @@ namespace Mnetsynt3
 
                 char[,] WireMask = new char[BaseSize, BaseSize];
 
+                //Разводка групп
+                
+                //Разводка Группы
+
+                //Поиск лучшей группы для разводки
+                foreach (WireGroup group in MainNetwork.wireGroups)
+                {
+                    group.weight = 0;
+                    foreach (Wire wire in group.WList)
+                    {
+                        //Поиск точек входа выхода
+                        RouteUtils.Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, Cpoints);
+                        RouteUtils.Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, Cpoints);
+
+                        //Маскировка неиспользуемых точек;
+                        for (int pn = 0; pn < Cpoints.Count; pn++)
+                        {
+                            if (Cpoints[pn].UsedLayer == 0)
+                                DrawAtMask(WireMask, Cpoints[pn].BaseX, Cpoints[pn].BaseY + CurrentWireLayer, 1, 2);
+                        }
+                        //Отмена маскировки на конечных точках соеденения
+
+                        startPoint.BaseY += CurrentWireLayer;
+                        endPoint.BaseY += CurrentWireLayer;
+
+                        UnmaskCpoint(WireMask, startPoint);
+                        UnmaskCpoint(WireMask, endPoint);
+                        startPoint.BaseY += 1;
+                        endPoint.BaseY += 1;
+                        UnmaskCpoint(WireMask, startPoint);
+                        UnmaskCpoint(WireMask, endPoint);
+                        startPoint.BaseY -= 1;
+                        endPoint.BaseY -= 1;
+                        //CalcAstar
+                        int[,] AStarTable = CalcAstar(BaseSize, WireMask, startPoint, endPoint);
+                        startPoint.BaseY -= CurrentWireLayer;
+                        endPoint.BaseY -= CurrentWireLayer;
+                        int weight = AStarTable[endPoint.BaseX, endPoint.BaseY + CurrentWireLayer];
+                        group.weight += weight;
+                        //renderATable(wire.ToString() + ".png",AStarTable,BaseSize,startPoint,endPoint);
+                    }
+                }
+                
+
+
+                //Разводка Соеденений
 
                 for (int i = 0; i < MainNetwork.wires.Count; i++)
                 {
@@ -171,73 +243,43 @@ namespace Mnetsynt3
                     List<int> WPX;
                     List<int> WPY;
 
-                    if (WireOpt)
-                    {
-                        int Twire = 0;
-                        int mink = 999999;
-                        int bestN = 0;
+                    int Twire = 0;
+                    int mink = 999999;
+                    int bestN = 0;
 
-                        //TODO Попробовать распаралелить
-                        for (int k = 0; k < MainNetwork.wires.Count; k++)
+                    //TODO Попробовать распаралелить
+                    for (int k = 0; k < MainNetwork.wires.Count; k++)
+                    {
+                        if (!MainNetwork.wires[k].Placed)
                         {
-                            if (!MainNetwork.wires[k].Placed)
+                            int bw = FindBestWireToRoute(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, k, MCWires, WireMask);
+                            if (mink > bw && bw != 0)
                             {
-                                int bw = FindBestWireToRoute(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, k, MCWires, WireMask);
-                                if (mink > bw && bw != 0)
-                                {
-                                    mink = bw;
-                                    bestN = k;
-                                }
+                                mink = bw;
+                                bestN = k;
                             }
                         }
-                        if (!MainNetwork.wires[bestN].Placed)
+                    }
+                    if (!MainNetwork.wires[bestN].Placed)
+                    {
+                        PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, bestN, MCWires, WireMask, out WPX, out WPY);
+                        Twire = bestN;
+                        if (MainNetwork.wires[bestN].Placed)
                         {
-                            PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, bestN, MCWires, WireMask, out WPX, out WPY);
-                            Twire = bestN;
-                            if (MainNetwork.wires[bestN].Placed)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                WireNum++;
-                                Console.WriteLine(MainNetwork.wires[bestN].ToString());
-                            }
-                            else
-                            {
-                                i = MainNetwork.wires.Count;
-                                Console.ForegroundColor = ConsoleColor.White;
-                            }
-
+                            Console.ForegroundColor = ConsoleColor.Green;
+                            WireNum++;
+                            Console.WriteLine(MainNetwork.wires[bestN].ToString());
                         }
                         else
                         {
                             i = MainNetwork.wires.Count;
+                            Console.ForegroundColor = ConsoleColor.White;
                         }
 
                     }
                     else
                     {
-                        if (!MainNetwork.wires[i].Placed)
-                        {
-
-
-
-                            PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, i, MCWires, WireMask, out WPX, out WPY);
-
-
-
-
-                            if (MainNetwork.wires[i].Placed)
-                            {
-                                Console.ForegroundColor = ConsoleColor.Green;
-                                WireNum++;
-                            }
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.White;
-                            }
-
-                            Console.WriteLine(MainNetwork.wires[i].ToString());
-
-                        }
+                        i = MainNetwork.wires.Count;
                     }
                 }
                 Console.WriteLine("Разведено в текущем слое:" + WireNum);
@@ -399,6 +441,40 @@ namespace Mnetsynt3
 
             Console.WriteLine("Экспорт");
             OutNodeO.Export(file + ".binhl");
+        }
+
+        private static void renderATable(string p, int[,] AStarTable, int size, RouteUtils.Cpoint sp, RouteUtils.Cpoint ep)
+        {
+            System.Drawing.Image im = new System.Drawing.Bitmap(size*10, size*10);
+            System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(im);
+            int max = 0;
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (AStarTable[i, j] > max) max = AStarTable[i, j];
+                }
+            }
+
+            gr.Clear(System.Drawing.Color.Black);
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (AStarTable[i, j] != 0)
+                    {
+                        int r = 0;
+                        int g = 255 - Convert.ToInt32(255.0f / (float)max * (float)AStarTable[i, j]);
+                        int b = Convert.ToInt32(255.0f / (float)max * (float)AStarTable[i, j]);
+                        System.Drawing.Color c = System.Drawing.Color.FromArgb(r, g, b);
+                        System.Drawing.Brush brush = new System.Drawing.SolidBrush(c);
+                        gr.FillRectangle(brush, i * 10, j * 10, 10, 10);
+                    }
+                }
+            }
+            gr.FillRectangle(System.Drawing.Brushes.Red, sp.BaseX * 10, sp.BaseY * 10, 10, 10);
+            gr.FillRectangle(System.Drawing.Brushes.Red, ep.BaseX * 10, ep.BaseY * 10, 10, 10);
+            im.Save(p.Replace(":","_"));
         }
 
         private static void PlaceFast(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)

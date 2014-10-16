@@ -10,5 +10,7 @@ namespace Mnetsynt3
     {
         public List<Wire> WList;
         public string GroupName;
+        public bool Placed;
+        public int weight;
     }
 }

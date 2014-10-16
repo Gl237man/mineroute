@@ -13,6 +13,9 @@ namespace Mnetsynt3
         public string SrcPort;
         public string DistPort;
         public bool Placed;
+
+        public List<WirePoint> WirePoints;
+
         public override string ToString()
         {
             return "WIRE:" + SrcName + "-" + SrcPort + ":" + DistName + "-" + DistPort;
