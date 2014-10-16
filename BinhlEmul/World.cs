@@ -179,8 +179,8 @@ namespace BinhlEmul
                 }
             }
             wtime += WTickTorch();
-            wtime += WTickTorch();
-            wtime += WTickTorch();
+            //wtime += WTickTorch();
+            //wtime += WTickTorch();
             //Обновление состояния портов
             foreach (IoPort t in outPorts)
             {
