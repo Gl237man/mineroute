@@ -8,6 +8,7 @@ namespace Mnetsynt3
 {
     class Mnet
     {
+        public List<WireGroup> wireGroups;
         public List<Node> nodes;
         public List<Wire> wires;
 

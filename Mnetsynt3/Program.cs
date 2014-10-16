@@ -45,7 +45,30 @@ namespace Mnetsynt3
                 Console.WriteLine("Оптимизация распалажения");
                 SortOptimize(MainNetwork);
             }
-            //ReducteDUP(MainNetwork);
+
+            MainNetwork.wireGroups = new List<WireGroup>();
+            //Перевести соеденения DUP в группы
+            Console.WriteLine("Конвертирование DUP");
+            var dupList = MainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+            var delinwirelist = new List<Wire>();
+            var deloutwirelist = new List<Wire>();
+            foreach (Node node in dupList)
+            {
+                var inWires = MainNetwork.wires.Where(t => t.DistName == node.NodeName).ToList();
+                var outWires = MainNetwork.wires.Where(t => t.SrcName == node.NodeName).ToList();
+                foreach (var t in outWires)
+                {
+                    t.SrcName = inWires.First().SrcName;
+                    t.SrcPort = inWires.First().SrcPort;
+                }
+                MainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = outWires });
+                delinwirelist.AddRange(inWires);
+                deloutwirelist.AddRange(outWires);
+            }
+            foreach (var t in delinwirelist) MainNetwork.wires.Remove(t);
+            foreach (var t in dupList) MainNetwork.nodes.Remove(t);
+
+
             //loadnodes
             Console.WriteLine("Загрузка темплейтов");
             RouteUtils.Node[] mcNodes = new RouteUtils.Node[MainNetwork.nodes.Count];
@@ -59,6 +82,10 @@ namespace Mnetsynt3
             //Place nodes
             int PlaceLayer = 0;
             int BaseSize = 0;
+
+            
+            
+
 
             //switch (placeMode) { }
             switch (placeMode)
@@ -76,8 +103,7 @@ namespace Mnetsynt3
                     break;
             }
 
-
-
+            foreach (var t in deloutwirelist) MainNetwork.wires.Remove(t);
 
             Console.WriteLine("Размещение ОК");
 
