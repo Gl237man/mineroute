@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MnetLutOptimise", "MnetLutO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NANDTGenerator", "NANDTGenerator\NANDTGenerator.csproj", "{88079724-C354-4B4D-8ECD-594A724159C3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnetsynt3", "Mnetsynt3\Mnetsynt3.csproj", "{C14C402E-7409-4D64-9AEA-175F3715706B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -289,6 +291,16 @@ Global
 		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{88079724-C354-4B4D-8ECD-594A724159C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C14C402E-7409-4D64-9AEA-175F3715706B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
