@@ -1,31 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using RouteUtils;
 
 namespace Mnetsynt3
 {
-    enum PlaceModes
+    static class Program
     {
-        Compact1,
-        Fast,
-        Optimal
-    }
-    class Program
-    {
+        private const int OptimiseDeep = 99;
 
-        static int OptimiseDeep = 99;
         /// <summary>
         /// Разряженность
         /// </summary>
-        static int dolled = 1;
+        private const int Dolled = 1;
 
-        static PlaceModes placeMode = PlaceModes.Optimal;
+        private const bool TypeSort = false;
 
-        static bool WireOpt = true;
-        static bool TypeSort = false;
-        static bool SortObjectOpt = false;
+        private const bool DrawAstar = false;
 
         static void Main(string[] args)
         {
@@ -38,221 +29,194 @@ namespace Mnetsynt3
             }
 
 
-            Mnet MainNetwork = new Mnet();
-            MainNetwork.ReadMnetFile(file + @".MNET");
-            if (SortObjectOpt)
-            {
-                Console.WriteLine("Оптимизация распалажения");
-                SortOptimize(MainNetwork);
-            }
+            var mainNetwork = new Mnet();
+            mainNetwork.ReadMnetFile(file + @".MNET");
+            
 
-            MainNetwork.wireGroups = new List<WireGroup>();
+            mainNetwork.wireGroups = new List<WireGroup>();
             
             //Перевести соеденения DUP в группы
             Console.WriteLine("Конвертирование DUP");
-            var dupList = MainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+            var dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
 
             //Обьеденение DUP
-            var dupdupWires = MainNetwork.wires.Where(t => dupList.FirstOrDefault(a => a.NodeName == t.SrcName) != null &&
-                                                           dupList.FirstOrDefault(a => a.NodeName == t.DistName) != null);
+            List<Node> list = dupList;
+            var dupdupWires = mainNetwork.wires.Where(t => list.FirstOrDefault(a => a.NodeName == t.SrcName) != null &&
+                                                           list.FirstOrDefault(a => a.NodeName == t.DistName) != null);
 
-            while (dupdupWires.Count() > 0)
+
+
+            while (dupdupWires.Any())
+
             {
                 var wire = dupdupWires.First();
-                var firstDup = dupList.FirstOrDefault(a => a.NodeName == wire.SrcName);
-                var secondDup = dupList.FirstOrDefault(a => a.NodeName == wire.DistName);
-                var fromSecondWires = MainNetwork.wires.Where(t => t.SrcName == secondDup.NodeName).ToList();
+                var firstDup = dupList.First(a => a.NodeName == wire.SrcName);
+                var secondDup = dupList.First(a => a.NodeName == wire.DistName);
+                var fromSecondWires = mainNetwork.wires.Where(t => t.SrcName == secondDup.NodeName).ToList();
                 foreach (var w in fromSecondWires)
                 {
                     w.SrcName = firstDup.NodeName;
                 }
-                MainNetwork.wires.Remove(wire);
-                MainNetwork.nodes.Remove(secondDup);
+                mainNetwork.wires.Remove(wire);
+                mainNetwork.nodes.Remove(secondDup);
             }
 
-            dupList = MainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+            dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
 
             var delinwirelist = new List<Wire>();
             var deloutwirelist = new List<Wire>();
             foreach (Node node in dupList)
             {
                 string targetNodeName = node.NodeName;
-                var inWires = MainNetwork.wires.Where(t => t.DistName == targetNodeName).ToList();
-                var outWires = MainNetwork.wires.Where(t => t.SrcName == targetNodeName).ToList();
+                var inWires = mainNetwork.wires.Where(t => t.DistName == targetNodeName).ToList();
+                var outWires = mainNetwork.wires.Where(t => t.SrcName == targetNodeName).ToList();
                 foreach (var t in outWires)
                 {
                     t.SrcName = inWires.First().SrcName;
                     t.SrcPort = inWires.First().SrcPort;
                 }
-                MainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = outWires });
+                mainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = outWires });
                 delinwirelist.AddRange(inWires);
                 deloutwirelist.AddRange(outWires);
             }
 
 
 
-            foreach (var t in delinwirelist) MainNetwork.wires.Remove(t);
-            foreach (var t in dupList) MainNetwork.nodes.Remove(t);
+            foreach (var t in delinwirelist) mainNetwork.wires.Remove(t);
+            foreach (var t in dupList) mainNetwork.nodes.Remove(t);
 
 
             //loadnodes
             Console.WriteLine("Загрузка темплейтов");
-            RouteUtils.Node[] mcNodes = new RouteUtils.Node[MainNetwork.nodes.Count];
-            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            var mcNodes = new RouteUtils.Node[mainNetwork.nodes.Count];
+            for (int i = 0; i < mainNetwork.nodes.Count; i++)
             {
-                mcNodes[i] = new RouteUtils.Node(MainNetwork.nodes[i].NodeType + ".binhl");
-                mcNodes[i].NodeName = MainNetwork.nodes[i].NodeName;
-                MainNetwork.nodes[i].mcNode = mcNodes[i];
+                mcNodes[i] = new RouteUtils.Node(mainNetwork.nodes[i].NodeType + ".binhl")
+                {
+                    NodeName = mainNetwork.nodes[i].NodeName
+                };
+                mainNetwork.nodes[i].McNode = mcNodes[i];
             }
             Console.WriteLine("OK");
             //Place nodes
-            int PlaceLayer = 0;
-            int BaseSize = 0;
+            int placeLayer;
+            int baseSize;
 
-            
-            
+           
+            PlaceOptimal(mainNetwork, mcNodes, out placeLayer, out baseSize);
+           
 
-
-            //switch (placeMode) { }
-            switch (placeMode)
-            {
-                case PlaceModes.Compact1:
-                    PlaceCompact(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
-                    break;
-                case PlaceModes.Fast:
-                    PlaceFast(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
-                    break;
-                case PlaceModes.Optimal:
-                    PlaceOptimal(MainNetwork, mcNodes, out PlaceLayer, out BaseSize);
-                    break;
-                default:
-                    break;
-            }
-
-            foreach (var t in deloutwirelist) MainNetwork.wires.Remove(t);
+            foreach (var t in deloutwirelist) mainNetwork.wires.Remove(t);
 
             Console.WriteLine("Размещение ОК");
 
-            List<RouteUtils.Cpoint> Cpoints = new List<RouteUtils.Cpoint>();
+            var cpoints = new List<Cpoint>();
 
             //CreateCpointList
 
-            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            for (int i = 0; i < mainNetwork.nodes.Count; i++)
             {
-                for (int j = 0; j < mcNodes[i].InPorts.Length; j++)
+                cpoints.AddRange(mcNodes[i].InPorts.Select(t => new Cpoint
                 {
-                    Cpoints.Add(new RouteUtils.Cpoint
-                    {
-                        BaseX = mcNodes[i].InPorts[j].PosX + MainNetwork.nodes[i].x,
-                        BaseY = mcNodes[i].InPorts[j].PosY + MainNetwork.nodes[i].y,
-                        PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].InPorts[j].Name,
-                        Indat = true
-                    });
+                    BaseX = t.PosX + mainNetwork.nodes[i].X,
+                    BaseY = t.PosY + mainNetwork.nodes[i].Y,
+                    PointName = mainNetwork.nodes[i].NodeName + "-" + t.Name,
+                    Indat = true
+                }));
 
-                }
-
-                for (int j = 0; j < mcNodes[i].OutPorts.Length; j++)
+                cpoints.AddRange(mcNodes[i].OutPorts.Select(t => new Cpoint
                 {
-                    Cpoints.Add(new RouteUtils.Cpoint
-                    {
-                        BaseX = mcNodes[i].OutPorts[j].PosX + MainNetwork.nodes[i].x,
-                        BaseY = mcNodes[i].OutPorts[j].PosY + MainNetwork.nodes[i].y,
-                        PointName = MainNetwork.nodes[i].NodeName + "-" + mcNodes[i].OutPorts[j].Name,
-                        Indat = false
-                    });
-
-                }
+                    BaseX = t.PosX + mainNetwork.nodes[i].X,
+                    BaseY = t.PosY + mainNetwork.nodes[i].Y,
+                    PointName = mainNetwork.nodes[i].NodeName + "-" + t.Name,
+                    Indat = false
+                }));
             }
 
-            SortWire(Cpoints, MainNetwork, BaseSize);
+            SortWire(cpoints, mainNetwork, baseSize);
 
-            int CurrentWireLayer = 1;
-            int CurrentRealLayer = 0;
-            int WireNum = 0;
-            RouteUtils.Wire[] MCWires = new RouteUtils.Wire[MainNetwork.wires.Count];
+            var mcWires = new RouteUtils.Wire[mainNetwork.wires.Count];
             //Draw wires in layer
-            int TotalLayers = 0;
+            int totalLayers = 0;
             for (int j = 0; j < 24; j++)
             {
+                int currentWireLayer = j * 2 + 1;
+                if (j > 4) currentWireLayer += 5;
+                if (j > 9) currentWireLayer += 5;
+                if (j > 14) currentWireLayer += 5;
 
-                CurrentWireLayer = j * 2 + 1;
-                if (j > 4) CurrentWireLayer += 5;
-                if (j > 9) CurrentWireLayer += 5;
-                if (j > 14) CurrentWireLayer += 5;
+                int currentRealLayer = placeLayer - 1 - j * 2;
 
-                CurrentRealLayer = PlaceLayer - 1 - j * 2;
+                if (j > 4) currentRealLayer -= 2;
+                if (j > 9) currentRealLayer -= 2;
+                if (j > 14) currentRealLayer -= 2;
 
-                if (j > 4) CurrentRealLayer -= 2;
-                if (j > 9) CurrentRealLayer -= 2;
-                if (j > 14) CurrentRealLayer -= 2;
+                int wireNum = 0;
 
-                WireNum = 0;
-
-                char[,] WireMask = new char[BaseSize, BaseSize];
+                var wireMask = new char[baseSize, baseSize];
 
                 //Разводка групп
                 
                 //Разводка Группы
 
                 //Поиск лучшей группы для разводки
-                foreach (WireGroup group in MainNetwork.wireGroups)
+                foreach (WireGroup group in mainNetwork.wireGroups)
                 {
                     group.weight = 0;
+                    group.CanPlace = true;
                     foreach (Wire wire in group.WList)
                     {
                         //Поиск точек входа выхода
-                        RouteUtils.Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, Cpoints);
-                        RouteUtils.Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, Cpoints);
+                        Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
+                        Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
 
                         //Маскировка неиспользуемых точек;
-                        for (int pn = 0; pn < Cpoints.Count; pn++)
+                        foreach (Cpoint cpoint in cpoints)
                         {
-                            if (Cpoints[pn].UsedLayer == 0)
-                                DrawAtMask(WireMask, Cpoints[pn].BaseX, Cpoints[pn].BaseY + CurrentWireLayer, 1, 2);
+                            if (cpoint.UsedLayer == 0)
+                                DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
                         }
                         //Отмена маскировки на конечных точках соеденения
 
-                        startPoint.BaseY += CurrentWireLayer;
-                        endPoint.BaseY += CurrentWireLayer;
+                        startPoint.BaseY += currentWireLayer;
+                        endPoint.BaseY += currentWireLayer;
 
-                        UnmaskCpoint(WireMask, startPoint);
-                        UnmaskCpoint(WireMask, endPoint);
+                        UnmaskCpoint(wireMask, startPoint);
+                        UnmaskCpoint(wireMask, endPoint);
                         startPoint.BaseY += 1;
                         endPoint.BaseY += 1;
-                        UnmaskCpoint(WireMask, startPoint);
-                        UnmaskCpoint(WireMask, endPoint);
+                        UnmaskCpoint(wireMask, startPoint);
+                        UnmaskCpoint(wireMask, endPoint);
                         startPoint.BaseY -= 1;
                         endPoint.BaseY -= 1;
                         //CalcAstar
-                        int[,] AStarTable = CalcAstar(BaseSize, WireMask, startPoint, endPoint);
-                        startPoint.BaseY -= CurrentWireLayer;
-                        endPoint.BaseY -= CurrentWireLayer;
-                        int weight = AStarTable[endPoint.BaseX, endPoint.BaseY + CurrentWireLayer];
+                        var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+                        startPoint.BaseY -= currentWireLayer;
+                        endPoint.BaseY -= currentWireLayer;
+                        int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
+                        if (weight == 0) group.CanPlace = false;
                         group.weight += weight;
-                        //renderATable(wire.ToString() + ".png",AStarTable,BaseSize,startPoint,endPoint);
+
+                        if (DrawAstar) RenderATable(wire + ".png",aStarTable,baseSize,startPoint,endPoint);
+
                     }
                 }
-                
+
+                var bestGroup = mainNetwork.wireGroups.Where(q=>q.CanPlace).OrderBy(t => t.weight).First();
 
 
                 //Разводка Соеденений
 
-                for (int i = 0; i < MainNetwork.wires.Count; i++)
+                for (int i = 0; i < mainNetwork.wires.Count; i++)
                 {
-
-                    List<int> WPX;
-                    List<int> WPY;
-
-                    int Twire = 0;
                     int mink = 999999;
                     int bestN = 0;
 
-                    //TODO Попробовать распаралелить
-                    for (int k = 0; k < MainNetwork.wires.Count; k++)
+                    for (int k = 0; k < mainNetwork.wires.Count; k++)
                     {
-                        if (!MainNetwork.wires[k].Placed)
+                        if (!mainNetwork.wires[k].Placed)
                         {
-                            int bw = FindBestWireToRoute(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, k, MCWires, WireMask);
+                            int bw = FindBestWireToRoute(mainNetwork, baseSize, cpoints, currentWireLayer, currentRealLayer, k, mcWires, wireMask);
                             if (mink > bw && bw != 0)
                             {
                                 mink = bw;
@@ -260,173 +224,169 @@ namespace Mnetsynt3
                             }
                         }
                     }
-                    if (!MainNetwork.wires[bestN].Placed)
+                    if (!mainNetwork.wires[bestN].Placed)
                     {
-                        PlaceWire(MainNetwork, BaseSize, Cpoints, CurrentWireLayer, CurrentRealLayer, bestN, MCWires, WireMask, out WPX, out WPY);
-                        Twire = bestN;
-                        if (MainNetwork.wires[bestN].Placed)
+                        List<int> wpx;
+                        List<int> wpy;
+                        PlaceWire(mainNetwork, baseSize, cpoints, currentWireLayer, currentRealLayer, bestN, mcWires, wireMask, out wpx, out wpy);
+                        if (mainNetwork.wires[bestN].Placed)
                         {
                             Console.ForegroundColor = ConsoleColor.Green;
-                            WireNum++;
-                            Console.WriteLine(MainNetwork.wires[bestN].ToString());
+                            wireNum++;
+                            Console.WriteLine(mainNetwork.wires[bestN].ToString());
                         }
                         else
                         {
-                            i = MainNetwork.wires.Count;
+                            i = mainNetwork.wires.Count;
                             Console.ForegroundColor = ConsoleColor.White;
                         }
 
                     }
                     else
                     {
-                        i = MainNetwork.wires.Count;
+                        i = mainNetwork.wires.Count;
                     }
                 }
-                Console.WriteLine("Разведено в текущем слое:" + WireNum);
-                if (WireNum > 0)
+                Console.WriteLine("Разведено в текущем слое:" + wireNum);
+                if (wireNum > 0)
                 {
-                    TotalLayers++;
+                    totalLayers++;
                 }
                 else
                 {
                     break;
                 }
             }
-            Console.WriteLine("Всего Слоев:" + TotalLayers);
+            Console.WriteLine("Всего Слоев:" + totalLayers);
 
-            RouteUtils.Node OutNode = new RouteUtils.Node("OUT", BaseSize, BaseSize, PlaceLayer + 10);
+            var outNode = new RouteUtils.Node("OUT", baseSize, baseSize, placeLayer + 10);
 
             //OutNode.PlaceAnotherNode(new RouteUtils.Node("DUP23.binhl"), 0, 0, 0);
-            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            for (int i = 0; i < mainNetwork.nodes.Count; i++)
             {
-                OutNode.PlaceAnotherNode(mcNodes[i], MainNetwork.nodes[i].x, MainNetwork.nodes[i].y, MainNetwork.nodes[i].z);
+                outNode.PlaceAnotherNode(mcNodes[i], mainNetwork.nodes[i].X, mainNetwork.nodes[i].Y, mainNetwork.nodes[i].Z);
 
             }
             //LongCpoint
 
-            for (int i = 0; i < Cpoints.Count; i++)
+            foreach (Cpoint cpoint in cpoints)
             {
-                if (Cpoints[i].UsedLayer >= 10)
+                if (cpoint.UsedLayer >= 10)
                 {
-                    Cpoints[i].UsedLayer -= 4;
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 11] = "W";
-                    if (Cpoints[i].Indat)
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 10] = "^";
+                    cpoint.UsedLayer -= 4;
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 12, placeLayer - 11] = "W";
+                    if (cpoint.Indat)
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 12, placeLayer - 10] = "^";
                     else
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 12, PlaceLayer - 10] = "v";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 12, placeLayer - 10] = "v";
 
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 13, PlaceLayer - 11] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 13, PlaceLayer - 10] = "#";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 11] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 14, PlaceLayer - 10] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 13, placeLayer - 11] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 13, placeLayer - 10] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 14, placeLayer - 11] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 14, placeLayer - 10] = "#";
                 }
 
-                if (Cpoints[i].UsedLayer >= 22)
+                if (cpoint.UsedLayer >= 22)
                 {
-                    Cpoints[i].UsedLayer -= 3;
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 23] = "W";
-                    if (Cpoints[i].Indat)
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 22] = "^";
+                    cpoint.UsedLayer -= 3;
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 27, placeLayer - 23] = "W";
+                    if (cpoint.Indat)
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 27, placeLayer - 22] = "^";
                     else
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 27, PlaceLayer - 22] = "v";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 27, placeLayer - 22] = "v";
 
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 28, PlaceLayer - 23] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 28, PlaceLayer - 22] = "#";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 29, PlaceLayer - 23] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 29, PlaceLayer - 22] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 28, placeLayer - 23] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 28, placeLayer - 22] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 29, placeLayer - 23] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 29, placeLayer - 22] = "#";
                 }
 
-                if (Cpoints[i].UsedLayer >= 34)
+                if (cpoint.UsedLayer >= 34)
                 {
-                    Cpoints[i].UsedLayer -= 3;
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 35] = "W";
-                    if (Cpoints[i].Indat)
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "^";
+                    cpoint.UsedLayer -= 3;
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 42, placeLayer - 35] = "W";
+                    if (cpoint.Indat)
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 42, placeLayer - 34] = "^";
                     else
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 42, PlaceLayer - 34] = "v";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 42, placeLayer - 34] = "v";
 
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 43, PlaceLayer - 35] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 43, PlaceLayer - 34] = "#";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 44, PlaceLayer - 35] = "W";
-                    OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + 44, PlaceLayer - 34] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 43, placeLayer - 35] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 43, placeLayer - 34] = "#";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 44, placeLayer - 35] = "W";
+                    outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + 44, placeLayer - 34] = "#";
                 }
 
 
-                for (int j = 0; j < Cpoints[i].UsedLayer; j++)
+                for (int j = 0; j < cpoint.UsedLayer; j++)
                 {
                     if (j <= 10)
                     {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 1, PlaceLayer - j - 0] = "#";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 1, placeLayer - j - 1] = "w";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 1, placeLayer - j - 0] = "#";
                     }
                     if (j > 10 && j <= 22)
                     {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 4, PlaceLayer - j - 0] = "#";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 4, placeLayer - j - 1] = "w";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 4, placeLayer - j - 0] = "#";
                     }
                     if (j > 22 && j <= 34)
                     {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 7, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 7, PlaceLayer - j - 0] = "#";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 7, placeLayer - j - 1] = "w";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 7, placeLayer - j - 0] = "#";
                     }
 
                     if (j > 34)
                     {
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 10, PlaceLayer - j - 1] = "w";
-                        OutNode.DataMatrix[Cpoints[i].BaseX, Cpoints[i].BaseY + j + 10, PlaceLayer - j - 0] = "#";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 10, placeLayer - j - 1] = "w";
+                        outNode.DataMatrix[cpoint.BaseX, cpoint.BaseY + j + 10, placeLayer - j - 0] = "#";
                     }
                 }
             }
             //PlaceReapiters
-            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            for (int i = 0; i < mainNetwork.wires.Count; i++)
             {
-                MCWires[i].PlaceRepeaters();
+                mcWires[i].PlaceRepeaters();
             }
             //SyncWires
-            List<RouteUtils.Wire> WiresToSync = new List<RouteUtils.Wire>();
-            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            var wiresToSync = new List<RouteUtils.Wire>();
+            for (int i = 0; i < mainNetwork.wires.Count; i++)
             {
-                if (MainNetwork.wires[i].DistPort == "clk")
+                if (mainNetwork.wires[i].DistPort == "clk")
                 {
-                    WiresToSync.Add(MCWires[i]);
+                    wiresToSync.Add(mcWires[i]);
                 }
             }
-            int SyncLen = 0;
-            for (int i = 0; i < WiresToSync.Count; i++)
-            {
-                if (WiresToSync[i].CalcRepCount() > SyncLen)
-                    SyncLen = WiresToSync[i].CalcRepCount();
-            }
+            int syncLen = wiresToSync.Select(t => t.CalcRepCount()).Concat(new[] {0}).Max();
 
-            for (int i = 0; i < WiresToSync.Count; i++)
+            foreach (RouteUtils.Wire wire in wiresToSync)
             {
-                WiresToSync[i].RepCompincate(SyncLen - WiresToSync[i].CalcRepCount());
-                WiresToSync[i].Synced = true;
+                wire.RepCompincate(syncLen - wire.CalcRepCount());
+                wire.Synced = true;
             }
 
 
             //PlaceWires
-            for (int i = 0; i < MainNetwork.wires.Count; i++)
+            for (int i = 0; i < mainNetwork.wires.Count; i++)
             {
-                if (MainNetwork.wires[i].Placed)
+                if (mainNetwork.wires[i].Placed)
                 {
-                    for (int j = 0; j < MCWires[i].WirePointX.Length; j++)
+                    for (int j = 0; j < mcWires[i].WirePointX.Length; j++)
                     {
-                        if (MCWires[i].Synced)
+                        if (mcWires[i].Synced)
                         {
-                            OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "S";
+                            outNode.DataMatrix[mcWires[i].WirePointX[j], mcWires[i].WirePointY[j], mcWires[i].WirePointZ[j]] = "S";
                         }
                         else
                         {
-                            OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j]] = "w";
+                            outNode.DataMatrix[mcWires[i].WirePointX[j], mcWires[i].WirePointY[j], mcWires[i].WirePointZ[j]] = "w";
                         }
-                        if (MCWires[i].Rep[j])
+                        if (mcWires[i].Rep[j])
                         {
-                            OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j] + 1] = MCWires[i].RepNp[j];
+                            outNode.DataMatrix[mcWires[i].WirePointX[j], mcWires[i].WirePointY[j], mcWires[i].WirePointZ[j] + 1] = mcWires[i].RepNp[j];
                         }
                         else
                         {
-                            OutNode.DataMatrix[MCWires[i].WirePointX[j], MCWires[i].WirePointY[j], MCWires[i].WirePointZ[j] + 1] = "#";
+                            outNode.DataMatrix[mcWires[i].WirePointX[j], mcWires[i].WirePointY[j], mcWires[i].WirePointZ[j] + 1] = "#";
                         }
                     }
                 }
@@ -434,16 +394,16 @@ namespace Mnetsynt3
 
             //Обрезка
             Console.WriteLine("Обрезка рабочей Облости");
-            RouteUtils.Node OutNodeO = CutOutputNode(PlaceLayer, BaseSize, OutNode);
+            var outNodeO = CutOutputNode(placeLayer, baseSize, outNode);
             //Маркировка портов ввода вывода
-            OutNodeO.InPorts = MainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new RouteUtils.InPort(t.NodeName, t.x + 1, t.y)).ToArray();
-            OutNodeO.OutPorts = MainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new RouteUtils.OutPort(t.NodeName, t.x + 1, t.y)).ToArray();
+            outNodeO.InPorts = mainNetwork.nodes.Where(t => t.NodeType == "INPort").Select(t => new InPort(t.NodeName, t.X + 1, t.Y)).ToArray();
+            outNodeO.OutPorts = mainNetwork.nodes.Where(t => t.NodeType == "OUTPort").Select(t => new OutPort(t.NodeName, t.X + 1, t.Y)).ToArray();
 
             Console.WriteLine("Экспорт");
-            OutNodeO.Export(file + ".binhl");
+            outNodeO.Export(file + ".binhl");
         }
 
-        private static void renderATable(string p, int[,] AStarTable, int size, RouteUtils.Cpoint sp, RouteUtils.Cpoint ep)
+        private static void RenderATable(string p, int[,] aStarTable, int size, Cpoint sp, Cpoint ep)
         {
             System.Drawing.Image im = new System.Drawing.Bitmap(size*10, size*10);
             System.Drawing.Graphics gr = System.Drawing.Graphics.FromImage(im);
@@ -452,7 +412,7 @@ namespace Mnetsynt3
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (AStarTable[i, j] > max) max = AStarTable[i, j];
+                    if (aStarTable[i, j] > max) max = aStarTable[i, j];
                 }
             }
 
@@ -461,11 +421,11 @@ namespace Mnetsynt3
             {
                 for (int j = 0; j < size; j++)
                 {
-                    if (AStarTable[i, j] != 0)
+                    if (aStarTable[i, j] != 0)
                     {
-                        int r = 0;
-                        int g = 255 - Convert.ToInt32(255.0f / (float)max * (float)AStarTable[i, j]);
-                        int b = Convert.ToInt32(255.0f / (float)max * (float)AStarTable[i, j]);
+                        const int r = 0;
+                        int g = 255 - Convert.ToInt32(255.0f / max * aStarTable[i, j]);
+                        int b = Convert.ToInt32(255.0f / max * aStarTable[i, j]);
                         System.Drawing.Color c = System.Drawing.Color.FromArgb(r, g, b);
                         System.Drawing.Brush brush = new System.Drawing.SolidBrush(c);
                         gr.FillRectangle(brush, i * 10, j * 10, 10, 10);
@@ -477,62 +437,57 @@ namespace Mnetsynt3
             im.Save(p.Replace(":","_"));
         }
 
-        private static void PlaceFast(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        private static void PlaceOptimal(Mnet MainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
+        private static void PlaceOptimal(Mnet mainNetwork, RouteUtils.Node[] mcNodes, out int PlaceLayer, out int BaseSize)
         {
             //Расчитать baseSize
             PlaceLayer = 60;
-            int xStep = mcNodes.Select(t => t.SizeX).Max() + dolled;
-            int yStep = mcNodes.Select(t => t.SizeY).Max() + dolled;
+            int xStep = mcNodes.Select(t => t.SizeX).Max() + Dolled;
+            int yStep = mcNodes.Select(t => t.SizeY).Max() + Dolled;
 
             BaseSize = (new int[] { Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * xStep, Convert.ToInt32(Math.Sqrt(mcNodes.Length)) * yStep }).Max() + 60;
 
             //Разместить порты
-            var ports = MainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
+            var ports = mainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
             int lastxcoord = 1;
             foreach (var port in ports)
             {
-                port.placed = true;
-                port.x = lastxcoord;
-                port.y = 1;
-                port.z = PlaceLayer;
-                lastxcoord += mcNodes.FirstOrDefault(t => t.NodeName == port.NodeName).SizeX + dolled;
+                port.Placed = true;
+                port.X = lastxcoord;
+                port.Y = 1;
+                port.Z = PlaceLayer;
+                lastxcoord += mcNodes.FirstOrDefault(t => t.NodeName == port.NodeName).SizeX + Dolled;
             }
             //Расчитать матрицу связоности
-            int[,] connectionMatrix = new int[MainNetwork.nodes.Count, MainNetwork.nodes.Count];
-            for (int i = 0; i < MainNetwork.nodes.Count; i++)
+            int[,] connectionMatrix = new int[mainNetwork.nodes.Count, mainNetwork.nodes.Count];
+            for (int i = 0; i < mainNetwork.nodes.Count; i++)
             {
-                for (int j = 0; j < MainNetwork.nodes.Count; j++)
+                for (int j = 0; j < mainNetwork.nodes.Count; j++)
                 {
-                    connectionMatrix[i, j] = MainNetwork.wires.Where(t => t.SrcName == MainNetwork.nodes[i].NodeName && t.DistName == MainNetwork.nodes[j].NodeName ||
-                                                                          t.SrcName == MainNetwork.nodes[j].NodeName && t.DistName == MainNetwork.nodes[i].NodeName).Count();
+                    connectionMatrix[i, j] = mainNetwork.wires.Where(t => t.SrcName == mainNetwork.nodes[i].NodeName && t.DistName == mainNetwork.nodes[j].NodeName ||
+                                                                          t.SrcName == mainNetwork.nodes[j].NodeName && t.DistName == mainNetwork.nodes[i].NodeName).Count();
                 }
             }
 
             //Разместить ноды в ячейки
-            var unPlaced = MainNetwork.nodes.Where(t => !t.placed);
+            var unPlaced = mainNetwork.nodes.Where(t => !t.Placed);
             while (unPlaced.Count() > 0)
             {
                 //Поиск нода максимально связанного с установленными
-                int[] localConnectionMatrix = new int[MainNetwork.nodes.Count];
-                for (int i = 0; i < MainNetwork.nodes.Count; i++)
+                int[] localConnectionMatrix = new int[mainNetwork.nodes.Count];
+                for (int i = 0; i < mainNetwork.nodes.Count; i++)
                 {
-                    localConnectionMatrix[i] += MainNetwork.wires.Where(t => !MainNetwork.nodes[i].placed &&
-                                                                             (t.SrcName == MainNetwork.nodes[i].NodeName && MainNetwork.nodes.FirstOrDefault(n => n.NodeName == t.DistName).placed)).Count();
-                    localConnectionMatrix[i] += MainNetwork.wires.Where(t => !MainNetwork.nodes[i].placed &&
-                                                                             (t.DistName == MainNetwork.nodes[i].NodeName && MainNetwork.nodes.FirstOrDefault(n => n.NodeName == t.SrcName).placed)).Count();
+                    localConnectionMatrix[i] += mainNetwork.wires.Where(t => !mainNetwork.nodes[i].Placed &&
+                                                                             (t.SrcName == mainNetwork.nodes[i].NodeName && mainNetwork.nodes.FirstOrDefault(n => n.NodeName == t.DistName).Placed)).Count();
+                    localConnectionMatrix[i] += mainNetwork.wires.Where(t => !mainNetwork.nodes[i].Placed &&
+                                                                             (t.DistName == mainNetwork.nodes[i].NodeName && mainNetwork.nodes.FirstOrDefault(n => n.NodeName == t.SrcName).Placed)).Count();
                 }
                 int maxConections = localConnectionMatrix.Max();
                 Node nodeToPlace = new Node();
-                for (int i = 0; i < MainNetwork.nodes.Count; i++)
+                for (int i = 0; i < mainNetwork.nodes.Count; i++)
                 {
                     if (localConnectionMatrix[i] == maxConections)
                     {
-                        nodeToPlace = MainNetwork.nodes[i];
+                        nodeToPlace = mainNetwork.nodes[i];
                     }
                 }
                 if (maxConections == 0)
@@ -541,13 +496,13 @@ namespace Mnetsynt3
                 }
                 //Поиск места для установки
                 int[,] placeMatrix = new int[BaseSize, BaseSize];
-                var connectionsa = MainNetwork.wires.Where(k => k.SrcName == nodeToPlace.NodeName).Select(s => MainNetwork.nodes.FirstOrDefault(q => s.DistName == q.NodeName)).Where(l => l.placed);
-                var connectionsb = MainNetwork.wires.Where(k => k.DistName == nodeToPlace.NodeName).Select(s => MainNetwork.nodes.FirstOrDefault(q => s.SrcName == q.NodeName)).Where(l => l.placed);
+                var connectionsa = mainNetwork.wires.Where(k => k.SrcName == nodeToPlace.NodeName).Select(s => mainNetwork.nodes.FirstOrDefault(q => s.DistName == q.NodeName)).Where(l => l.Placed);
+                var connectionsb = mainNetwork.wires.Where(k => k.DistName == nodeToPlace.NodeName).Select(s => mainNetwork.nodes.FirstOrDefault(q => s.SrcName == q.NodeName)).Where(l => l.Placed);
                 var connections = connectionsa.Union(connectionsb);
                 var mcNode = mcNodes.FirstOrDefault(k => k.NodeName == nodeToPlace.NodeName);
-                int sizex = mcNode.SizeX + dolled;
-                int sizey = mcNode.SizeY + dolled;
-                var placedNodes = MainNetwork.nodes.Where(t => t.placed);
+                int sizex = mcNode.SizeX + Dolled;
+                int sizey = mcNode.SizeY + Dolled;
+                var placedNodes = mainNetwork.nodes.Where(t => t.Placed);
 
 
                 int step = 5;
@@ -555,7 +510,7 @@ namespace Mnetsynt3
                 char[,] mask = new char[BaseSize, BaseSize];
                 foreach (var node in placedNodes)
                 {
-                    DrawAtMask(mask, node.x, node.y, node.mcNode.SizeX, node.mcNode.SizeY);
+                    DrawAtMask(mask, node.X, node.Y, node.McNode.SizeX, node.McNode.SizeY);
                 }
 
                 for (int i = 0; i < BaseSize; i += step)
@@ -568,7 +523,7 @@ namespace Mnetsynt3
                             {
                                 foreach (Node n in connections)
                                 {
-                                    placeMatrix[i, j] += (n.x - i) * (n.x - i) + (n.y - j) * (n.y - j);
+                                    placeMatrix[i, j] += (n.X - i) * (n.X - i) + (n.Y - j) * (n.Y - j);
                                 }
                             }
                     }
@@ -589,10 +544,10 @@ namespace Mnetsynt3
                         }
                     }
                 }
-                nodeToPlace.x = xplace;
-                nodeToPlace.y = yplace;
-                nodeToPlace.z = PlaceLayer;
-                nodeToPlace.placed = true;
+                nodeToPlace.X = xplace;
+                nodeToPlace.Y = yplace;
+                nodeToPlace.Z = PlaceLayer;
+                nodeToPlace.Placed = true;
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("{0} - Осталось:{1}", nodeToPlace.NodeName, unPlaced.Count());
                 Console.ForegroundColor = ConsoleColor.White;
@@ -604,9 +559,9 @@ namespace Mnetsynt3
             System.Drawing.Image im = new System.Drawing.Bitmap(BaseSize, BaseSize);
             System.Drawing.Graphics Gr = System.Drawing.Graphics.FromImage(im);
             Gr.Clear(System.Drawing.Color.Black);
-            foreach (var node in MainNetwork.nodes)
+            foreach (var node in mainNetwork.nodes)
             {
-                Gr.DrawRectangle(System.Drawing.Pens.Green, node.x, node.y, node.mcNode.SizeX, node.mcNode.SizeY);
+                Gr.DrawRectangle(System.Drawing.Pens.Green, node.X, node.Y, node.McNode.SizeX, node.McNode.SizeY);
             }
             im.Save("1.png");
 
@@ -616,9 +571,9 @@ namespace Mnetsynt3
 
         private static bool CheckMaskCollision(char[,] mask, Node node, int x, int y)
         {
-            for (int i = 0; i < node.mcNode.SizeX; i++)
+            for (int i = 0; i < node.McNode.SizeX; i++)
             {
-                for (int j = 0; j < node.mcNode.SizeY; j++)
+                for (int j = 0; j < node.McNode.SizeY; j++)
                 {
                     if (mask[x + i, y + j] == 'X') return true;
                 }
@@ -629,16 +584,16 @@ namespace Mnetsynt3
         private static bool CheckCollision(Node t, RouteUtils.Node node1, int i, int j, RouteUtils.Node node2)
         {
             bool result = false;
-            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i, j);
-            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i + node2.SizeX, j);
-            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i, j + node2.SizeY);
-            result = result || CheckCollisionBoxAndPoint(t.x, t.y, node1.SizeX + dolled, node1.SizeY + dolled, i + node2.SizeX, j + node2.SizeY);
+            result = result || CheckCollisionBoxAndPoint(t.X, t.Y, node1.SizeX + Dolled, node1.SizeY + Dolled, i, j);
+            result = result || CheckCollisionBoxAndPoint(t.X, t.Y, node1.SizeX + Dolled, node1.SizeY + Dolled, i + node2.SizeX, j);
+            result = result || CheckCollisionBoxAndPoint(t.X, t.Y, node1.SizeX + Dolled, node1.SizeY + Dolled, i, j + node2.SizeY);
+            result = result || CheckCollisionBoxAndPoint(t.X, t.Y, node1.SizeX + Dolled, node1.SizeY + Dolled, i + node2.SizeX, j + node2.SizeY);
 
 
-            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x, t.y);
-            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x + node1.SizeX, t.y);
-            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x, t.y + node1.SizeY);
-            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + dolled, node2.SizeY + dolled, t.x + node1.SizeX, t.y + node1.SizeY);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + Dolled, node2.SizeY + Dolled, t.X, t.Y);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + Dolled, node2.SizeY + Dolled, t.X + node1.SizeX, t.Y);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + Dolled, node2.SizeY + Dolled, t.X, t.Y + node1.SizeY);
+            result = result || CheckCollisionBoxAndPoint(i, j, node2.SizeX + Dolled, node2.SizeY + Dolled, t.X + node1.SizeX, t.Y + node1.SizeY);
 
             return result;
         }
@@ -1073,12 +1028,12 @@ namespace Mnetsynt3
             {
                 if (MainNetwork.nodes[i].NodeType.Contains("Port"))
                 {
-                    MainNetwork.nodes[i].x = potrtx;
-                    MainNetwork.nodes[i].y = 1;
-                    MainNetwork.nodes[i].z = PlaceLayer;
+                    MainNetwork.nodes[i].X = potrtx;
+                    MainNetwork.nodes[i].Y = 1;
+                    MainNetwork.nodes[i].Z = PlaceLayer;
                     //DrawMask
-                    int mx = MainNetwork.nodes[i].x;
-                    int my = MainNetwork.nodes[i].y;
+                    int mx = MainNetwork.nodes[i].X;
+                    int my = MainNetwork.nodes[i].Y;
                     int mw = mcNodes[i].SizeX;
                     int mh = mcNodes[i].SizeY;
 
@@ -1098,18 +1053,18 @@ namespace Mnetsynt3
                     placed = true;
                 }
 
-                for (int x = lastX; x < BaseSize; x += dolled)
+                for (int x = lastX; x < BaseSize; x += Dolled)
                 {
-                    for (int y = 1; y < BaseSize; y += dolled)
+                    for (int y = 1; y < BaseSize; y += Dolled)
                     {
                         if (!placed)
                         {
-                            MainNetwork.nodes[i].x = x;
-                            MainNetwork.nodes[i].y = y;
-                            MainNetwork.nodes[i].z = PlaceLayer;
+                            MainNetwork.nodes[i].X = x;
+                            MainNetwork.nodes[i].Y = y;
+                            MainNetwork.nodes[i].Z = PlaceLayer;
 
-                            int mx = MainNetwork.nodes[i].x;
-                            int my = MainNetwork.nodes[i].y;
+                            int mx = MainNetwork.nodes[i].X;
+                            int my = MainNetwork.nodes[i].Y;
                             int mw = mcNodes[i].SizeX;
                             int mh = mcNodes[i].SizeY;
 

@@ -12,5 +12,6 @@ namespace Mnetsynt3
         public string GroupName;
         public bool Placed;
         public int weight;
+        public bool CanPlace;
     }
 }
