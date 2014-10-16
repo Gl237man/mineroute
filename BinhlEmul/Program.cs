@@ -38,6 +38,10 @@ namespace BinhlEmul
                 {
                     FWait(world, str);
                 }
+                if (Regex.IsMatch(str, @"\bswait.*?\(.*?\)"))
+                {
+                    FSWait(world, str);
+                }
                 if (Regex.IsMatch(str, @"\bset.*?\(.*?\)"))
                 {
                     FSet(world, str);
@@ -93,6 +97,16 @@ namespace BinhlEmul
 
             r.GetSingeLayeImage().Save("I.png");
             */
+        }
+
+        private static void FSWait(World world, string str)
+        {
+            int twait = 1;
+            while (twait > 0)
+            {
+                twait = world.WTick();
+            }
+            
         }
 
         private static void FMTest(ref bool allTests, ref int numTests, World world, string str)

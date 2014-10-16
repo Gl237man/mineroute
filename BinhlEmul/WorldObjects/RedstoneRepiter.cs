@@ -22,6 +22,16 @@
             ActArch = new bool[Delay];
         }
 
+        public bool OldAciv;
+        public int OVal;
+        public override bool WTick()
+        {
+            OldAciv = IsActivated;
+            OVal = RedValue;
+            Tick();
+            return !(OldAciv == IsActivated && OVal == RedValue);
+        }
+
         public override void Tick()
         {
             Act = false;

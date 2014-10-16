@@ -15,6 +15,16 @@ namespace BinhlEmul.WorldObjects
             return GetObject(Direction.Down).GetType() == typeof(Cloth);
         }
 
+        public bool OldAciv;
+        public int OVal;
+        public override bool WTick()
+        {
+            OldAciv = IsActivated;
+            OVal = RedValue;
+            Tick();
+            return !(OldAciv == IsActivated && OVal == RedValue);
+        }
+
         public override void Tick()
         {
             int oldRedValue = RedValue;

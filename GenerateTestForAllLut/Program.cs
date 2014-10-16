@@ -28,7 +28,7 @@ namespace GenerateTestForAllLut
                 //Gen Test
                 string testFile = "";
                 testFile += string.Format("load ( lut_{0}_D_O )\r\n", lutNum.ToString("X4"));
-                testFile += "wait (50)\r\n";
+                testFile += "swait ()\r\n";
                 testFile += "checkstruct()\r\n";
                 testFile += "checkio()\r\n";
                 for (int i = 0; i < 16; i++)
@@ -38,7 +38,7 @@ namespace GenerateTestForAllLut
                     testFile += string.Format("set(I1, {0})\r\n", bits[1]);
                     testFile += string.Format("set(I2, {0})\r\n", bits[2]);
                     testFile += string.Format("set(I3, {0})\r\n", bits[3]);
-                    testFile += "wait(120)\r\n";
+                    testFile += "swait()\r\n";
                     testFile += "read(nout)\r\n";
                     testFile += string.Format("test(nout , {0})\r\n", GetBits(lutNum)[i]);
                 }

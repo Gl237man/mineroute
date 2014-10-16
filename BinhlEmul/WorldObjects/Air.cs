@@ -11,6 +11,11 @@
             return true;
         }
 
+        public override bool WTick()
+        {
+            return false;
+        }
+
         public override void Tick()
         {
         }

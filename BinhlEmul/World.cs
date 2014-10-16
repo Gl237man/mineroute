@@ -157,6 +157,86 @@ namespace BinhlEmul
             }
         }
 
+        public int WTick()
+        {
+            int wtime = 0;
+            tick++;
+            if (debug) R.GetSingeLayeImage().Save("I" + tick + ".png");
+            //Оброботка тика проводов
+            wtime += WTickWire();
+            //Оброботка тика блоков
+            for (int x = 0; x < WorldSizeX; x++)
+            {
+                for (int y = 0; y < WorldSizeY; y++)
+                {
+                    for (int z = 0; z < WorldSizeZ; z++)
+                    {
+                        if (_objectMatrix[x, y, z].GetType() != typeof(RedstoneWire))
+                        {
+                           if (_objectMatrix[x, y, z].WTick()) wtime++;
+                        }
+                    }
+                }
+            }
+            wtime += WTickTorch();
+            wtime += WTickTorch();
+            wtime += WTickTorch();
+            //Обновление состояния портов
+            foreach (IoPort t in outPorts)
+            {
+                t.Value = _objectMatrix[t.X, t.Y, t.Z].RedValue > 0;
+            }
+            return wtime;
+        }
+
+        private int WTickWire()
+        {
+            int wtime = 0;
+            NotFullTick = true;
+            while (NotFullTick)
+            {
+                NotFullTick = false;
+                for (int x = 0; x < WorldSizeX; x++)
+                {
+                    for (int y = 0; y < WorldSizeY; y++)
+                    {
+                        for (int z = 0; z < WorldSizeZ; z++)
+                        {
+                            if (_objectMatrix[x, y, z].GetType() == typeof(RedstoneWire))
+                            {
+                                _objectMatrix[x, y, z].Tick();
+                            }
+                        }
+                    }
+                }
+            }
+            return wtime;
+        }
+
+        private int WTickTorch()
+        {
+            int wtime = 0;
+            NotFullTick = true;
+            while (NotFullTick)
+            {
+                NotFullTick = false;
+                for (int x = 0; x < WorldSizeX; x++)
+                {
+                    for (int y = 0; y < WorldSizeY; y++)
+                    {
+                        for (int z = 0; z < WorldSizeZ; z++)
+                        {
+                            if (_objectMatrix[x, y, z].GetType() == typeof(RedstoneTorch))
+                            {
+                                if (_objectMatrix[x, y, z].WTick()) wtime++;
+                            }
+                        }
+                    }
+                }
+            }
+            return wtime;
+        }
+
         public void Tick()
         {
             tick++;
