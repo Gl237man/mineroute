@@ -16,7 +16,7 @@ namespace Mnetsynt3
 
         private const bool TypeSort = false;
 
-        private static bool DrawAstar = false;
+        private static bool DrawAstar = true;
 
         static void Main(string[] args)
         {
@@ -168,39 +168,44 @@ namespace Mnetsynt3
                     //Поиск лучшей группы для разводки
                     foreach (WireGroup group in mainNetwork.wireGroups)
                     {
-                        group.weight = 0;
-                        group.CanPlace = true;
-                        foreach (Wire wire in group.WList)
+                        if (!group.Placed)
                         {
-                            //Поиск точек входа выхода
-                            Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
-                            Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
-
-                            //Маскировка неиспользуемых точек;
-                            foreach (Cpoint cpoint in cpoints)
+                            group.weight = 0;
+                            group.CanPlace = true;
+                            foreach (Wire wire in group.WList)
                             {
-                                if (cpoint.UsedLayer == 0)
-                                    DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
+                                //Поиск точек входа выхода
+                                Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
+                                Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
+
+
+
+                                //Маскировка неиспользуемых точек;
+                                foreach (Cpoint cpoint in cpoints)
+                                {
+                                    if (cpoint.UsedLayer == 0)
+                                        DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
+                                }
+                                //Отмена маскировки на конечных точках соеденения
+
+                                startPoint.BaseY += currentWireLayer;
+                                endPoint.BaseY += currentWireLayer;
+
+                                UnmaskCpoint(wireMask, startPoint);
+                                UnmaskCpoint(wireMask, endPoint);
+                                var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+
+                                //CalcAstar
+
+                                startPoint.BaseY -= currentWireLayer;
+                                endPoint.BaseY -= currentWireLayer;
+                                int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
+                                if (weight == 0) group.CanPlace = false;
+                                group.weight += weight;
+
+                                if (DrawAstar) RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
+
                             }
-                            //Отмена маскировки на конечных точках соеденения
-
-                            startPoint.BaseY += currentWireLayer;
-                            endPoint.BaseY += currentWireLayer;
-
-                            UnmaskCpoint(wireMask, startPoint);
-                            UnmaskCpoint(wireMask, endPoint);
-                            var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
- 
-                            //CalcAstar
-                            
-                            startPoint.BaseY -= currentWireLayer;
-                            endPoint.BaseY -= currentWireLayer;
-                            int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
-                            if (weight == 0) group.CanPlace = false;
-                            group.weight += weight;
-
-                            if (DrawAstar) RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
-
                         }
                     }
 
@@ -218,6 +223,8 @@ namespace Mnetsynt3
                         {
                             Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
                             Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
+
+                            
 
                             //Маскировка неиспользуемых точек;
                             foreach (Cpoint cpoint in cpoints)
@@ -715,12 +722,12 @@ namespace Mnetsynt3
             BaseSize += PlaceLayer;
         }
 
-        private static int FindBestWireToRoute(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask)
+        private static int FindBestWireToRoute(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] wireMask)
         {
             for (int j = 0; j < Cpoints.Count; j++)
             {
                 if (Cpoints[j].UsedLayer == 0)
-                    DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
+                    DrawAtMask(wireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
             Wire W = MainNetwork.wires[WireNum];
@@ -733,10 +740,10 @@ namespace Mnetsynt3
             SP.BaseY += CurrentWireLayer;
             EP.BaseY += CurrentWireLayer;
 
-            UnmaskCpoint(WireMask, SP);
-            UnmaskCpoint(WireMask, EP);
+            UnmaskCpoint(wireMask, SP);
+            UnmaskCpoint(wireMask, EP);
             //CalcAstar
-            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP, EP);
+            int[,] AStarTable = CalcAstar(BaseSize, wireMask, SP, EP);
             SP.BaseY -= CurrentWireLayer;
             EP.BaseY -= CurrentWireLayer;
 
@@ -915,15 +922,15 @@ namespace Mnetsynt3
         }
 
 
-        private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] WireMask, out List<int> WPX, out List<int> WPY)
+        private static void PlaceWire(Mnet MainNetwork, int BaseSize, List<RouteUtils.Cpoint> Cpoints, int CurrentWireLayer, int CurrentRealLayer, int WireNum, RouteUtils.Wire[] MCWires, char[,] wireMask, out List<int> WPX, out List<int> WPY)
         {
-            //WireMask = new string[BaseSize, BaseSize];
+            //wireMask = new string[BaseSize, BaseSize];
 
             //PlaceMaskCpoint
             for (int j = 0; j < Cpoints.Count; j++)
             {
                 if (Cpoints[j].UsedLayer == 0)
-                    DrawAtMask(WireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
+                    DrawAtMask(wireMask, Cpoints[j].BaseX, Cpoints[j].BaseY + CurrentWireLayer, 1, 2);
             }
 
             Wire W = MainNetwork.wires[WireNum];
@@ -936,10 +943,10 @@ namespace Mnetsynt3
             SP.BaseY += CurrentWireLayer;
             EP.BaseY += CurrentWireLayer;
 
-            UnmaskCpoint(WireMask, SP);
-            UnmaskCpoint(WireMask, EP);
+            UnmaskCpoint(wireMask, SP);
+            UnmaskCpoint(wireMask, EP);
             //CalcAstar
-            int[,] AStarTable = CalcAstar(BaseSize, WireMask, SP, EP);
+            int[,] AStarTable = CalcAstar(BaseSize, wireMask, SP, EP);
 
             //DrawWire
 
@@ -950,7 +957,7 @@ namespace Mnetsynt3
                 //WireRemask
                 for (int i = 0; i < WPX.Count; i++)
                 {
-                    DrawAtMask(WireMask, WPX[i], WPY[i], 1, 1);
+                    DrawAtMask(wireMask, WPX[i], WPY[i], 1, 1);
                 }
 
                 MCWires[WireNum] = new RouteUtils.Wire(MCW.StartName, MCW.EndName);
@@ -1022,7 +1029,7 @@ namespace Mnetsynt3
             return true;
         }
 
-        private static int[,] CalcAstar(int BaseSize, char[,] WireMask, RouteUtils.Cpoint SP, RouteUtils.Cpoint EP)
+        private static int[,] CalcAstar(int BaseSize, char[,] wireMask, RouteUtils.Cpoint SP, RouteUtils.Cpoint EP)
         {
             var AStarTable = new int[BaseSize, BaseSize];
             AStarTable[SP.BaseX, SP.BaseY] = 1;
@@ -1055,28 +1062,28 @@ namespace Mnetsynt3
                     {
                         if (AStarTable[x, y] != 0)
                         {
-                            if (AStarTable[x + 1, y] == 0 && WireMask[x + 1, y] != 'X')
+                            if (AStarTable[x + 1, y] == 0 && wireMask[x + 1, y] != 'X')
                             {
                                 AStarTable[x + 1, y] = AStarTable[x, y] + 1;
                                 aded++;
                                 lsx.Add(x + 1);
                                 lsy.Add(y);
                             }
-                            if (AStarTable[x - 1, y] == 0 && WireMask[x - 1, y] != 'X')
+                            if (AStarTable[x - 1, y] == 0 && wireMask[x - 1, y] != 'X')
                             {
                                 AStarTable[x - 1, y] = AStarTable[x, y] + 1;
                                 aded++;
                                 lsx.Add(x - 1);
                                 lsy.Add(y);
                             }
-                            if (AStarTable[x, y - 1] == 0 && WireMask[x, y - 1] != 'X')
+                            if (AStarTable[x, y - 1] == 0 && wireMask[x, y - 1] != 'X')
                             {
                                 AStarTable[x, y - 1] = AStarTable[x, y] + 1;
                                 aded++;
                                 lsx.Add(x);
                                 lsy.Add(y - 1);
                             }
-                            if (AStarTable[x, y + 1] == 0 && WireMask[x, y + 1] != 'X')
+                            if (AStarTable[x, y + 1] == 0 && wireMask[x, y + 1] != 'X')
                             {
                                 AStarTable[x, y + 1] = AStarTable[x, y] + 1;
                                 aded++;
@@ -1091,15 +1098,15 @@ namespace Mnetsynt3
             return AStarTable;
         }
 
-        private static void UnmaskCpoint(char[,] WireMask, RouteUtils.Cpoint SP)
+        private static void UnmaskCpoint(char[,] wireMask, RouteUtils.Cpoint SP)
         {
-            WireMask[SP.BaseX, SP.BaseY] = ' ';
-            WireMask[SP.BaseX - 1, SP.BaseY] = ' ';
-            WireMask[SP.BaseX + 1, SP.BaseY] = ' ';
+            wireMask[SP.BaseX, SP.BaseY] = ' ';
+            wireMask[SP.BaseX - 1, SP.BaseY] = ' ';
+            wireMask[SP.BaseX + 1, SP.BaseY] = ' ';
 
-            WireMask[SP.BaseX, SP.BaseY + 1] = ' ';
-            WireMask[SP.BaseX - 1, SP.BaseY + 1] = ' ';
-            WireMask[SP.BaseX + 1, SP.BaseY + 1] = ' ';
+            wireMask[SP.BaseX, SP.BaseY + 1] = ' ';
+            wireMask[SP.BaseX - 1, SP.BaseY + 1] = ' ';
+            wireMask[SP.BaseX + 1, SP.BaseY + 1] = ' ';
         }
 
         private static RouteUtils.Cpoint FindCpoint(string p, List<RouteUtils.Cpoint> CPnt)
