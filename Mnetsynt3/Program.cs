@@ -16,10 +16,14 @@ namespace Mnetsynt3
 
         private const bool TypeSort = false;
 
-        private const bool DrawAstar = false;
+        private static bool DrawAstar = false;
 
         static void Main(string[] args)
         {
+            if (args.Contains("-debug"))
+            {
+                DrawAstar = true;
+            }
             //string file = "test_D_O";
             string file = "lut_0006_D_O";
 
@@ -156,54 +160,120 @@ namespace Mnetsynt3
                 var wireMask = new char[baseSize, baseSize];
 
                 //Разводка групп
-                
-                //Разводка Группы
-
-                //Поиск лучшей группы для разводки
-                foreach (WireGroup group in mainNetwork.wireGroups)
+                bool  canplace = true;
+                while (canplace)
                 {
-                    group.weight = 0;
-                    group.CanPlace = true;
-                    foreach (Wire wire in group.WList)
+                    //Разводка Группы
+
+                    //Поиск лучшей группы для разводки
+                    foreach (WireGroup group in mainNetwork.wireGroups)
                     {
-                        //Поиск точек входа выхода
-                        Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
-                        Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
-
-                        //Маскировка неиспользуемых точек;
-                        foreach (Cpoint cpoint in cpoints)
+                        group.weight = 0;
+                        group.CanPlace = true;
+                        foreach (Wire wire in group.WList)
                         {
-                            if (cpoint.UsedLayer == 0)
-                                DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
+                            //Поиск точек входа выхода
+                            Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
+                            Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
+
+                            //Маскировка неиспользуемых точек;
+                            foreach (Cpoint cpoint in cpoints)
+                            {
+                                if (cpoint.UsedLayer == 0)
+                                    DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
+                            }
+                            //Отмена маскировки на конечных точках соеденения
+
+                            startPoint.BaseY += currentWireLayer;
+                            endPoint.BaseY += currentWireLayer;
+
+                            UnmaskCpoint(wireMask, startPoint);
+                            UnmaskCpoint(wireMask, endPoint);
+                            startPoint.BaseY += 1;
+                            endPoint.BaseY += 1;
+                            UnmaskCpoint(wireMask, startPoint);
+                            UnmaskCpoint(wireMask, endPoint);
+                            startPoint.BaseY -= 1;
+                            endPoint.BaseY -= 1;
+                            //CalcAstar
+                            var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+                            startPoint.BaseY -= currentWireLayer;
+                            endPoint.BaseY -= currentWireLayer;
+                            int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
+                            if (weight == 0) group.CanPlace = false;
+                            group.weight += weight;
+
+                            if (DrawAstar) RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
+
                         }
-                        //Отмена маскировки на конечных точках соеденения
+                    }
 
-                        startPoint.BaseY += currentWireLayer;
-                        endPoint.BaseY += currentWireLayer;
+                    var bestGroup = mainNetwork.wireGroups.Where(q => q.CanPlace && !q.Placed).OrderBy(t => t.weight).FirstOrDefault();
 
-                        UnmaskCpoint(wireMask, startPoint);
-                        UnmaskCpoint(wireMask, endPoint);
-                        startPoint.BaseY += 1;
-                        endPoint.BaseY += 1;
-                        UnmaskCpoint(wireMask, startPoint);
-                        UnmaskCpoint(wireMask, endPoint);
-                        startPoint.BaseY -= 1;
-                        endPoint.BaseY -= 1;
-                        //CalcAstar
-                        var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
-                        startPoint.BaseY -= currentWireLayer;
-                        endPoint.BaseY -= currentWireLayer;
-                        int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
-                        if (weight == 0) group.CanPlace = false;
-                        group.weight += weight;
+                    //Разводка 
 
-                        if (DrawAstar) RenderATable(wire + ".png",aStarTable,baseSize,startPoint,endPoint);
+                    if (bestGroup != null)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Разводка группы {0} из {1} соеденений", bestGroup.GroupName,bestGroup.WList.Count);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        bestGroup.Placed = true;
+                        foreach (Wire wire in bestGroup.WList)
+                        {
+                            Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
+                            Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
 
+                            //Маскировка неиспользуемых точек;
+                            foreach (Cpoint cpoint in cpoints)
+                            {
+                                if (cpoint.UsedLayer == 0)
+                                    DrawAtMask(wireMask, cpoint.BaseX, cpoint.BaseY + currentWireLayer, 1, 2);
+                            }
+                            //Отмена маскировки на конечных точках соеденения
+
+                            startPoint.BaseY += currentWireLayer;
+                            endPoint.BaseY += currentWireLayer;
+
+                            UnmaskCpoint(wireMask, startPoint);
+                            UnmaskCpoint(wireMask, endPoint);
+                            startPoint.BaseY += 1;
+                            endPoint.BaseY += 1;
+                            UnmaskCpoint(wireMask, startPoint);
+                            UnmaskCpoint(wireMask, endPoint);
+                            var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+
+                            List<int> wpx;
+                            List<int> wpy;
+
+                            bool placed = TryPlaceWire(startPoint, endPoint, aStarTable, out wpx, out wpy);
+                            if (placed)
+                            {
+                                //WireRemask
+                                wire.WirePoints = new List<WirePoint>();
+                                for (int i = 0; i < wpx.Count; i++)
+                                {
+                                    DrawAtMask(wireMask, wpx[i], wpy[i], 1, 1);
+                                    wire.WirePoints.Add(new WirePoint { x = wpx[i], y = wpy[i], z = currentRealLayer });
+                                }
+                                wire.WirePoints.Reverse();
+
+                                startPoint.UsedLayer = currentWireLayer;
+                                endPoint.UsedLayer = currentWireLayer;
+                                wire.Placed = true;
+                            }
+
+                            startPoint.BaseY -= 1;
+                            endPoint.BaseY -= 1;
+                            startPoint.BaseY -= currentWireLayer;
+                            endPoint.BaseY -= currentWireLayer;
+                            wireNum++;
+                        }
+                    }
+                    else
+                    {
+                        canplace = false;
                     }
                 }
-
-                var bestGroup = mainNetwork.wireGroups.Where(q=>q.CanPlace).OrderBy(t => t.weight).First();
-
 
                 //Разводка Соеденений
 
