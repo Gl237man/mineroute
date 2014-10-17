@@ -189,13 +189,8 @@ namespace Mnetsynt3
 
                             UnmaskCpoint(wireMask, startPoint);
                             UnmaskCpoint(wireMask, endPoint);
-                            //startPoint.BaseY += 1;
-                            //endPoint.BaseY += 1;
-                            //UnmaskCpoint(wireMask, startPoint);
-                            //UnmaskCpoint(wireMask, endPoint);
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
-                            //startPoint.BaseY -= 1;
-                            //endPoint.BaseY -= 1;
+ 
                             //CalcAstar
                             
                             startPoint.BaseY -= currentWireLayer;
