@@ -189,14 +189,15 @@ namespace Mnetsynt3
 
                             UnmaskCpoint(wireMask, startPoint);
                             UnmaskCpoint(wireMask, endPoint);
-                            startPoint.BaseY += 1;
-                            endPoint.BaseY += 1;
-                            UnmaskCpoint(wireMask, startPoint);
-                            UnmaskCpoint(wireMask, endPoint);
-                            startPoint.BaseY -= 1;
-                            endPoint.BaseY -= 1;
-                            //CalcAstar
+                            //startPoint.BaseY += 1;
+                            //endPoint.BaseY += 1;
+                            //UnmaskCpoint(wireMask, startPoint);
+                            //UnmaskCpoint(wireMask, endPoint);
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+                            //startPoint.BaseY -= 1;
+                            //endPoint.BaseY -= 1;
+                            //CalcAstar
+                            
                             startPoint.BaseY -= currentWireLayer;
                             endPoint.BaseY -= currentWireLayer;
                             int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
@@ -236,10 +237,11 @@ namespace Mnetsynt3
 
                             UnmaskCpoint(wireMask, startPoint);
                             UnmaskCpoint(wireMask, endPoint);
-                            startPoint.BaseY += 1;
-                            endPoint.BaseY += 1;
-                            UnmaskCpoint(wireMask, startPoint);
-                            UnmaskCpoint(wireMask, endPoint);
+                            //startPoint.BaseY += 1;
+                            //endPoint.BaseY += 1;
+                            //UnmaskCpoint(wireMask, startPoint);
+                            //UnmaskCpoint(wireMask, endPoint);
+
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
 
                             List<int> wpx;
@@ -252,7 +254,6 @@ namespace Mnetsynt3
                                 wire.WirePoints = new List<WirePoint>();
                                 for (int i = 0; i < wpx.Count; i++)
                                 {
-                                    DrawAtMask(wireMask, wpx[i], wpy[i], 1, 1);
                                     wire.WirePoints.Add(new WirePoint { x = wpx[i], y = wpy[i], z = currentRealLayer });
                                 }
                                 wire.WirePoints.Reverse();
@@ -262,11 +263,18 @@ namespace Mnetsynt3
                                 wire.Placed = true;
                             }
 
-                            startPoint.BaseY -= 1;
-                            endPoint.BaseY -= 1;
+                            //startPoint.BaseY -= 1;
+                            //endPoint.BaseY -= 1;
                             startPoint.BaseY -= currentWireLayer;
                             endPoint.BaseY -= currentWireLayer;
                             wireNum++;
+                        }
+                        foreach (Wire wire in bestGroup.WList)
+                        {
+                            foreach (var point in wire.WirePoints)
+                            {
+                                DrawAtMask(wireMask, point.x, point.y, 1, 1);
+                            }
                         }
                     }
                     else
@@ -417,6 +425,13 @@ namespace Mnetsynt3
             {
                 mcWires[i].PlaceRepeaters();
             }
+
+            //Установка репитеров для групп
+            foreach (var group in mainNetwork.wireGroups)
+            {
+                group.PlaceRepitors();
+            }
+
             //SyncWires
             var wiresToSync = new List<RouteUtils.Wire>();
             for (int i = 0; i < mainNetwork.wires.Count; i++)
