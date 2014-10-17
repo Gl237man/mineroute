@@ -431,6 +431,7 @@ namespace Mnetsynt3
             {
                 group.PlaceRepitors();
             }
+            //Установка групп соеденений
 
             //SyncWires
             var wiresToSync = new List<RouteUtils.Wire>();
@@ -449,6 +450,19 @@ namespace Mnetsynt3
                 wire.Synced = true;
             }
 
+            foreach (var group in mainNetwork.wireGroups)
+            {
+                foreach (var wire in group.WList)
+                {
+                    foreach (var point in wire.WirePoints)
+                    {
+                        outNode.DataMatrix[point.x, point.y, point.z] = "S";
+                        outNode.DataMatrix[point.x, point.y, point.z + 1] = "#";
+                        if (point.Repiter)
+                            outNode.DataMatrix[point.x, point.y, point.z + 1] = point.RepVapl;
+                    }
+                }
+            }
 
             //PlaceWires
             for (int i = 0; i < mainNetwork.wires.Count; i++)

@@ -21,7 +21,7 @@ namespace Mnetsynt3
             foreach (var wire in WList)
             {
                 int tPointIndex = 0;
-                int lastRepLen = 0;
+                int lastRepLen = 10;
                 while (tPointIndex < wire.WirePoints.Count)
                 {
                     if(wire.WirePoints[tPointIndex].Repiter)
@@ -47,6 +47,7 @@ namespace Mnetsynt3
                         }
                     }
                 }
+                tPointIndex = RepPlaceBack(wire.WirePoints.Count-1, wire);
                 //Заполнение направлений репитеров
                 for (int i = 1; i < wire.WirePoints.Count; i++)
                 {
@@ -54,8 +55,8 @@ namespace Mnetsynt3
                     {
                         if (wire.WirePoints[i].x > wire.WirePoints[i - 1].x) wire.WirePoints[i].RepVapl = ">";
                         if (wire.WirePoints[i].x < wire.WirePoints[i - 1].x) wire.WirePoints[i].RepVapl = "<";
-                        if (wire.WirePoints[i].y > wire.WirePoints[i - 1].y) wire.WirePoints[i].RepVapl = "^";
-                        if (wire.WirePoints[i].y < wire.WirePoints[i - 1].y) wire.WirePoints[i].RepVapl = "v";
+                        if (wire.WirePoints[i].y > wire.WirePoints[i - 1].y) wire.WirePoints[i].RepVapl = "v";
+                        if (wire.WirePoints[i].y < wire.WirePoints[i - 1].y) wire.WirePoints[i].RepVapl = "^";
                     }
                 }
             }
