@@ -16,7 +16,7 @@ namespace Mnetsynt3
 
         private const bool TypeSort = false;
 
-        private static bool DrawAstar = true;
+        private static bool DrawAstar = false;
 
         static void Main(string[] args)
         {
@@ -24,8 +24,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            //string file = "test_D_O";
-            string file = "lut_0006_D_O";
+            string file = "test_D_O";
+            //string file = "lut_0006_D_O";
 
             if (args.Length > 0)
             {
@@ -259,7 +259,7 @@ namespace Mnetsynt3
                                     wire.WirePoints.Add(new WirePoint { x = wpx[i], y = wpy[i], z = currentRealLayer });
                                 }
                                 wire.WirePoints.Reverse();
-
+                                
                                 startPoint.UsedLayer = currentWireLayer;
                                 endPoint.UsedLayer = currentWireLayer;
                                 wire.Placed = true;
@@ -459,9 +459,35 @@ namespace Mnetsynt3
                     foreach (var point in wire.WirePoints)
                     {
                         outNode.DataMatrix[point.x, point.y, point.z] = "S";
+                        if (wire.repError)
+                            outNode.DataMatrix[point.x, point.y, point.z] = "W";
+
                         outNode.DataMatrix[point.x, point.y, point.z + 1] = "#";
                         if (point.Repiter)
                             outNode.DataMatrix[point.x, point.y, point.z + 1] = point.RepVapl;
+                    }
+                }
+            }
+            //отрисовка ошибочного соеденения
+            foreach (var group in mainNetwork.wireGroups)
+            {
+                foreach (var wire in group.WList)
+                {
+                    if (wire.repError)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine(wire);
+                        Console.ForegroundColor = ConsoleColor.White;
+                        foreach (var point in wire.WirePoints)
+                        {
+                            outNode.DataMatrix[point.x, point.y, point.z] = "S";
+                            if (wire.repError)
+                                outNode.DataMatrix[point.x, point.y, point.z] = "W";
+
+                            outNode.DataMatrix[point.x, point.y, point.z + 1] = "#";
+                            if (point.Repiter)
+                                outNode.DataMatrix[point.x, point.y, point.z + 1] = point.RepVapl;
+                        }
                     }
                 }
             }

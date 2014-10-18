@@ -13,6 +13,7 @@ namespace Mnetsynt3
         public string SrcPort;
         public string DistPort;
         public bool Placed;
+        public bool repError;
 
         public List<WirePoint> WirePoints;
 

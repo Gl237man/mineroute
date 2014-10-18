@@ -20,8 +20,10 @@ namespace Mnetsynt3
             WList.Reverse();
             foreach (var wire in WList)
             {
+
                 int tPointIndex = 0;
-                int lastRepLen = 10;
+                RepPlaceForward(0, wire);
+                int lastRepLen = 0;
                 while (tPointIndex < wire.WirePoints.Count)
                 {
                     if(wire.WirePoints[tPointIndex].Repiter)
@@ -43,7 +45,13 @@ namespace Mnetsynt3
                         }
                         else
                         {
+                            int oldtpoint = tPointIndex;
                             tPointIndex = RepPlaceBack(tPointIndex,wire);
+                            if (wire.repError)
+                            {
+                                tPointIndex = oldtpoint;
+                                lastRepLen = 0;
+                            }
                         }
                     }
                 }
@@ -63,12 +71,40 @@ namespace Mnetsynt3
 
         }
 
+        private Wire lastWire;
+        private int lastWireCount;
+
         private int RepPlaceBack(int tPointIndex, Wire wire)
         {
             bool placed = false;
             while (!placed)
             {
                 tPointIndex--;
+                bool canplace = CanRepPlace(wire.WirePoints[tPointIndex].x, wire.WirePoints[tPointIndex].y);
+                if (canplace)
+                {
+                    placed = true;
+                    RepPlace(wire.WirePoints[tPointIndex].x, wire.WirePoints[tPointIndex].y);
+                }
+            }
+            //Проверка невозможности установки репитеров
+            if (wire == lastWire) lastWireCount++;
+            else
+            {
+                lastWireCount = 0;
+            }
+            if (lastWireCount > wire.WirePoints.Count) wire.repError = true;
+            lastWire = wire;
+            return tPointIndex;
+            
+        }
+
+        private int RepPlaceForward(int tPointIndex, Wire wire)
+        {
+            bool placed = false;
+            while (!placed)
+            {
+                tPointIndex++;
                 bool canplace = CanRepPlace(wire.WirePoints[tPointIndex].x, wire.WirePoints[tPointIndex].y);
                 if (canplace)
                 {
