@@ -14,6 +14,7 @@ namespace Mnetsynt3
         public string DistPort;
         public bool Placed;
         public bool repError;
+        public int len;
 
         public List<WirePoint> WirePoints;
 

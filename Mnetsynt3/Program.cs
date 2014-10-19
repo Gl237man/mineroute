@@ -24,8 +24,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            string file = "test_D_O";
-            //string file = "lut_001C_D_O";
+            //string file = "test_D_O";
+            string file = "lut_001C_D_O";
 
             if (args.Length > 0)
             {
@@ -202,7 +202,7 @@ namespace Mnetsynt3
                                 int weight = aStarTable[endPoint.BaseX, endPoint.BaseY + currentWireLayer];
                                 if (weight == 0) group.CanPlace = false;
                                 group.weight += weight;
-
+                                wire.len = weight;
                                 if (DrawAstar) RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
 
                             }
@@ -219,6 +219,8 @@ namespace Mnetsynt3
                         Console.WriteLine("Разводка группы {0} из {1} соеденений", bestGroup.GroupName,bestGroup.WList.Count);
                         Console.ForegroundColor = ConsoleColor.White;
                         bestGroup.Placed = true;
+                        bestGroup.WList = bestGroup.WList.OrderBy(t => t.len).ToList();
+                        bestGroup.WList.Reverse();
                         foreach (Wire wire in bestGroup.WList)
                         {
                             Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
