@@ -25,7 +25,7 @@ namespace Mnetsynt3
                 DrawAstar = true;
             }
             //string file = "test_D_O";
-            string file = "lut_001C_D_O";
+            string file = "lut_0049_D_O";
 
             if (args.Length > 0)
             {
@@ -273,7 +273,7 @@ namespace Mnetsynt3
                             startPoint.BaseY -= currentWireLayer;
                             endPoint.BaseY -= currentWireLayer;
                             wireNum++;
-                            RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
+                            //RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
                         }
 
                         foreach (Wire wire in bestGroup.WList)
