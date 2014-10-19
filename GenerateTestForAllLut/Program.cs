@@ -52,7 +52,7 @@ namespace GenerateTestForAllLut
                 builder.AppendFormat("cd {0}\r\n", lutNum.ToString("X4").Substring(0, 1));
                 builder.AppendFormat("MnetLutDecomposite.exe lut_{0}\r\n", lutNum.ToString("X4"));
                 builder.AppendFormat("MnetLutOptimise.exe lut_{0}_D\r\n", lutNum.ToString("X4"));
-                builder.AppendFormat("mnetsynt2.exe lut_{0}_D_O\r\n", lutNum.ToString("X4"));
+                builder.AppendFormat("mnetsynt3.exe lut_{0}_D_O\r\n", lutNum.ToString("X4"));
                 builder.AppendFormat("BinhlEmul.exe lut_{0}.emu\r\n", lutNum.ToString("X4"));
                 builder.Append("cd ..\r\n");
             }

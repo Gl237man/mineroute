@@ -3,8 +3,8 @@ copy vqm2MNET\bin\Debug\*.exe LUTtest\
 copy vqm2MNET\bin\Debug\*.dll LUTtest\
 copy MnetLutDecomposite\bin\Debug\*.exe LUTtest\
 copy MnetLutDecomposite\bin\Debug\*.dll LUTtest\
-copy Mnetsynt2\bin\Debug\*.exe LUTtest\
-copy Mnetsynt2\bin\Debug\*.dll LUTtest\
+copy Mnetsynt3\bin\Debug\*.exe LUTtest\
+copy Mnetsynt3\bin\Debug\*.dll LUTtest\
 copy GenerateTestForAllLut\bin\Debug\*.exe LUTtest\
 copy GenerateTestForAllLut\bin\Debug\*.dll LUTtest\
 copy BinhlEmul\bin\Debug\*.exe LUTtest\

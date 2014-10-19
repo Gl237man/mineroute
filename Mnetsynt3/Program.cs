@@ -25,7 +25,7 @@ namespace Mnetsynt3
                 DrawAstar = true;
             }
             string file = "test_D_O";
-            //string file = "lut_0006_D_O";
+            //string file = "lut_001C_D_O";
 
             if (args.Length > 0)
             {
@@ -245,6 +245,7 @@ namespace Mnetsynt3
                             //UnmaskCpoint(wireMask, endPoint);
 
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
+                            //MultiWareAstarUpdate(aStarTable, bestGroup);
 
                             List<int> wpx;
                             List<int> wpy;
@@ -270,7 +271,9 @@ namespace Mnetsynt3
                             startPoint.BaseY -= currentWireLayer;
                             endPoint.BaseY -= currentWireLayer;
                             wireNum++;
+                            RenderATable(wire + ".png", aStarTable, baseSize, startPoint, endPoint);
                         }
+
                         foreach (Wire wire in bestGroup.WList)
                         {
                             foreach (var point in wire.WirePoints)
@@ -528,6 +531,31 @@ namespace Mnetsynt3
 
             Console.WriteLine("Экспорт");
             outNodeO.Export(file + ".binhl");
+        }
+
+        private static void MultiWareAstarUpdate(int[,] aStarTable, WireGroup bestGroup)
+        {
+
+            var placedWire = bestGroup.WList.Where(t => t.WirePoints != null).ToList();
+            int updateVector = aStarTable.GetLength(0) * aStarTable.GetLength(0);
+            for (int x = 0; x < aStarTable.GetLength(0); x++)
+            {
+                for (int y = 0; y < aStarTable.GetLength(0); y++)
+                {
+                    if (aStarTable[x, y] != 0)
+                    {
+                        aStarTable[x, y] += updateVector;
+                    }
+                }
+            }
+
+            foreach (var ware in placedWire )
+            {
+                foreach (var point in ware.WirePoints)
+                {
+                    aStarTable[point.x, point.y]-=2;
+                }
+            }
         }
 
         private static void RenderATable(string p, int[,] aStarTable, int size, Cpoint sp, Cpoint ep)
@@ -1022,6 +1050,37 @@ namespace Mnetsynt3
                 bool R = false;
                 WPX.Add(tx);
                 WPY.Add(ty);
+                //Поиск минимальной точки
+                var ways = new int[4];
+
+                ways[0] = AStarTable[tx - 1, ty] - AStarTable[tx, ty];
+                ways[1] = AStarTable[tx + 1, ty] - AStarTable[tx, ty];
+                ways[2] = AStarTable[tx, ty + 1] - AStarTable[tx, ty];
+                ways[3] = AStarTable[tx, ty - 1] - AStarTable[tx, ty];
+                if (AStarTable[tx - 1, ty] == 0) ways[0] = -9000;
+                if (AStarTable[tx + 1, ty] == 0) ways[1] = -9000;
+                if (AStarTable[tx, ty + 1] == 0) ways[2] = -9000;
+                if (AStarTable[tx, ty - 1] == 0) ways[3] = -9000;
+
+                int bestWay = 0;
+                int bestVal = 9000;
+                for (int i = 0; i < ways.Length; i++)
+                {
+                    if (ways[i] <= bestVal)
+                    {
+                        if (ways[i] != -9000)
+                        {
+                            bestWay = i;
+                            bestVal = ways[i];
+                        }
+                    }
+                }
+
+                if (bestWay == 0) tx = tx - 1;
+                if (bestWay == 1) tx = tx + 1;
+                if (bestWay == 2) ty = ty + 1;
+                if (bestWay == 3) ty = ty - 1;
+                /*
                 if (AStarTable[tx - 1, ty] < AStarTable[tx, ty] && AStarTable[tx - 1, ty] != 0 & !R)
                 {
                     R = true;
@@ -1045,6 +1104,7 @@ namespace Mnetsynt3
                     R = true;
                     ty = ty - 1;
                 }
+                */
                 if (SP.BaseX == tx && SP.BaseY == ty)
                 {
                     Wcalc = false;
