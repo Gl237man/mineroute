@@ -13,6 +13,7 @@ namespace Mnetsynt3
         public bool Placed;
         public int weight;
         public bool CanPlace;
+        public string groupType;
 
         internal void PlaceRepitors()
         {

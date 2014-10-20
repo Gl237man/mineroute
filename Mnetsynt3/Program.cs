@@ -18,14 +18,26 @@ namespace Mnetsynt3
 
         private static bool DrawAstar = false;
 
+        private static int Step = 5;
+
         static void Main(string[] args)
         {
+            if (args.Contains("-OFast"))
+            {
+                Step = 10;
+            }
+            if (args.Contains("-OMax"))
+            {
+                Step = 1;
+            }
             if (args.Contains("-debug"))
             {
                 DrawAstar = true;
             }
-            string file = "test_D_O";
+            //string file = "test_D_O";
             //string file = "lut_0056_D_O";
+            //string file = "lut_00BB_D_O";
+            string file = "lut_00AB_D_O";
 
             if (args.Length > 0)
             {
@@ -47,9 +59,6 @@ namespace Mnetsynt3
             List<Node> list = dupList;
             var dupdupWires = mainNetwork.wires.Where(t => list.FirstOrDefault(a => a.NodeName == t.SrcName) != null &&
                                                            list.FirstOrDefault(a => a.NodeName == t.DistName) != null);
-
-
-
             while (dupdupWires.Any())
 
             {
@@ -64,7 +73,10 @@ namespace Mnetsynt3
                 mainNetwork.wires.Remove(wire);
                 mainNetwork.nodes.Remove(secondDup);
             }
-
+            //Создание Dummy обьектов
+            //foreach(  )
+            
+            //Преобразование DUP В wireGroup
             dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
 
             var delinwirelist = new List<Wire>();
@@ -79,15 +91,40 @@ namespace Mnetsynt3
                     t.SrcName = inWires.First().SrcName;
                     t.SrcPort = inWires.First().SrcPort;
                 }
-                mainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = outWires });
+                mainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = outWires,groupType = "DUP" });
                 delinwirelist.AddRange(inWires);
                 deloutwirelist.AddRange(outWires);
             }
+            
+            
 
+                        
+            //Преобразование OR в WireGroup
+            var orList = mainNetwork.nodes.Where(t => t.NodeType.Contains("OR")).ToList();
+            
+            foreach (Node node in orList)
+            {
+                string targetNodeName = node.NodeName;
+                var inWires = mainNetwork.wires.Where(t => t.DistName == targetNodeName).ToList();
+                var outWires = mainNetwork.wires.Where(t => t.SrcName == targetNodeName).ToList();
+                foreach (var t in inWires)
+                {
+                    t.DistName = outWires.First().DistName;
+                    t.DistPort = outWires.First().DistPort;
+                }
+                mainNetwork.wireGroups.Add(new WireGroup { GroupName = node.NodeName, WList = inWires,groupType = "OR" });
+                delinwirelist.AddRange(outWires);
+                deloutwirelist.AddRange(inWires);
+            }
+
+            //Удаление соеденений
+            
 
 
             foreach (var t in delinwirelist) mainNetwork.wires.Remove(t);
             foreach (var t in dupList) mainNetwork.nodes.Remove(t);
+            foreach (var t in orList) mainNetwork.nodes.Remove(t);
+            
 
 
             //loadnodes
@@ -109,7 +146,7 @@ namespace Mnetsynt3
            
             PlaceOptimal(mainNetwork, mcNodes, out placeLayer, out baseSize);
            
-
+            //Удаление оставшихся соеденений
             foreach (var t in deloutwirelist) mainNetwork.wires.Remove(t);
 
             Console.WriteLine("Размещение ОК");
@@ -226,7 +263,11 @@ namespace Mnetsynt3
                             Cpoint startPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
                             Cpoint endPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
 
-                            
+                            if (bestGroup.groupType == "OR")
+                            {
+                                endPoint = FindCpoint(wire.SrcName + "-" + wire.SrcPort, cpoints);
+                                startPoint = FindCpoint(wire.DistName + "-" + wire.DistPort, cpoints);
+                            }
 
                             //Маскировка неиспользуемых точек;
                             foreach (Cpoint cpoint in cpoints)
@@ -241,10 +282,6 @@ namespace Mnetsynt3
 
                             UnmaskCpoint(wireMask, startPoint);
                             UnmaskCpoint(wireMask, endPoint);
-                            //startPoint.BaseY += 1;
-                            //endPoint.BaseY += 1;
-                            //UnmaskCpoint(wireMask, startPoint);
-                            //UnmaskCpoint(wireMask, endPoint);
 
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
                             MultiWareAstarUpdate(aStarTable, bestGroup);
@@ -281,6 +318,10 @@ namespace Mnetsynt3
                             foreach (var point in wire.WirePoints)
                             {
                                 DrawAtMask(wireMask, point.x, point.y, 1, 1);
+                            }
+                            if (bestGroup.groupType == "OR")
+                            {
+                                wire.WirePoints.Reverse();
                             }
                         }
                     }
@@ -672,7 +713,7 @@ namespace Mnetsynt3
                 var placedNodes = mainNetwork.nodes.Where(t => t.Placed);
 
 
-                int step = 5;
+               
 
                 char[,] mask = new char[BaseSize, BaseSize];
                 foreach (var node in placedNodes)
@@ -680,9 +721,9 @@ namespace Mnetsynt3
                     DrawAtMask(mask, node.X, node.Y, node.McNode.SizeX, node.McNode.SizeY);
                 }
 
-                for (int i = 0; i < BaseSize; i += step)
+                for (int i = 0; i < BaseSize; i += Step)
                 {
-                    for (int j = 0; j < BaseSize; j += step)
+                    for (int j = 0; j < BaseSize; j += Step)
                     {
                         //bool collision = placedNodes.Where(t => CheckCollision(t, t.mcNode, i, j, mcNode)).Count() > 0;
                         if (BaseSize > i + sizex + 1 && BaseSize > j + sizey + 1)
