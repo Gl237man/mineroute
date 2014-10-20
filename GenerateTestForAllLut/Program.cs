@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Text;
+using System.Linq;
 
 namespace GenerateTestForAllLut
 {
     static class Program
     {
-        static void Main()
+        static void Main(string[] args)
         {
+            int lutNumMax = 0xFFFF;
+            if (args.Contains("-fast")) lutNumMax = 0x0100;
+
             //Gen MNET
-            for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
+            for (int lutNum = 0; lutNum <= lutNumMax; lutNum++)
             {
                 string mnetFile = "";
                 mnetFile += "NODE:INPort:I0\r\n";
@@ -47,7 +51,7 @@ namespace GenerateTestForAllLut
             }
             //Gen test.CMD
             var builder = new StringBuilder();
-            for (int lutNum = 0; lutNum <= 0xFFFF; lutNum++)
+            for (int lutNum = 0; lutNum <= lutNumMax; lutNum++)
             {
                 builder.AppendFormat("cd {0}\r\n", lutNum.ToString("X4").Substring(0, 1));
                 builder.AppendFormat("MnetLutDecomposite.exe lut_{0}\r\n", lutNum.ToString("X4"));

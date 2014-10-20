@@ -24,8 +24,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            //string file = "test_D_O";
-            string file = "lut_0049_D_O";
+            string file = "test_D_O";
+            //string file = "lut_0056_D_O";
 
             if (args.Length > 0)
             {
@@ -247,7 +247,7 @@ namespace Mnetsynt3
                             //UnmaskCpoint(wireMask, endPoint);
 
                             var aStarTable = CalcAstar(baseSize, wireMask, startPoint, endPoint);
-                            //MultiWareAstarUpdate(aStarTable, bestGroup);
+                            MultiWareAstarUpdate(aStarTable, bestGroup);
 
                             List<int> wpx;
                             List<int> wpy;
@@ -553,11 +553,21 @@ namespace Mnetsynt3
 
             foreach (var ware in placedWire )
             {
+                
                 foreach (var point in ware.WirePoints)
                 {
-                    aStarTable[point.x, point.y]-=2;
+                    downPointInAstarTable(aStarTable, point.x, point.y);
+                    downPointInAstarTable(aStarTable, point.x, point.y);
+                    downPointInAstarTable(aStarTable, point.x, point.y);
+                    //Пока не очень понятно почему это работает
                 }
+                
             }
+        }
+
+        private static void downPointInAstarTable(int[,] aStarTable, int x, int y)
+        {
+            if (aStarTable[x, y] != 0) aStarTable[x, y]--;
         }
 
         private static void RenderATable(string p, int[,] aStarTable, int size, Cpoint sp, Cpoint ep)
@@ -1195,6 +1205,11 @@ namespace Mnetsynt3
             wireMask[SP.BaseX, SP.BaseY + 1] = ' ';
             wireMask[SP.BaseX - 1, SP.BaseY + 1] = ' ';
             wireMask[SP.BaseX + 1, SP.BaseY + 1] = ' ';
+            //Пробный код
+
+            wireMask[SP.BaseX, SP.BaseY + 2] = ' ';
+            //wireMask[SP.BaseX - 1, SP.BaseY - 1] = ' ';
+            //wireMask[SP.BaseX + 1, SP.BaseY - 1] = ' ';
         }
 
         private static RouteUtils.Cpoint FindCpoint(string p, List<RouteUtils.Cpoint> CPnt)
