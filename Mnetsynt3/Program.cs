@@ -34,8 +34,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            string file = "test_D_O";
-            //string file = "lut_0056_D_O";
+            //string file = "test_D_O";
+            string file = "lut_0096_D_O";
             //string file = "lut_00BB_D_O";
             //string file = "lut_00AB_D_O";
 
@@ -94,6 +94,7 @@ namespace Mnetsynt3
                 wire.DistName = "DUMMY_" + dummynum;
                 wire.DistPort = "I0";
                 mainNetwork.wires.Add(newWire);
+                dummynum++;
             }
 
             //Преобразование DUP В wireGroup

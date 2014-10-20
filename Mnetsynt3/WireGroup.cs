@@ -23,7 +23,7 @@ namespace Mnetsynt3
             {
 
                 int tPointIndex = 0;
-                RepPlaceForward(0, wire);
+                RepPlaceForward(1, wire);
                 int lastRepLen = 0;
                 while (tPointIndex < wire.WirePoints.Count)
                 {

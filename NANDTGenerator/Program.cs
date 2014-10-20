@@ -98,7 +98,7 @@ namespace NANDTGenerator
                 builder.AppendLine("0W0W0W0W0");
                 builder.AppendLine("0#0#0#0#0");
                 builder.AppendLine("0" + (bits[3] == 0 ? "#" : "_") + "0" + (bits[2] == 0 ? "#" : "_") + "0" + (bits[1] == 0 ? "#" : "_") + "0" + (bits[0] == 0 ? "#" : "_") + "0");
-                builder.AppendLine("0" + (bits[3] == 0 ? "#" : "W") + "0" + (bits[2] == 0 ? "#" : "W") + "0" + (bits[1] == 0 ? "#" : "W") + "0" + (bits[0] == 0 ? "#" : "W") + "0");
+                builder.AppendLine("0" + (bits[3] == 0 ? "^" : "W") + "0" + (bits[2] == 0 ? "^" : "W") + "0" + (bits[1] == 0 ? "^" : "W") + "0" + (bits[0] == 0 ? "^" : "W") + "0");
                 builder.AppendLine("0#0#0#0#0");
                 builder.AppendLine("000000000");
                 builder.AppendLine("000000000");
@@ -204,7 +204,7 @@ namespace NANDTGenerator
                 builder.AppendLine("0W0W0W0");
                 builder.AppendLine("0#0#0#0");
                 builder.AppendLine("0" + (bits[2] == 0 ? "#" : "_") + "0" + (bits[1] == 0 ? "#" : "_") + "0" + (bits[0] == 0 ? "#" : "_") + "0");
-                builder.AppendLine("0" + (bits[2] == 0 ? "#" : "W") + "0" + (bits[1] == 0 ? "#" : "W") + "0" + (bits[0] == 0 ? "#" : "W") + "0");
+                builder.AppendLine("0" + (bits[2] == 0 ? "^" : "W") + "0" + (bits[1] == 0 ? "^" : "W") + "0" + (bits[0] == 0 ? "^" : "W") + "0");
                 builder.AppendLine("0#0#0#0");
                 builder.AppendLine("0000000");
                 builder.AppendLine("0000000");
@@ -308,7 +308,7 @@ namespace NANDTGenerator
                 builder.AppendLine("0W0W0");
                 builder.AppendLine("0#0#0");
                 builder.AppendLine("0" + (bits[1] == 0 ? "#" : "_") + "0" + (bits[0] == 0 ? "#" : "_") + "0");
-                builder.AppendLine("0" + (bits[1] == 0 ? "#" : "W") + "0" + (bits[0] == 0 ? "#" : "W") + "0");
+                builder.AppendLine("0" + (bits[1] == 0 ? "^" : "W") + "0" + (bits[0] == 0 ? "^" : "W") + "0");
                 builder.AppendLine("0#0#0");
                 builder.AppendLine("00000");
                 builder.AppendLine("00000");
