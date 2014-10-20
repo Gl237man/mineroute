@@ -13,9 +13,34 @@ namespace MnetLutOptimise
         static void Main(string[] args)
         {
             
-            string file = args.Length == 0 ? "lut_0100_D" : args[0];
+            //string file = args.Length == 0 ? "lut_0100_D" : args[0];
+            string file = args.Length == 0 ? "test_D" : args[0];
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
+
+    
+
+            var dupList = _mainNet.Nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+
+            //Обьеденение DUP
+            List<Node> list = dupList;
+            var dupdupWires = _mainNet.Wires.Where(t => list.FirstOrDefault(a => a.NodeName == t.SrcName) != null &&
+                                                           list.FirstOrDefault(a => a.NodeName == t.DistName) != null);
+            while (dupdupWires.Any())
+            {
+                var wire = dupdupWires.First();
+                var firstDup = dupList.First(a => a.NodeName == wire.SrcName);
+                var secondDup = dupList.First(a => a.NodeName == wire.DistName);
+                var fromSecondWires = _mainNet.Wires.Where(t => t.SrcName == secondDup.NodeName).ToList();
+                foreach (var w in fromSecondWires)
+                {
+                    w.SrcName = firstDup.NodeName;
+                }
+                _mainNet.Wires.Remove(wire);
+                _mainNet.Nodes.Remove(secondDup);
+            }
+            dupList = _mainNet.Nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+
             Console.WriteLine("Всего Соеденений " + _mainNet.Wires.Count);
             Console.WriteLine();
             Optimise("AND");
