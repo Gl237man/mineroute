@@ -34,10 +34,10 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            //string file = "test_D_O";
+            string file = "test_D_O";
             //string file = "lut_0056_D_O";
             //string file = "lut_00BB_D_O";
-            string file = "lut_00AB_D_O";
+            //string file = "lut_00AB_D_O";
 
             if (args.Length > 0)
             {
@@ -73,9 +73,29 @@ namespace Mnetsynt3
                 mainNetwork.wires.Remove(wire);
                 mainNetwork.nodes.Remove(secondDup);
             }
+            var orList = mainNetwork.nodes.Where(t => t.NodeType.Contains("OR")).ToList();
+            dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
             //Создание Dummy обьектов
-            //foreach(  )
-            
+            //Поиск соеденений подходящих под DUMMY
+            var dupToOrWires = new List<Wire>();
+            foreach (var node in dupList)
+            {
+                foreach (var node2 in orList)
+                {
+                    dupToOrWires.AddRange(mainNetwork.wires.Where(t => t.SrcName == node.NodeName && node2.NodeName == t.DistName));
+                }
+            }
+            //Создание DUMMY
+            int dummynum = 0;
+            foreach (var wire in dupToOrWires)
+            {
+                mainNetwork.nodes.Add(new Node { NodeName = "DUMMY_" + dummynum, NodeType = "DUMMY" });
+                var newWire = new Wire { SrcName = "DUMMY_" + dummynum, SrcPort = "O0", DistName = wire.DistName, DistPort = wire.DistPort };
+                wire.DistName = "DUMMY_" + dummynum;
+                wire.DistPort = "I0";
+                mainNetwork.wires.Add(newWire);
+            }
+
             //Преобразование DUP В wireGroup
             dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
 
@@ -100,7 +120,7 @@ namespace Mnetsynt3
 
                         
             //Преобразование OR в WireGroup
-            var orList = mainNetwork.nodes.Where(t => t.NodeType.Contains("OR")).ToList();
+            orList = mainNetwork.nodes.Where(t => t.NodeType.Contains("OR")).ToList();
             
             foreach (Node node in orList)
             {
