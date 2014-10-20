@@ -34,8 +34,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            //string file = "test_D_O";
-            string file = "lut_0096_D_O";
+            string file = "test_D_O";
+            //string file = "lut_0096_D_O";
             //string file = "lut_00BB_D_O";
             //string file = "lut_00AB_D_O";
 
@@ -85,6 +85,15 @@ namespace Mnetsynt3
                     dupToOrWires.AddRange(mainNetwork.wires.Where(t => t.SrcName == node.NodeName && node2.NodeName == t.DistName));
                 }
             }
+            //Поиск обратных связей
+            foreach (var node in orList)
+            {
+                foreach (var node2 in dupList)
+                {
+                    dupToOrWires.AddRange(mainNetwork.wires.Where(t => t.SrcName == node.NodeName && node2.NodeName == t.DistName));
+                }
+            }
+
             //Создание DUMMY
             int dummynum = 0;
             foreach (var wire in dupToOrWires)
@@ -739,7 +748,7 @@ namespace Mnetsynt3
                 char[,] mask = new char[BaseSize, BaseSize];
                 foreach (var node in placedNodes)
                 {
-                    DrawAtMask(mask, node.X, node.Y, node.McNode.SizeX, node.McNode.SizeY);
+                    DrawAtMask(mask, node.X, node.Y, node.McNode.SizeX + 3, node.McNode.SizeY);//При Более близко расположении бывают ошибки
                 }
 
                 for (int i = 0; i < BaseSize; i += Step)
