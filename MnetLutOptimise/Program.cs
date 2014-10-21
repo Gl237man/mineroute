@@ -40,6 +40,18 @@ namespace MnetLutOptimise
                 _mainNet.Nodes.Remove(secondDup);
             }
             dupList = _mainNet.Nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+            //Обновление Типов и имен выходных портов
+            foreach (var node in dupList)
+            {
+                var wlist = _mainNet.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                for (int i = 0; i < wlist.Count; i++)
+                {
+                    wlist[i].SrcPort = "O" + i;
+                }
+                node.NodeType = "DUP" + wlist.Count;
+            }
+
+
 
             Console.WriteLine("Всего Соеденений " + _mainNet.Wires.Count);
             Console.WriteLine();
