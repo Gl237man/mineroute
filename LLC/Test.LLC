@@ -1,0 +1,5 @@
+﻿main
+{
+	WIRE w01;
+	WIRE w02[5];
+}

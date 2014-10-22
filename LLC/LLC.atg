@@ -1,0 +1,50 @@
+﻿COMPILER llc
+
+	const int // types
+	  undef = 0, integer = 1, boolean = 2;
+
+	const int // object kinds
+	  var = 0, proc = 1;
+
+
+	public SymbolTable   tab;
+	public CodeGenerator gen;
+
+CHARACTERS
+  letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".
+  digit = "0123456789".
+  bindig = "01".
+  hexdig = "0123456789ABCDEF".
+  cr  = '\r'.
+  lf  = '\n'.
+  tab = '\t'.
+
+TOKENS
+  ident  = letter {letter | digit}.
+  number = digit {digit}.
+  bits = "0x" {bindig}.
+
+COMMENTS FROM "/*" TO "*/" NESTED
+COMMENTS FROM "//" TO lf
+
+IGNORE cr + lf + tab
+
+PRODUCTIONS
+
+Ident<out string name>
+= ident                  				(. name = t.val; .).
+
+WireDecl 	                			(. int wide = 0;
+										   string name;.)
+	= "WIRE" Ident<out name>			
+	{'[' number                         (. wide = Convert.ToInt32(t.val); .)
+		 ']'}               		
+	';'                                 (. tab.NewWire(name,wide); .).
+
+llc = "main"
+'{'										(. tab.OpenScope(); .)
+	{ WireDecl }
+'}'										(. tab.CloseScope(); .).
+
+END llc.
+
