@@ -2,4 +2,6 @@
 {
 	WIRE w01;
 	WIRE w02[5];
+	PORT IN single;
+	PORT OUT duble[16];
 }

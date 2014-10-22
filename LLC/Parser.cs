@@ -10,7 +10,7 @@ public class Parser {
 	public const int _ident = 1;
 	public const int _number = 2;
 	public const int _bits = 3;
-	public const int maxT = 11;
+	public const int maxT = 14;
 
 	const bool T = true;
 	const bool x = false;
@@ -97,29 +97,56 @@ const int // types
 		name = t.val; 
 	}
 
-	void WireDecl() {
+	void PortDecl() {
 		int wide = 0;
 		string name;
+		string type = "NAN";
 		Expect(4);
+		if (la.kind == 5) {
+			Get();
+			type = "IN";
+		} else if (la.kind == 6) {
+			Get();
+			type = "OUT";
+		} else SynErr(15);
 		Ident(out name);
-		while (la.kind == 5) {
+		while (la.kind == 7) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(6);
+			Expect(8);
 		}
-		Expect(7);
+		Expect(9);
+		tab.NewPort(name,type,wide); 
+	}
+
+	void WireDecl() {
+		int wide = 0;
+		string name;
+		Expect(10);
+		Ident(out name);
+		while (la.kind == 7) {
+			Get();
+			Expect(2);
+			wide = Convert.ToInt32(t.val); 
+			Expect(8);
+		}
+		Expect(9);
 		tab.NewWire(name,wide); 
 	}
 
 	void llc() {
-		Expect(8);
-		Expect(9);
+		Expect(11);
+		Expect(12);
 		tab.OpenScope(); 
-		while (la.kind == 4) {
-			WireDecl();
+		while (la.kind == 4 || la.kind == 10) {
+			if (la.kind == 10) {
+				WireDecl();
+			} else {
+				PortDecl();
+			}
 		}
-		Expect(10);
+		Expect(13);
 		tab.CloseScope(); 
 	}
 
@@ -135,7 +162,7 @@ const int // types
 	}
 	
 	static readonly bool[,] set = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x}
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x}
 
 	};
 } // end Parser
@@ -153,14 +180,18 @@ public class Errors {
 			case 1: s = "ident expected"; break;
 			case 2: s = "number expected"; break;
 			case 3: s = "bits expected"; break;
-			case 4: s = "\"WIRE\" expected"; break;
-			case 5: s = "\"[\" expected"; break;
-			case 6: s = "\"]\" expected"; break;
-			case 7: s = "\";\" expected"; break;
-			case 8: s = "\"main\" expected"; break;
-			case 9: s = "\"{\" expected"; break;
-			case 10: s = "\"}\" expected"; break;
-			case 11: s = "??? expected"; break;
+			case 4: s = "\"PORT\" expected"; break;
+			case 5: s = "\"IN\" expected"; break;
+			case 6: s = "\"OUT\" expected"; break;
+			case 7: s = "\"[\" expected"; break;
+			case 8: s = "\"]\" expected"; break;
+			case 9: s = "\";\" expected"; break;
+			case 10: s = "\"WIRE\" expected"; break;
+			case 11: s = "\"main\" expected"; break;
+			case 12: s = "\"{\" expected"; break;
+			case 13: s = "\"}\" expected"; break;
+			case 14: s = "??? expected"; break;
+			case 15: s = "invalid PortDecl"; break;
 
 			default: s = "error " + n; break;
 		}

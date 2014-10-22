@@ -34,6 +34,21 @@ PRODUCTIONS
 Ident<out string name>
 = ident                  				(. name = t.val; .).
 
+PortDecl
+										(. int wide = 0;
+										   string name;
+										   string type = "NAN";.)
+ = "PORT"
+ (
+	"IN"								(. type = "IN";.)
+	|"OUT"								(. type = "OUT";.)
+ )
+	Ident<out name>
+	{'[' number                         (. wide = Convert.ToInt32(t.val); .)
+		 ']'}               		
+	';'									(. tab.NewPort(name,type,wide); .).
+ 
+
 WireDecl 	                			(. int wide = 0;
 										   string name;.)
 	= "WIRE" Ident<out name>			
@@ -43,7 +58,7 @@ WireDecl 	                			(. int wide = 0;
 
 llc = "main"
 '{'										(. tab.OpenScope(); .)
-	{ WireDecl }
+	{ WireDecl|PortDecl }
 '}'										(. tab.CloseScope(); .).
 
 END llc.
