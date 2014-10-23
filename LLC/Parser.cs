@@ -10,7 +10,8 @@ public class Parser {
 	public const int _ident = 1;
 	public const int _number = 2;
 	public const int _bits = 3;
-	public const int maxT = 14;
+	public const int _hex = 4;
+	public const int maxT = 19;
 
 	const bool T = true;
 	const bool x = false;
@@ -97,56 +98,122 @@ const int // types
 		name = t.val; 
 	}
 
-	void PortDecl() {
-		int wide = 0;
-		string name;
-		string type = "NAN";
-		Expect(4);
+	void Const(out string ID) {
+		int wide;
+		int tval = 0; 
+		Expect(2);
+		wide = Convert.ToInt32(t.val);
 		if (la.kind == 5) {
 			Get();
+			Expect(2);
+			tval = Convert.ToInt32(t.val);
+		} else if (la.kind == 3) {
+			Get();
+			tval = tab.bitConv(t.val);
+		} else if (la.kind == 4) {
+			Get();
+			tval = tab.hexConv(t.val);
+		} else SynErr(20);
+		ID = tab.newConst(wide,tval);
+	}
+
+	void Expresion(out string ID) {
+		ID = "";
+		string cID = "";
+		string Tleft = "";
+		string Tright = "";
+		string boptype = "";
+		if (la.kind == 2) {
+			Const(out cID);
+			ID = cID;
+		} else if (la.kind == 1 || la.kind == 2) {
+			Expresion(out Tleft);
+			BOp(out boptype);
+			Expresion(out Tright);
+			ID = tab.NewBOP(boptype);
+			tab.NewWire(Tleft,ID,"O0","I0");
+			tab.NewWire(Tright,ID,"O0","I1");
+		} else if (la.kind == 1) {
+			Ident(out cID);
+			ID = cID;
+		} else SynErr(21);
+	}
+
+	void BOp(out string optype) {
+		optype = "";
+		if (la.kind == 6) {
+			Get();
+			optype = "ADD";
+		} else if (la.kind == 7) {
+			Get();
+			optype = "SUB";
+		} else SynErr(22);
+	}
+
+	void Assign() {
+		string name;
+		string ID;
+		Ident(out name);
+		string wto = name; 
+		Expect(8);
+		Expresion(out ID);
+		string wfrom = ID;
+		Expect(9);
+		tab.NewWire(wfrom,wto,"O0","I0"); 
+	}
+
+	void PortDecl() {
+		int wide = 1;
+		string name;
+		string type = "NAN";
+		Expect(10);
+		if (la.kind == 11) {
+			Get();
 			type = "IN";
-		} else if (la.kind == 6) {
+		} else if (la.kind == 12) {
 			Get();
 			type = "OUT";
-		} else SynErr(15);
+		} else SynErr(23);
 		Ident(out name);
-		while (la.kind == 7) {
+		while (la.kind == 13) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(8);
+			Expect(14);
 		}
 		Expect(9);
 		tab.NewPort(name,type,wide); 
 	}
 
 	void WireDecl() {
-		int wide = 0;
+		int wide = 1;
 		string name;
-		Expect(10);
+		Expect(15);
 		Ident(out name);
-		while (la.kind == 7) {
+		while (la.kind == 13) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(8);
+			Expect(14);
 		}
 		Expect(9);
 		tab.NewWire(name,wide); 
 	}
 
 	void llc() {
-		Expect(11);
-		Expect(12);
+		Expect(16);
+		Expect(17);
 		tab.OpenScope(); 
-		while (la.kind == 4 || la.kind == 10) {
-			if (la.kind == 10) {
+		while (la.kind == 1 || la.kind == 10 || la.kind == 15) {
+			if (la.kind == 15) {
 				WireDecl();
-			} else {
+			} else if (la.kind == 10) {
 				PortDecl();
+			} else {
+				Assign();
 			}
 		}
-		Expect(13);
+		Expect(18);
 		tab.CloseScope(); 
 	}
 
@@ -162,7 +229,7 @@ const int // types
 	}
 	
 	static readonly bool[,] set = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x}
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x}
 
 	};
 } // end Parser
@@ -180,18 +247,26 @@ public class Errors {
 			case 1: s = "ident expected"; break;
 			case 2: s = "number expected"; break;
 			case 3: s = "bits expected"; break;
-			case 4: s = "\"PORT\" expected"; break;
-			case 5: s = "\"IN\" expected"; break;
-			case 6: s = "\"OUT\" expected"; break;
-			case 7: s = "\"[\" expected"; break;
-			case 8: s = "\"]\" expected"; break;
+			case 4: s = "hex expected"; break;
+			case 5: s = "\"#i\" expected"; break;
+			case 6: s = "\"+\" expected"; break;
+			case 7: s = "\"-\" expected"; break;
+			case 8: s = "\"=\" expected"; break;
 			case 9: s = "\";\" expected"; break;
-			case 10: s = "\"WIRE\" expected"; break;
-			case 11: s = "\"main\" expected"; break;
-			case 12: s = "\"{\" expected"; break;
-			case 13: s = "\"}\" expected"; break;
-			case 14: s = "??? expected"; break;
-			case 15: s = "invalid PortDecl"; break;
+			case 10: s = "\"PORT\" expected"; break;
+			case 11: s = "\"IN\" expected"; break;
+			case 12: s = "\"OUT\" expected"; break;
+			case 13: s = "\"[\" expected"; break;
+			case 14: s = "\"]\" expected"; break;
+			case 15: s = "\"WIRE\" expected"; break;
+			case 16: s = "\"main\" expected"; break;
+			case 17: s = "\"{\" expected"; break;
+			case 18: s = "\"}\" expected"; break;
+			case 19: s = "??? expected"; break;
+			case 20: s = "invalid Const"; break;
+			case 21: s = "invalid Expresion"; break;
+			case 22: s = "invalid BOp"; break;
+			case 23: s = "invalid PortDecl"; break;
 
 			default: s = "error " + n; break;
 		}

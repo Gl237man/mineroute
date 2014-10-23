@@ -22,7 +22,8 @@ CHARACTERS
 TOKENS
   ident  = letter {letter | digit}.
   number = digit {digit}.
-  bits = "0x" {bindig}.
+  bits = "#b" {bindig}.
+  hex = "#x" {hexdig}.
 
 COMMENTS FROM "/*" TO "*/" NESTED
 COMMENTS FROM "//" TO lf
@@ -30,12 +31,47 @@ COMMENTS FROM "//" TO lf
 IGNORE cr + lf + tab
 
 PRODUCTIONS
-
+// Ident --------------------------------------------------------------------------------//
 Ident<out string name>
 = ident                  				(. name = t.val; .).
-
+// Const --------------------------------------------------------------------------------//
+Const<out string ID>					(. int wide;
+										   int tval = 0; .)
+= number								(. wide = Convert.ToInt32(t.val);.)
+	(
+		 "#i" number					(. tval = Convert.ToInt32(t.val);.)
+		| bits						    (. tval = tab.bitConv(t.val);.)
+        | hex						    (. tval = tab.hexConv(t.val);.)										
+	)									
+										(. ID = tab.newConst(wide,tval);.).
+// Expresion ----------------------------------------------------------------------------//
+Expresion<out string ID>												(. ID = "";
+																		string cID = "";
+																	    string Tleft = "";
+																		string Tright = "";
+																		string boptype = "";.)
+ = ( Const<out cID>												        (. ID = cID;.)
+	|Expresion<out Tleft> BOp<out boptype> Expresion<out Tright>		(. ID = tab.NewBOP(boptype);
+																		   tab.NewWire(Tleft,ID,"O0","I0");
+																		   tab.NewWire(Tright,ID,"O0","I1");.)				
+	|Ident<out cID>														(. ID = cID;.)
+ ).
+// BOp ---------------------------------------------------------------------------------//
+BOp <out string optype>					(. optype = "";.)
+ = (									
+	 '+'								(. optype = "ADD";.)
+	|'-'								(. optype = "SUB";.)
+   ).
+// Assign ------------------------------------------------------------------------------//
+Assign									(. string name;
+										   string ID;.)
+= Ident<out name>						(. string wto = name; .)
+	'='
+	Expresion<out ID>					(. string wfrom = ID;.)
+	';'									(. tab.NewWire(wfrom,wto,"O0","I0"); .).								
+// PortDecl ----------------------------------------------------------------------------//
 PortDecl
-										(. int wide = 0;
+										(. int wide = 1;
 										   string name;
 										   string type = "NAN";.)
  = "PORT"
@@ -48,17 +84,17 @@ PortDecl
 		 ']'}               		
 	';'									(. tab.NewPort(name,type,wide); .).
  
-
-WireDecl 	                			(. int wide = 0;
+// WireDecl ----------------------------------------------------------------------------//
+WireDecl 	                			(. int wide = 1;
 										   string name;.)
 	= "WIRE" Ident<out name>			
 	{'[' number                         (. wide = Convert.ToInt32(t.val); .)
 		 ']'}               		
 	';'                                 (. tab.NewWire(name,wide); .).
-
+// llc --------------------------------------------------------------------------------//
 llc = "main"
 '{'										(. tab.OpenScope(); .)
-	{ WireDecl|PortDecl }
+	{ WireDecl|PortDecl|Assign }
 '}'										(. tab.CloseScope(); .).
 
 END llc.

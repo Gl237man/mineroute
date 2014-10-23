@@ -2,6 +2,10 @@
 {
 	WIRE w01;
 	WIRE w02[5];
+	WIRE wirem[10];
 	PORT IN single;
 	PORT OUT duble[16];
+	w01 = 1#i0;
+	w02 = 5#i15;
+	//wirem = w01+w02;
 }

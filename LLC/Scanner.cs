@@ -203,8 +203,8 @@ public class UTF8Buffer: Buffer {
 public class Scanner {
 	const char EOL = '\n';
 	const int eofSym = 0; /* pdt */
-	const int maxT = 14;
-	const int noSym = 14;
+	const int maxT = 19;
+	const int noSym = 19;
 
 
 	public Buffer buffer; // scanner buffer
@@ -228,13 +228,16 @@ public class Scanner {
 		start = new Hashtable(128);
 		for (int i = 65; i <= 90; ++i) start[i] = 1;
 		for (int i = 97; i <= 122; ++i) start[i] = 1;
-		for (int i = 49; i <= 57; ++i) start[i] = 2;
-		start[48] = 4; 
-		start[91] = 5; 
-		start[93] = 6; 
-		start[59] = 7; 
-		start[123] = 8; 
-		start[125] = 9; 
+		for (int i = 48; i <= 57; ++i) start[i] = 2;
+		start[35] = 14; 
+		start[43] = 6; 
+		start[45] = 7; 
+		start[61] = 8; 
+		start[59] = 9; 
+		start[91] = 10; 
+		start[93] = 11; 
+		start[123] = 12; 
+		start[125] = 13; 
 		start[Buffer.EOF] = -1;
 
 	}
@@ -347,11 +350,11 @@ public class Scanner {
 
 	void CheckLiteral() {
 		switch (t.val) {
-			case "PORT": t.kind = 4; break;
-			case "IN": t.kind = 5; break;
-			case "OUT": t.kind = 6; break;
-			case "WIRE": t.kind = 10; break;
-			case "main": t.kind = 11; break;
+			case "PORT": t.kind = 10; break;
+			case "IN": t.kind = 11; break;
+			case "OUT": t.kind = 12; break;
+			case "WIRE": t.kind = 15; break;
+			case "main": t.kind = 16; break;
 			default: break;
 		}
 	}
@@ -392,20 +395,32 @@ public class Scanner {
 				if (ch >= '0' && ch <= '1') {AddCh(); goto case 3;}
 				else {t.kind = 3; break;}
 			case 4:
-				recEnd = pos; recKind = 2;
-				if (ch >= '0' && ch <= '9') {AddCh(); goto case 2;}
-				else if (ch == 'x') {AddCh(); goto case 3;}
-				else {t.kind = 2; break;}
+				recEnd = pos; recKind = 4;
+				if (ch >= '0' && ch <= '9' || ch >= 'A' && ch <= 'F') {AddCh(); goto case 4;}
+				else {t.kind = 4; break;}
 			case 5:
-				{t.kind = 7; break;}
+				{t.kind = 5; break;}
 			case 6:
-				{t.kind = 8; break;}
+				{t.kind = 6; break;}
 			case 7:
-				{t.kind = 9; break;}
+				{t.kind = 7; break;}
 			case 8:
-				{t.kind = 12; break;}
+				{t.kind = 8; break;}
 			case 9:
+				{t.kind = 9; break;}
+			case 10:
 				{t.kind = 13; break;}
+			case 11:
+				{t.kind = 14; break;}
+			case 12:
+				{t.kind = 17; break;}
+			case 13:
+				{t.kind = 18; break;}
+			case 14:
+				if (ch == 'b') {AddCh(); goto case 3;}
+				else if (ch == 'x') {AddCh(); goto case 4;}
+				else if (ch == 'i') {AddCh(); goto case 5;}
+				else {goto case 0;}
 
 		}
 		t.val = new String(tval, 0, tlen);

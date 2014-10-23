@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BopObj.cs" />
     <Compile Include="CodeGenerator.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="Program.cs" />
