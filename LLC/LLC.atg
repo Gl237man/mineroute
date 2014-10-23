@@ -51,11 +51,14 @@ Expresion<out string ID>												(. ID = "";
 																		string Tright = "";
 																		string boptype = "";.)
  = ( Const<out cID>												        (. ID = cID;.)
-	|Expresion<out Tleft> BOp<out boptype> Expresion<out Tright>		(. ID = tab.NewBOP(boptype);
-																		   tab.NewWire(Tleft,ID,"O0","I0");
-																		   tab.NewWire(Tright,ID,"O0","I1");.)				
-	|Ident<out cID>														(. ID = cID;.)
- ).
+	|Ident<out cID>)													(. ID = cID;.)
+	 [BOp<out boptype> Expresion<out Tright>]		                    (. if (boptype !="")
+																		   {
+																		   ID = tab.NewBOP(boptype);
+																		   tab.NewWire(cID,ID,"O0","I0");
+																		   tab.NewWire(Tright,ID,"O0","I1");} .).
+	
+ 
 // BOp ---------------------------------------------------------------------------------//
 BOp <out string optype>					(. optype = "";.)
  = (									

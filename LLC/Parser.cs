@@ -126,17 +126,19 @@ const int // types
 		if (la.kind == 2) {
 			Const(out cID);
 			ID = cID;
-		} else if (la.kind == 1 || la.kind == 2) {
-			Expresion(out Tleft);
-			BOp(out boptype);
-			Expresion(out Tright);
-			ID = tab.NewBOP(boptype);
-			tab.NewWire(Tleft,ID,"O0","I0");
-			tab.NewWire(Tright,ID,"O0","I1");
 		} else if (la.kind == 1) {
 			Ident(out cID);
-			ID = cID;
 		} else SynErr(21);
+		ID = cID;
+		if (la.kind == 6 || la.kind == 7) {
+			BOp(out boptype);
+			Expresion(out Tright);
+		}
+		if (boptype !="")
+		{
+		ID = tab.NewBOP(boptype);
+		tab.NewWire(cID,ID,"O0","I0");
+		tab.NewWire(Tright,ID,"O0","I1");} 
 	}
 
 	void BOp(out string optype) {
