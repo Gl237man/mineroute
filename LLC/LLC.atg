@@ -58,12 +58,15 @@ Expresion<out string ID>												(. ID = "";
 																		   tab.NewWire(cID,ID,"O0","I0");
 																		   tab.NewWire(Tright,ID,"O0","I1");} .).
 	
+
  
 // BOp ---------------------------------------------------------------------------------//
 BOp <out string optype>					(. optype = "";.)
  = (									
 	 '+'								(. optype = "ADD";.)
 	|'-'								(. optype = "SUB";.)
+	|'*'								(. optype = "MUL";.)
+	|'/'								(. optype = "DIV";.)
    ).
 // Assign ------------------------------------------------------------------------------//
 Assign									(. string name;
