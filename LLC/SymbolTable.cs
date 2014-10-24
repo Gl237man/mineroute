@@ -38,6 +38,12 @@ namespace LLC
         public int val;
     }
 
+    public class TrigObj
+    {
+        public string name;
+        public int wide;
+    }
+
     public class SymbolTable
     {
         public List<WireObj> WireObjs = new List<WireObj>();
@@ -45,6 +51,7 @@ namespace LLC
         public List<ConstObj> ConstObjs = new List<ConstObj>();
         public List<ConnObj> conections = new List<ConnObj>();
         public List<BopObj> Bops = new List<BopObj>();
+        public List<TrigObj> Trigers = new List<TrigObj>();
         private Parser parser;
         public int LastUid;
 
@@ -138,6 +145,11 @@ namespace LLC
             string ID = boptype + "_" + GetUID();
             Bops.Add(new BopObj { Name = ID, opType = boptype });
             return ID;
+        }
+
+        internal void NewTrig(string name, int wide)
+        {
+            Trigers.Add(new TrigObj { name = name, wide = wide });
         }
     }
 }

@@ -159,6 +159,14 @@ PortDecl
 		 ']'}               		
 	';'									(. tab.NewPort(name,type,wide); .).
  
+// TrigDecl ----------------------------------------------------------------------------//
+TrigDecl 	                			(. int wide = 1;
+										   string name;.)
+	= "TRIG" Ident<out name>			
+	{'[' number                         (. wide = Convert.ToInt32(t.val); .)
+		 ']'}               		
+	';'                                 (. tab.NewTrig(name,wide); .).
+
 // WireDecl ----------------------------------------------------------------------------//
 WireDecl 	                			(. int wide = 1;
 										   string name;.)
@@ -169,7 +177,7 @@ WireDecl 	                			(. int wide = 1;
 // llc --------------------------------------------------------------------------------//
 llc = "main"
 '{'										(. tab.OpenScope(); .)
-	{ WireDecl|PortDecl|Assign }
+	{ WireDecl|PortDecl|Assign|TrigDecl }
 '}'										(. tab.CloseScope(); .).
 
 END llc.
