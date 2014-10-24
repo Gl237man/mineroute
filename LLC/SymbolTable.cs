@@ -24,6 +24,11 @@ namespace LLC
         public string to;
         public string FromPort;
         public string ToPort;
+
+        public override string ToString()
+        {
+            return string.Format("{0}:{1}-{2}:{3}", from, FromPort, to, ToPort);
+        }
     }
 
     public class ConstObj

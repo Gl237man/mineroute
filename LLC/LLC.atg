@@ -44,30 +44,99 @@ Const<out string ID>					(. int wide;
         | hex						    (. tval = tab.hexConv(t.val);.)										
 	)									
 										(. ID = tab.newConst(wide,tval);.).
-// Expresion ----------------------------------------------------------------------------//
+// Expresion ---------------------------------------------------------------------------//
 Expresion<out string ID>												(. ID = "";
-																		string cID = "";
-																	    string Tleft = "";
-																		string Tright = "";
-																		string boptype = "";.)
- = ( Const<out cID>												        (. ID = cID;.)
-	|Ident<out cID>)													(. ID = cID;.)
-	 [BOp<out boptype> Expresion<out Tright>]		                    (. if (boptype !="")
-																		   {
-																		   ID = tab.NewBOP(boptype);
-																		   tab.NewWire(cID,ID,"O0","I0");
-																		   tab.NewWire(Tright,ID,"O0","I1");} .).
-	
+																		   string LID = "";.)
+=
+ LogicOp <out LID>														(. ID = LID; .).				
 
+ // MultOpType -------------------------------------------------------------------------//
+MultOpType <out string optype>	    	(. optype = "";.)
+ = (									
+	 '*'								(. optype = "MUL";.)
+	|'/'								(. optype = "DIV";.)
+   ).
  
-// BOp ---------------------------------------------------------------------------------//
-BOp <out string optype>					(. optype = "";.)
+// SumOpType ---------------------------------------------------------------------------//
+SumOpType <out string optype>	    	(. optype = "";.)
  = (									
 	 '+'								(. optype = "ADD";.)
 	|'-'								(. optype = "SUB";.)
-	|'*'								(. optype = "MUL";.)
-	|'/'								(. optype = "DIV";.)
    ).
+
+// CompareOpType -----------------------------------------------------------------------//
+CompareOpType <out string optype>	  	(. optype = "";.)
+ = (									
+	 "=="								(. optype = "EQ";.)
+	|"!="								(. optype = "NOTEQ";.)
+	|">"								(. optype = "MORE";.)
+	|"<"								(. optype = "LESS";.)
+	|"<="								(. optype = "LESSEQ";.)
+	|">="								(. optype = "MOREEQ";.)
+   ).
+
+// LogicOpType -------------------------------------------------------------------------//
+LogicOpType <out string optype>	    	(. optype = "";.)
+ = (									
+	 '&'								(. optype = "AND";.)
+	|'|'								(. optype = "OR";.)
+	|'^'								(. optype = "XOR";.)
+   ).
+
+// LogicOp -----------------------------------------------------------------------------//
+LogicOp<out string ID>												    (. ID = "";
+																		   string RID = "";
+																		   string LID = "";
+																		   string OP ="";.)
+																				
+ = CompareOp<out LID>													(. ID = LID;.)			
+ [LogicOpType<out OP> LogicOp<out RID>]								    (. if (OP !="")
+																		   {
+																			ID = tab.NewBOP(OP);
+																		   tab.NewWire(LID,ID,"O0","I0");
+																		   tab.NewWire(RID,ID,"O0","I1");} .).
+
+// CompareOp ---------------------------------------------------------------------------//
+CompareOp<out string ID>												(. ID = "";
+																		   string RID = "";
+																		   string LID = "";
+																		   string OP ="";.)
+ = SumOp<out LID>														(. ID = LID;.)
+ [CompareOpType<out OP> CompareOp<out RID>]								(. if (OP !="")
+																		{
+																			ID = tab.NewBOP(OP);
+																			tab.NewWire(LID,ID,"O0","I0");
+																			tab.NewWire(RID,ID,"O0","I1");} .).
+
+// SumOp -------------------------------------------------------------------------------//
+SumOp<out string ID>													(. ID = "";
+																		   string RID = "";
+																		   string LID = "";
+																		   string OP ="";.)
+ = MultOp<out LID>														(. ID = LID;.)
+ [SumOpType<out OP> SumOp<out RID>]									(. if (OP !="")
+																		{
+																			ID = tab.NewBOP(OP);
+																			tab.NewWire(LID,ID,"O0","I0");
+																			tab.NewWire(RID,ID,"O0","I1");} .).
+
+// MultOp ------------------------------------------------------------------------------//
+MultOp<out string ID>													(. ID = "";
+																		   string RID = "";
+																		   string LID = "";
+																		   string OP ="";.)
+ = Term<out LID>														(. ID = LID;.)
+ [MultOpType<out OP> MultOp<out RID>]									(. if (OP !="")
+																		{
+																			ID = tab.NewBOP(OP);
+																			tab.NewWire(LID,ID,"O0","I0");
+																			tab.NewWire(RID,ID,"O0","I1");} .).
+
+// Term --------------------------------------------------------------------------------//
+ Term<out string ID>                                                    (. ID = "";
+																		   string cID = "";.)
+  = (Const<out cID> | Ident<out cID> | '(' Expresion <out cID> ')')     (. ID = cID;.).
+
 // Assign ------------------------------------------------------------------------------//
 Assign									(. string name;
 										   string ID;.)
