@@ -93,8 +93,8 @@ LogicOp<out string ID>												    (. ID = "";
  [LogicOpType<out OP> LogicOp<out RID>]								    (. if (OP !="")
 																		   {
 																			ID = tab.NewBOP(OP);
-																		   tab.NewWire(LID,ID,"O0","I0");
-																		   tab.NewWire(RID,ID,"O0","I1");} .).
+																		   tab.NewWire(LID,ID,"O","A");
+																		   tab.NewWire(RID,ID,"O","B");} .).
 
 // CompareOp ---------------------------------------------------------------------------//
 CompareOp<out string ID>												(. ID = "";
@@ -105,8 +105,8 @@ CompareOp<out string ID>												(. ID = "";
  [CompareOpType<out OP> CompareOp<out RID>]								(. if (OP !="")
 																		{
 																			ID = tab.NewBOP(OP);
-																			tab.NewWire(LID,ID,"O0","I0");
-																			tab.NewWire(RID,ID,"O0","I1");} .).
+																			tab.NewWire(LID,ID,"O","A");
+																			tab.NewWire(RID,ID,"O","B");} .).
 
 // SumOp -------------------------------------------------------------------------------//
 SumOp<out string ID>													(. ID = "";
@@ -117,8 +117,8 @@ SumOp<out string ID>													(. ID = "";
  [SumOpType<out OP> SumOp<out RID>]									(. if (OP !="")
 																		{
 																			ID = tab.NewBOP(OP);
-																			tab.NewWire(LID,ID,"O0","I0");
-																			tab.NewWire(RID,ID,"O0","I1");} .).
+																			tab.NewWire(LID,ID,"O","A");
+																			tab.NewWire(RID,ID,"O","B");} .).
 
 // MultOp ------------------------------------------------------------------------------//
 MultOp<out string ID>													(. ID = "";
@@ -129,8 +129,8 @@ MultOp<out string ID>													(. ID = "";
  [MultOpType<out OP> MultOp<out RID>]									(. if (OP !="")
 																		{
 																			ID = tab.NewBOP(OP);
-																			tab.NewWire(LID,ID,"O0","I0");
-																			tab.NewWire(RID,ID,"O0","I1");} .).
+																			tab.NewWire(LID,ID,"O","A");
+																			tab.NewWire(RID,ID,"O","B");} .).
 
 // Term --------------------------------------------------------------------------------//
  Term<out string ID>                                                    (. ID = "";
@@ -143,7 +143,7 @@ Assign									(. string name;
 = Ident<out name>						(. string wto = name; .)
 	'='
 	Expresion<out ID>					(. string wfrom = ID;.)
-	';'									(. tab.NewWire(wfrom,wto,"O0","I0"); .).								
+	';'									(. tab.NewWire(wfrom,wto,"O","I"); .).								
 // PortDecl ----------------------------------------------------------------------------//
 PortDecl
 										(. int wide = 1;

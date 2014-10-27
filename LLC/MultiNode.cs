@@ -10,6 +10,7 @@ namespace LLC
     {
         public string name;
         public int wide;
+        public int outWide;
         public string BaseType;
         public string Type;
     }

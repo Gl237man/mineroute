@@ -138,8 +138,8 @@ const int // types
 		if (OP !="")
 		{
 		ID = tab.NewBOP(OP);
-		tab.NewWire(LID,ID,"O0","I0");
-		tab.NewWire(RID,ID,"O0","I1");} 
+		tab.NewWire(LID,ID,"O","A");
+		tab.NewWire(RID,ID,"O","B");} 
 	}
 
 	void MultOpType(out string optype) {
@@ -229,8 +229,8 @@ const int // types
 		if (OP !="")
 		{
 		ID = tab.NewBOP(OP);
-		tab.NewWire(LID,ID,"O0","I0");
-		tab.NewWire(RID,ID,"O0","I1");} 
+		tab.NewWire(LID,ID,"O","A");
+		tab.NewWire(RID,ID,"O","B");} 
 	}
 
 	void SumOp(out string ID) {
@@ -247,8 +247,8 @@ const int // types
 		if (OP !="")
 		{
 		ID = tab.NewBOP(OP);
-		tab.NewWire(LID,ID,"O0","I0");
-		tab.NewWire(RID,ID,"O0","I1");} 
+		tab.NewWire(LID,ID,"O","A");
+		tab.NewWire(RID,ID,"O","B");} 
 	}
 
 	void MultOp(out string ID) {
@@ -265,8 +265,8 @@ const int // types
 		if (OP !="")
 		{
 		ID = tab.NewBOP(OP);
-		tab.NewWire(LID,ID,"O0","I0");
-		tab.NewWire(RID,ID,"O0","I1");} 
+		tab.NewWire(LID,ID,"O","A");
+		tab.NewWire(RID,ID,"O","B");} 
 	}
 
 	void Term(out string ID) {
@@ -293,7 +293,7 @@ const int // types
 		Expresion(out ID);
 		string wfrom = ID;
 		Expect(22);
-		tab.NewWire(wfrom,wto,"O0","I0"); 
+		tab.NewWire(wfrom,wto,"O","I"); 
 	}
 
 	void PortDecl() {
