@@ -1,6 +1,6 @@
 ﻿main
 {
-	WIRE w01;
+	WIRE w01[5];
 	WIRE w02[5];
 	WIRE w03[5];
 	TRIG wirem[5];
