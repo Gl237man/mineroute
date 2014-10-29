@@ -184,6 +184,48 @@ namespace LLC
                     }
                 }
                 //Декомпозиция обьектов
+                int throughId = 0;
+                //Базовая декомпозиция регистров
+                var registers = mainNetwork.Nodes.Where(t => t.NodeType.Contains("TRIGD")).ToList();
+                foreach (var node in registers)
+                {
+                    int regnums = Convert.ToInt32(node.NodeType.Replace("TRIGD", ""));
+                    var wclk = mainNetwork.Wires.First(t => t.DistName == node.NodeName && t.DistPort == "clk");
+                    var wreset = mainNetwork.Wires.First(t => t.DistName == node.NodeName && t.DistPort == "reset");
+                    mainNetwork.Wires.Remove(wclk);
+                    mainNetwork.Wires.Remove(wreset);
+                    var inwares = mainNetwork.Wires.Where(t => t.DistName == node.NodeName).ToList();
+                    var outwares = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                    mainNetwork.Nodes.Remove(node);
+                    List<NetUtils.Node> newnodes = new List<NetUtils.Node>();
+                    //Новые ноды
+                    for (int i = 0; i < regnums; i++)
+                    {
+                        var newNode = new NetUtils.Node { NodeName = node.NodeName + "_" + throughId, NodeType = "TRIG_D" };
+                        newnodes.Add(newNode);
+                        mainNetwork.Nodes.Add(newNode);
+                        mainNetwork.Wires.Add(new NetUtils.Wire { SrcName = wclk.SrcName, SrcPort = wclk.SrcPort, DistName = newNode.NodeName, DistPort = "clk" });
+                        mainNetwork.Wires.Add(new NetUtils.Wire { SrcName = wreset.SrcName, SrcPort = wreset.SrcPort, DistName = newNode.NodeName, DistPort = "sclr" });
+                        throughId++;
+                    }
+                    //Ремапинг соеденений
+                    foreach (var wire in inwares)
+                    {
+                        wire.DistName = newnodes[Convert.ToInt32(wire.DistPort.Replace("I", ""))].NodeName;
+                        wire.DistPort = "datain";
+                    }
+                    foreach (var wire in outwares)
+                    {
+                        wire.SrcName = newnodes[Convert.ToInt32(wire.SrcPort.Replace("O", ""))].NodeName;
+                        wire.SrcPort = "regout";
+                    }
+
+                }
+                //Базовая декомпозиция констант
+
+                //Базовая декомпозиция Портов
+
+                //Декомпозиция из файлов MNET
 
                 //Пересоздание DUP
             }
