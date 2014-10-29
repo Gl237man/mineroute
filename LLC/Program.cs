@@ -222,13 +222,113 @@ namespace LLC
 
                 }
                 //Базовая декомпозиция констант
-
+                var consts = mainNetwork.Nodes.Where(t => t.NodeType.Contains("CONST")).ToList();
+                foreach (var node in consts)
+                {
+                    int len = Convert.ToInt32(node.NodeType.Split('_')[2]);
+                    int[] value = hexConv(node.NodeType.Split('_')[1], len);
+                    bool have1 = value.Contains(1);
+                    bool have0 = value.Contains(0);
+                    var vcc = new NetUtils.Node { NodeName = "VCC_" + throughId, NodeType = "VCC" };
+                    var gnd = new NetUtils.Node { NodeName = "GND_" + throughId, NodeType = "GND" };
+                    throughId++;
+                    var wares = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                    foreach (var wire in wares)
+                    {
+                        if (value[Convert.ToInt32(wire.SrcPort.Replace("O", ""))] == 1)
+                        {
+                            wire.SrcPort = "O0";
+                            wire.SrcName = vcc.NodeName;
+                        }
+                        else
+                        {
+                            wire.SrcPort = "O0";
+                            wire.SrcName = gnd.NodeName;
+                        }
+                    }
+                    if (have0) mainNetwork.Nodes.Add(gnd);
+                    if (have1) mainNetwork.Nodes.Add(vcc);
+                    mainNetwork.Nodes.Remove(node);
+                }
                 //Базовая декомпозиция Портов
+                var inports = mainNetwork.Nodes.Where(t => t.NodeType.Contains("INPort") && t.NodeType.Length > ("INPort").Length).ToList();
+                foreach (var node in inports)
+                {
+                    int len = Convert.ToInt32(node.NodeType.Replace("INPort", ""));
+                    var outwares = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                    var newNodes = new List<NetUtils.Node>();
+                    for (int i = 0; i < len; i++)
+                    {
+                        var newNode = new NetUtils.Node { NodeName = node.NodeName + "_" + i, NodeType = "INPort" };
+                        newNodes.Add(newNode);
+                        mainNetwork.Nodes.Add(newNode);
+                        
+                    }
+                    //Ремапинг соеденений
+                    foreach (var wire in outwares)
+                    {
+                        wire.SrcName = newNodes[Convert.ToInt32(wire.SrcPort.Replace("O", ""))].NodeName;
+                        wire.SrcPort = "O0";
+                    }
+                    mainNetwork.Nodes.Remove(node);
+                }
+                var outports = mainNetwork.Nodes.Where(t => t.NodeType.Contains("OUTPort") && t.NodeType.Length > ("OUTPort").Length).ToList();
+                foreach (var node in outports)
+                {
+                    int len = Convert.ToInt32(node.NodeType.Replace("OUTPort", ""));
+                    var outwares = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                    var newNodes = new List<NetUtils.Node>();
+                    for (int i = 0; i < len; i++)
+                    {
+                        var newNode = new NetUtils.Node { NodeName = node.NodeName + "_" + i, NodeType = "OUTPort" };
+                        newNodes.Add(newNode);
+                        mainNetwork.Nodes.Add(newNode);
 
+                    }
+                    //Ремапинг соеденений
+                    foreach (var wire in outwares)
+                    {
+                        wire.DistName = newNodes[Convert.ToInt32(wire.DistPort.Replace("I", ""))].NodeName;
+                        wire.DistPort = "I0";
+                    }
+                    mainNetwork.Nodes.Remove(node);
+                }
                 //Декомпозиция из файлов MNET
 
                 //Пересоздание DUP
             }
+        }
+
+        private static int[] hexConv(string p, int len)
+        {
+            p = p.Replace("0", "0000");
+            p = p.Replace("1", "Z").Replace("Z", "0001");
+            p = p.Replace("2", "0010");
+            p = p.Replace("3", "0011");
+            p = p.Replace("4", "0100");
+            p = p.Replace("5", "0101");
+            p = p.Replace("6", "0110");
+            p = p.Replace("7", "0111");
+            p = p.Replace("8", "1000");
+            p = p.Replace("9", "1001");
+            p = p.Replace("A", "1010");
+            p = p.Replace("B", "1011");
+            p = p.Replace("C", "1100");
+            p = p.Replace("D", "1101");
+            p = p.Replace("E", "1110");
+            p = p.Replace("F", "1111");
+
+            var cp = p.Reverse().ToArray();
+            int[] outi = new int[len];
+            for (int i = 0; i < len; i++)
+            {
+                if (i < p.Length)
+                {
+                    outi[i] = Convert.ToInt32(cp[i].ToString());
+                }
+            }
+
+            return outi;
         }
     }
 }
