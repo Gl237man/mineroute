@@ -1,0 +1,9 @@
+NODE:GND:Const0
+NODE:VCC:Const1
+NODE:OUTPort:O
+NODE:INPort:A0
+NODE:INPort:B0
+NODE:C2LUT_00F0_datac:LessThan0~0_I
+WIRE:B0-O0:LessThan0~0_I-datac
+WIRE:A0-O0:LessThan0~0_I-datad
+WIRE:LessThan0~0_I-combout:O-I0

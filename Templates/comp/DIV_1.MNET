@@ -1,0 +1,9 @@
+NODE:GND:Const0
+NODE:VCC:Const1
+NODE:OUTPort:O0
+NODE:INPort:A0
+NODE:INPort:B0
+NODE:C2LUT_F0FF_datac:lpm_divide_Div0|lpm_divide_ncm_auto_generated|sign_div_unsign_1kh_divider|alt_u_div_4ve_divider|add_sub_lkc_add_sub_0|_~0_I
+WIRE:A0-O0:lpm_divide_Div0|lpm_divide_ncm_auto_generated|sign_div_unsign_1kh_divider|alt_u_div_4ve_divider|add_sub_lkc_add_sub_0|_~0_I-datac
+WIRE:B0-O0:lpm_divide_Div0|lpm_divide_ncm_auto_generated|sign_div_unsign_1kh_divider|alt_u_div_4ve_divider|add_sub_lkc_add_sub_0|_~0_I-datad
+WIRE:lpm_divide_Div0|lpm_divide_ncm_auto_generated|sign_div_unsign_1kh_divider|alt_u_div_4ve_divider|add_sub_lkc_add_sub_0|_~0_I-combout:O0-I0

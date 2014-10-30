@@ -1,0 +1,16 @@
+NODE:GND:Const0
+NODE:VCC:Const1
+NODE:OUTPort:O0
+NODE:OUTPort:O1
+NODE:INPort:A0
+NODE:INPort:A1
+NODE:INPort:B0
+NODE:INPort:B1
+NODE:C2LUT_55AA_datac:mo~0_I
+NODE:C2LUT_55AA_datac:mo~1_I
+WIRE:A0-O0:mo~0_I-dataa
+WIRE:B0-O0:mo~0_I-datad
+WIRE:A1-O0:mo~1_I-dataa
+WIRE:B1-O0:mo~1_I-datad
+WIRE:mo~0_I-combout:O0-I0
+WIRE:mo~1_I-combout:O1-I0

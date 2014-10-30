@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 namespace vqm2MNET
 {
     class NetLink
@@ -24,7 +24,7 @@ namespace vqm2MNET
 
         static void Main(string[] args)
         {
-            string InFile = "test3";
+            string InFile = "ADD_2";
             if (args.Length == 1)
             {
                 InFile = args[0];
@@ -55,8 +55,33 @@ namespace vqm2MNET
 
             FillDup(Nodes);
             FillLostDupLinks(Links);
+            //Пересздание DUP
 
-            ConvertLostLink2Dup(Nodes, Links);
+            var newLinks = new List<NetLink>();
+            var newNodes = new List<Node>();
+            foreach (var link in Links)
+            {
+                var mlinks = Links.Where(t => t.FromDev == link.FromDev && t.FromPort == link.FromPort).ToList();
+                if (mlinks.Count > 1)
+                {
+                    var newDup = new Node { NodeName = "RDUP_" + GlobalDup, NodeType = "DUP" + mlinks.Count };
+                    GlobalDup++;
+                    var newLink = new NetLink { FromDev = link.FromDev, FromPort = link.FromPort ,ToDev = newDup.NodeName,ToPort = "I0"};
+                    newNodes.Add(newDup);
+                    newLinks.Add(newLink);
+                    int p = 0;
+                    foreach (var llink in mlinks)
+                    {
+                        llink.FromDev = newDup.NodeName;
+                        llink.FromPort = "O" + p;
+                        p++;
+                    }
+                }
+            }
+            Nodes.AddRange(newNodes);
+            Links.AddRange(newLinks);
+
+            //ConvertLostLink2Dup(Nodes, Links);
             //Выгрузка
 
 			Console.WriteLine("Nodes {0}",Nodes.Count);
@@ -658,7 +683,7 @@ namespace vqm2MNET
                         {
                             if (ts1.Substring(j, 1) == ";")
                             {
-                                CleanList.Add(tstr.Replace("\t", "").Replace("\\", ""));
+                                CleanList.Add(tstr.Replace("\t", "").Replace("\\", "").Replace(":","_"));
                                 tstr = "";
                             }
                             else
