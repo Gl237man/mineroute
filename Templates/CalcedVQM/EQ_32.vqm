@@ -1,0 +1,356 @@
+
+
+
+module 	EQ_32 (
+	O,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	A8,
+	A9,
+	A10,
+	A11,
+	A12,
+	A13,
+	A14,
+	A15,
+	A16,
+	A17,
+	A18,
+	A19,
+	A20,
+	A21,
+	A22,
+	A23,
+	A24,
+	A25,
+	A26,
+	A27,
+	A28,
+	A29,
+	A30,
+	A31,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7,
+	B8,
+	B9,
+	B10,
+	B11,
+	B12,
+	B13,
+	B14,
+	B15,
+	B16,
+	B17,
+	B18,
+	B19,
+	B20,
+	B21,
+	B22,
+	B23,
+	B24,
+	B25,
+	B26,
+	B27,
+	B28,
+	B29,
+	B30,
+	B31);
+output 	O;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	A8;
+input 	A9;
+input 	A10;
+input 	A11;
+input 	A12;
+input 	A13;
+input 	A14;
+input 	A15;
+input 	A16;
+input 	A17;
+input 	A18;
+input 	A19;
+input 	A20;
+input 	A21;
+input 	A22;
+input 	A23;
+input 	A24;
+input 	A25;
+input 	A26;
+input 	A27;
+input 	A28;
+input 	A29;
+input 	A30;
+input 	A31;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+input 	B8;
+input 	B9;
+input 	B10;
+input 	B11;
+input 	B12;
+input 	B13;
+input 	B14;
+input 	B15;
+input 	B16;
+input 	B17;
+input 	B18;
+input 	B19;
+input 	B20;
+input 	B21;
+input 	B22;
+input 	B23;
+input 	B24;
+input 	B25;
+input 	B26;
+input 	B27;
+input 	B28;
+input 	B29;
+input 	B30;
+input 	B31;
+wire \Equal0~2 ;
+wire \Equal0~8 ;
+wire \Equal0~13 ;
+wire \Equal0~18 ;
+wire \Equal0~17 ;
+wire \Equal0~16 ;
+wire \Equal0~15 ;
+wire \Equal0~19 ;
+wire \Equal0~11 ;
+wire \Equal0~10 ;
+wire \Equal0~12 ;
+wire \Equal0~14 ;
+wire \Equal0~1 ;
+wire \Equal0~3 ;
+wire \Equal0~0 ;
+wire \Equal0~4 ;
+wire \Equal0~5 ;
+wire \Equal0~6 ;
+wire \Equal0~7 ;
+wire \Equal0~9 ;
+wire \Equal0~20 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \Equal0~2_I (
+	.dataa(A4),
+	.datab(B4),
+	.datac(A5),
+	.datad(B5),
+	.combout(\Equal0~2 ));
+defparam \Equal0~2_I .sum_lutc_input = "datac";
+defparam \Equal0~2_I .lut_mask = "9009";
+
+cycloneii_lcell_comb \Equal0~8_I (
+	.dataa(A15),
+	.datab(A14),
+	.datac(B15),
+	.datad(B14),
+	.combout(\Equal0~8 ));
+defparam \Equal0~8_I .sum_lutc_input = "datac";
+defparam \Equal0~8_I .lut_mask = "8421";
+
+cycloneii_lcell_comb \Equal0~13_I (
+	.dataa(A22),
+	.datab(B22),
+	.datac(B23),
+	.datad(A23),
+	.combout(\Equal0~13 ));
+defparam \Equal0~13_I .sum_lutc_input = "datac";
+defparam \Equal0~13_I .lut_mask = "9009";
+
+cycloneii_lcell_comb \Equal0~18_I (
+	.dataa(B30),
+	.datab(A31),
+	.datac(B31),
+	.datad(A30),
+	.combout(\Equal0~18 ));
+defparam \Equal0~18_I .sum_lutc_input = "datac";
+defparam \Equal0~18_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~17_I (
+	.dataa(A29),
+	.datab(B29),
+	.datac(A28),
+	.datad(B28),
+	.combout(\Equal0~17 ));
+defparam \Equal0~17_I .sum_lutc_input = "datac";
+defparam \Equal0~17_I .lut_mask = "9009";
+
+cycloneii_lcell_comb \Equal0~16_I (
+	.dataa(B27),
+	.datab(B26),
+	.datac(A26),
+	.datad(A27),
+	.combout(\Equal0~16 ));
+defparam \Equal0~16_I .sum_lutc_input = "datac";
+defparam \Equal0~16_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~15_I (
+	.dataa(B24),
+	.datab(B25),
+	.datac(A25),
+	.datad(A24),
+	.combout(\Equal0~15 ));
+defparam \Equal0~15_I .sum_lutc_input = "datac";
+defparam \Equal0~15_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~19_I (
+	.dataa(\Equal0~18 ),
+	.datab(\Equal0~17 ),
+	.datac(\Equal0~16 ),
+	.datad(\Equal0~15 ),
+	.combout(\Equal0~19 ));
+defparam \Equal0~19_I .sum_lutc_input = "datac";
+defparam \Equal0~19_I .lut_mask = "8000";
+
+cycloneii_lcell_comb \Equal0~11_I (
+	.dataa(B19),
+	.datab(A18),
+	.datac(B18),
+	.datad(A19),
+	.combout(\Equal0~11 ));
+defparam \Equal0~11_I .sum_lutc_input = "datac";
+defparam \Equal0~11_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~10_I (
+	.dataa(B16),
+	.datab(B17),
+	.datac(A17),
+	.datad(A16),
+	.combout(\Equal0~10 ));
+defparam \Equal0~10_I .sum_lutc_input = "datac";
+defparam \Equal0~10_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~12_I (
+	.dataa(B20),
+	.datab(A21),
+	.datac(A20),
+	.datad(B21),
+	.combout(\Equal0~12 ));
+defparam \Equal0~12_I .sum_lutc_input = "datac";
+defparam \Equal0~12_I .lut_mask = "8421";
+
+cycloneii_lcell_comb \Equal0~14_I (
+	.dataa(\Equal0~13 ),
+	.datab(\Equal0~11 ),
+	.datac(\Equal0~10 ),
+	.datad(\Equal0~12 ),
+	.combout(\Equal0~14 ));
+defparam \Equal0~14_I .sum_lutc_input = "datac";
+defparam \Equal0~14_I .lut_mask = "8000";
+
+cycloneii_lcell_comb \Equal0~1_I (
+	.dataa(A3),
+	.datab(B2),
+	.datac(A2),
+	.datad(B3),
+	.combout(\Equal0~1 ));
+defparam \Equal0~1_I .sum_lutc_input = "datac";
+defparam \Equal0~1_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~3_I (
+	.dataa(B7),
+	.datab(A6),
+	.datac(B6),
+	.datad(A7),
+	.combout(\Equal0~3 ));
+defparam \Equal0~3_I .sum_lutc_input = "datac";
+defparam \Equal0~3_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~0_I (
+	.dataa(B0),
+	.datab(A0),
+	.datac(A1),
+	.datad(B1),
+	.combout(\Equal0~0 ));
+defparam \Equal0~0_I .sum_lutc_input = "datac";
+defparam \Equal0~0_I .lut_mask = "9009";
+
+cycloneii_lcell_comb \Equal0~4_I (
+	.dataa(\Equal0~2 ),
+	.datab(\Equal0~1 ),
+	.datac(\Equal0~3 ),
+	.datad(\Equal0~0 ),
+	.combout(\Equal0~4 ));
+defparam \Equal0~4_I .sum_lutc_input = "datac";
+defparam \Equal0~4_I .lut_mask = "8000";
+
+cycloneii_lcell_comb \Equal0~5_I (
+	.dataa(B9),
+	.datab(A8),
+	.datac(B8),
+	.datad(A9),
+	.combout(\Equal0~5 ));
+defparam \Equal0~5_I .sum_lutc_input = "datac";
+defparam \Equal0~5_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~6_I (
+	.dataa(B11),
+	.datab(B10),
+	.datac(A11),
+	.datad(A10),
+	.combout(\Equal0~6 ));
+defparam \Equal0~6_I .sum_lutc_input = "datac";
+defparam \Equal0~6_I .lut_mask = "8421";
+
+cycloneii_lcell_comb \Equal0~7_I (
+	.dataa(B12),
+	.datab(A12),
+	.datac(A13),
+	.datad(B13),
+	.combout(\Equal0~7 ));
+defparam \Equal0~7_I .sum_lutc_input = "datac";
+defparam \Equal0~7_I .lut_mask = "9009";
+
+cycloneii_lcell_comb \Equal0~9_I (
+	.dataa(\Equal0~8 ),
+	.datab(\Equal0~5 ),
+	.datac(\Equal0~6 ),
+	.datad(\Equal0~7 ),
+	.combout(\Equal0~9 ));
+defparam \Equal0~9_I .sum_lutc_input = "datac";
+defparam \Equal0~9_I .lut_mask = "8000";
+
+cycloneii_lcell_comb \Equal0~20_I (
+	.dataa(\Equal0~19 ),
+	.datab(\Equal0~14 ),
+	.datac(\Equal0~4 ),
+	.datad(\Equal0~9 ),
+	.combout(\Equal0~20 ));
+defparam \Equal0~20_I .sum_lutc_input = "datac";
+defparam \Equal0~20_I .lut_mask = "8000";
+
+assign O = \Equal0~20 ;
+
+endmodule

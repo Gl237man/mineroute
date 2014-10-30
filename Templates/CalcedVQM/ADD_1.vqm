@@ -1,0 +1,30 @@
+
+
+
+module 	ADD_1 (
+	O0,
+	A0,
+	B0);
+output 	O0;
+input 	A0;
+input 	B0;
+wire \Add0~0 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \Add0~0_I (
+	.datac(A0),
+	.datad(B0),
+	.combout(\Add0~0 ));
+defparam \Add0~0_I .sum_lutc_input = "datac";
+defparam \Add0~0_I .lut_mask = "0FF0";
+
+assign O0 = \Add0~0 ;
+
+endmodule

@@ -1,0 +1,36 @@
+
+
+
+module 	LESS_2 (
+	O,
+	A0,
+	A1,
+	B0,
+	B1);
+output 	O;
+input 	A0;
+input 	A1;
+input 	B0;
+input 	B1;
+wire \LessThan0~0 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \LessThan0~0_I (
+	.dataa(A1),
+	.datab(A0),
+	.datac(B1),
+	.datad(B0),
+	.combout(\LessThan0~0 ));
+defparam \LessThan0~0_I .sum_lutc_input = "datac";
+defparam \LessThan0~0_I .lut_mask = "7150";
+
+assign O = \LessThan0~0 ;
+
+endmodule

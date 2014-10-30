@@ -1,0 +1,46 @@
+
+
+
+module 	XOR_2 (
+	O0,
+	O1,
+	A0,
+	A1,
+	B0,
+	B1);
+output 	O0;
+output 	O1;
+input 	A0;
+input 	A1;
+input 	B0;
+input 	B1;
+wire \mo~0 ;
+wire \mo~1 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \mo~0_I (
+	.dataa(A0),
+	.datad(B0),
+	.combout(\mo~0 ));
+defparam \mo~0_I .sum_lutc_input = "datac";
+defparam \mo~0_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~1_I (
+	.dataa(A1),
+	.datad(B1),
+	.combout(\mo~1 ));
+defparam \mo~1_I .sum_lutc_input = "datac";
+defparam \mo~1_I .lut_mask = "55AA";
+
+assign O0 = \mo~0 ;
+
+assign O1 = \mo~1 ;
+
+endmodule

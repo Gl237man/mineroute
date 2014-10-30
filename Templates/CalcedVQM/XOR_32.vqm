@@ -1,0 +1,526 @@
+
+
+
+module 	XOR_32 (
+	O0,
+	O1,
+	O2,
+	O3,
+	O4,
+	O5,
+	O6,
+	O7,
+	O8,
+	O9,
+	O10,
+	O11,
+	O12,
+	O13,
+	O14,
+	O15,
+	O16,
+	O17,
+	O18,
+	O19,
+	O20,
+	O21,
+	O22,
+	O23,
+	O24,
+	O25,
+	O26,
+	O27,
+	O28,
+	O29,
+	O30,
+	O31,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	A8,
+	A9,
+	A10,
+	A11,
+	A12,
+	A13,
+	A14,
+	A15,
+	A16,
+	A17,
+	A18,
+	A19,
+	A20,
+	A21,
+	A22,
+	A23,
+	A24,
+	A25,
+	A26,
+	A27,
+	A28,
+	A29,
+	A30,
+	A31,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7,
+	B8,
+	B9,
+	B10,
+	B11,
+	B12,
+	B13,
+	B14,
+	B15,
+	B16,
+	B17,
+	B18,
+	B19,
+	B20,
+	B21,
+	B22,
+	B23,
+	B24,
+	B25,
+	B26,
+	B27,
+	B28,
+	B29,
+	B30,
+	B31);
+output 	O0;
+output 	O1;
+output 	O2;
+output 	O3;
+output 	O4;
+output 	O5;
+output 	O6;
+output 	O7;
+output 	O8;
+output 	O9;
+output 	O10;
+output 	O11;
+output 	O12;
+output 	O13;
+output 	O14;
+output 	O15;
+output 	O16;
+output 	O17;
+output 	O18;
+output 	O19;
+output 	O20;
+output 	O21;
+output 	O22;
+output 	O23;
+output 	O24;
+output 	O25;
+output 	O26;
+output 	O27;
+output 	O28;
+output 	O29;
+output 	O30;
+output 	O31;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	A8;
+input 	A9;
+input 	A10;
+input 	A11;
+input 	A12;
+input 	A13;
+input 	A14;
+input 	A15;
+input 	A16;
+input 	A17;
+input 	A18;
+input 	A19;
+input 	A20;
+input 	A21;
+input 	A22;
+input 	A23;
+input 	A24;
+input 	A25;
+input 	A26;
+input 	A27;
+input 	A28;
+input 	A29;
+input 	A30;
+input 	A31;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+input 	B8;
+input 	B9;
+input 	B10;
+input 	B11;
+input 	B12;
+input 	B13;
+input 	B14;
+input 	B15;
+input 	B16;
+input 	B17;
+input 	B18;
+input 	B19;
+input 	B20;
+input 	B21;
+input 	B22;
+input 	B23;
+input 	B24;
+input 	B25;
+input 	B26;
+input 	B27;
+input 	B28;
+input 	B29;
+input 	B30;
+input 	B31;
+wire \mo~0 ;
+wire \mo~1 ;
+wire \mo~2 ;
+wire \mo~3 ;
+wire \mo~4 ;
+wire \mo~5 ;
+wire \mo~6 ;
+wire \mo~7 ;
+wire \mo~8 ;
+wire \mo~9 ;
+wire \mo~10 ;
+wire \mo~11 ;
+wire \mo~12 ;
+wire \mo~13 ;
+wire \mo~14 ;
+wire \mo~15 ;
+wire \mo~16 ;
+wire \mo~17 ;
+wire \mo~18 ;
+wire \mo~19 ;
+wire \mo~20 ;
+wire \mo~21 ;
+wire \mo~22 ;
+wire \mo~23 ;
+wire \mo~24 ;
+wire \mo~25 ;
+wire \mo~26 ;
+wire \mo~27 ;
+wire \mo~28 ;
+wire \mo~29 ;
+wire \mo~30 ;
+wire \mo~31 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \mo~0_I (
+	.datab(A0),
+	.datac(B0),
+	.combout(\mo~0 ));
+defparam \mo~0_I .sum_lutc_input = "datac";
+defparam \mo~0_I .lut_mask = "3C3C";
+
+cycloneii_lcell_comb \mo~1_I (
+	.datab(B1),
+	.datad(A1),
+	.combout(\mo~1 ));
+defparam \mo~1_I .sum_lutc_input = "datac";
+defparam \mo~1_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~2_I (
+	.dataa(B2),
+	.datad(A2),
+	.combout(\mo~2 ));
+defparam \mo~2_I .sum_lutc_input = "datac";
+defparam \mo~2_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~3_I (
+	.datab(B3),
+	.datad(A3),
+	.combout(\mo~3 ));
+defparam \mo~3_I .sum_lutc_input = "datac";
+defparam \mo~3_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~4_I (
+	.datac(A4),
+	.datad(B4),
+	.combout(\mo~4 ));
+defparam \mo~4_I .sum_lutc_input = "datac";
+defparam \mo~4_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~5_I (
+	.datac(A5),
+	.datad(B5),
+	.combout(\mo~5 ));
+defparam \mo~5_I .sum_lutc_input = "datac";
+defparam \mo~5_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~6_I (
+	.dataa(A6),
+	.datad(B6),
+	.combout(\mo~6 ));
+defparam \mo~6_I .sum_lutc_input = "datac";
+defparam \mo~6_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~7_I (
+	.datac(B7),
+	.datad(A7),
+	.combout(\mo~7 ));
+defparam \mo~7_I .sum_lutc_input = "datac";
+defparam \mo~7_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~8_I (
+	.datab(A8),
+	.datad(B8),
+	.combout(\mo~8 ));
+defparam \mo~8_I .sum_lutc_input = "datac";
+defparam \mo~8_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~9_I (
+	.datab(A9),
+	.datad(B9),
+	.combout(\mo~9 ));
+defparam \mo~9_I .sum_lutc_input = "datac";
+defparam \mo~9_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~10_I (
+	.dataa(B10),
+	.datad(A10),
+	.combout(\mo~10 ));
+defparam \mo~10_I .sum_lutc_input = "datac";
+defparam \mo~10_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~11_I (
+	.datac(A11),
+	.datad(B11),
+	.combout(\mo~11 ));
+defparam \mo~11_I .sum_lutc_input = "datac";
+defparam \mo~11_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~12_I (
+	.datab(B12),
+	.datad(A12),
+	.combout(\mo~12 ));
+defparam \mo~12_I .sum_lutc_input = "datac";
+defparam \mo~12_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~13_I (
+	.datab(A13),
+	.datac(B13),
+	.combout(\mo~13 ));
+defparam \mo~13_I .sum_lutc_input = "datac";
+defparam \mo~13_I .lut_mask = "3C3C";
+
+cycloneii_lcell_comb \mo~14_I (
+	.dataa(A14),
+	.datad(B14),
+	.combout(\mo~14 ));
+defparam \mo~14_I .sum_lutc_input = "datac";
+defparam \mo~14_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~15_I (
+	.datac(B15),
+	.datad(A15),
+	.combout(\mo~15 ));
+defparam \mo~15_I .sum_lutc_input = "datac";
+defparam \mo~15_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~16_I (
+	.dataa(A16),
+	.datad(B16),
+	.combout(\mo~16 ));
+defparam \mo~16_I .sum_lutc_input = "datac";
+defparam \mo~16_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~17_I (
+	.datac(B17),
+	.datad(A17),
+	.combout(\mo~17 ));
+defparam \mo~17_I .sum_lutc_input = "datac";
+defparam \mo~17_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~18_I (
+	.datab(A18),
+	.datac(B18),
+	.combout(\mo~18 ));
+defparam \mo~18_I .sum_lutc_input = "datac";
+defparam \mo~18_I .lut_mask = "3C3C";
+
+cycloneii_lcell_comb \mo~19_I (
+	.dataa(A19),
+	.datac(B19),
+	.combout(\mo~19 ));
+defparam \mo~19_I .sum_lutc_input = "datac";
+defparam \mo~19_I .lut_mask = "5A5A";
+
+cycloneii_lcell_comb \mo~20_I (
+	.datab(A20),
+	.datad(B20),
+	.combout(\mo~20 ));
+defparam \mo~20_I .sum_lutc_input = "datac";
+defparam \mo~20_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~21_I (
+	.datac(B21),
+	.datad(A21),
+	.combout(\mo~21 ));
+defparam \mo~21_I .sum_lutc_input = "datac";
+defparam \mo~21_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~22_I (
+	.dataa(A22),
+	.datad(B22),
+	.combout(\mo~22 ));
+defparam \mo~22_I .sum_lutc_input = "datac";
+defparam \mo~22_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~23_I (
+	.dataa(B23),
+	.datad(A23),
+	.combout(\mo~23 ));
+defparam \mo~23_I .sum_lutc_input = "datac";
+defparam \mo~23_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~24_I (
+	.dataa(A24),
+	.datad(B24),
+	.combout(\mo~24 ));
+defparam \mo~24_I .sum_lutc_input = "datac";
+defparam \mo~24_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~25_I (
+	.dataa(A25),
+	.datad(B25),
+	.combout(\mo~25 ));
+defparam \mo~25_I .sum_lutc_input = "datac";
+defparam \mo~25_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~26_I (
+	.datac(B26),
+	.datad(A26),
+	.combout(\mo~26 ));
+defparam \mo~26_I .sum_lutc_input = "datac";
+defparam \mo~26_I .lut_mask = "0FF0";
+
+cycloneii_lcell_comb \mo~27_I (
+	.dataa(A27),
+	.datad(B27),
+	.combout(\mo~27 ));
+defparam \mo~27_I .sum_lutc_input = "datac";
+defparam \mo~27_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~28_I (
+	.datab(A28),
+	.datad(B28),
+	.combout(\mo~28 ));
+defparam \mo~28_I .sum_lutc_input = "datac";
+defparam \mo~28_I .lut_mask = "33CC";
+
+cycloneii_lcell_comb \mo~29_I (
+	.datab(B29),
+	.datac(A29),
+	.combout(\mo~29 ));
+defparam \mo~29_I .sum_lutc_input = "datac";
+defparam \mo~29_I .lut_mask = "3C3C";
+
+cycloneii_lcell_comb \mo~30_I (
+	.dataa(A30),
+	.datad(B30),
+	.combout(\mo~30 ));
+defparam \mo~30_I .sum_lutc_input = "datac";
+defparam \mo~30_I .lut_mask = "55AA";
+
+cycloneii_lcell_comb \mo~31_I (
+	.datab(B31),
+	.datad(A31),
+	.combout(\mo~31 ));
+defparam \mo~31_I .sum_lutc_input = "datac";
+defparam \mo~31_I .lut_mask = "33CC";
+
+assign O0 = \mo~0 ;
+
+assign O1 = \mo~1 ;
+
+assign O2 = \mo~2 ;
+
+assign O3 = \mo~3 ;
+
+assign O4 = \mo~4 ;
+
+assign O5 = \mo~5 ;
+
+assign O6 = \mo~6 ;
+
+assign O7 = \mo~7 ;
+
+assign O8 = \mo~8 ;
+
+assign O9 = \mo~9 ;
+
+assign O10 = \mo~10 ;
+
+assign O11 = \mo~11 ;
+
+assign O12 = \mo~12 ;
+
+assign O13 = \mo~13 ;
+
+assign O14 = \mo~14 ;
+
+assign O15 = \mo~15 ;
+
+assign O16 = \mo~16 ;
+
+assign O17 = \mo~17 ;
+
+assign O18 = \mo~18 ;
+
+assign O19 = \mo~19 ;
+
+assign O20 = \mo~20 ;
+
+assign O21 = \mo~21 ;
+
+assign O22 = \mo~22 ;
+
+assign O23 = \mo~23 ;
+
+assign O24 = \mo~24 ;
+
+assign O25 = \mo~25 ;
+
+assign O26 = \mo~26 ;
+
+assign O27 = \mo~27 ;
+
+assign O28 = \mo~28 ;
+
+assign O29 = \mo~29 ;
+
+assign O30 = \mo~30 ;
+
+assign O31 = \mo~31 ;
+
+endmodule

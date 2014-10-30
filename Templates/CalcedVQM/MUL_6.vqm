@@ -1,0 +1,135 @@
+
+
+
+module 	MUL_6 (
+	O0,
+	O1,
+	O2,
+	O3,
+	O4,
+	O5,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5);
+output 	O0;
+output 	O1;
+output 	O2;
+output 	O3;
+output 	O4;
+output 	O5;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~0 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~1 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~2 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~3 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~4 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~5 ;
+wire \~GND ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~0 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~1 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~2 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~3 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~4 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~5 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT5 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \~GND~I (
+	.combout(\~GND ));
+defparam \~GND~I .sum_lutc_input = "datac";
+defparam \~GND~I .lut_mask = "0000";
+
+cycloneii_mac_mult \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I (
+	.signa(\~GND ),
+	.signb(\~GND ),
+	.dataa({A5,A4,A3,A2,A1,A0,\gnd ,\gnd ,\gnd }),
+	.datab({B5,B4,B3,B2,B1,B0,\gnd ,\gnd ,\gnd }),
+	.dataout({\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT11 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT10 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT9 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT8 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT7 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT6 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT4 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT2 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT1 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~4 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~2 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~1 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~0 }));
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .dataa_width = 9;
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .datab_width = 9;
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .dataa_clock = "none";
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .datab_clock = "none";
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .signa_clock = "none";
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~I .signb_clock = "none";
+
+cycloneii_mac_out \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~I (
+	.dataa({\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT11 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT10 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT9 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT8 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT7 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT6 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT4 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT2 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~DATAOUT1 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~4 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~2 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~1 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_mult1~0 }),
+	.dataout({\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT11 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT10 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT9 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT8 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT7 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT6 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT4 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT2 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT1 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~5 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~4 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~3 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~2 ,\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~1 ,
+\lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~0 }));
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~I .dataa_width = 18;
+defparam \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~I .output_clock = "none";
+
+assign O0 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2 ;
+
+assign O1 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT1 ;
+
+assign O2 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT2 ;
+
+assign O3 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT3 ;
+
+assign O4 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT4 ;
+
+assign O5 = \lpm_mult:Mult0|mult_g5t:auto_generated|mac_out2~DATAOUT5 ;
+
+endmodule

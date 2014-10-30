@@ -1,0 +1,270 @@
+
+
+
+module 	MOREEQ_18 (
+	O,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	A8,
+	A9,
+	A10,
+	A11,
+	A12,
+	A13,
+	A14,
+	A15,
+	A16,
+	A17,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7,
+	B8,
+	B9,
+	B10,
+	B11,
+	B12,
+	B13,
+	B14,
+	B15,
+	B16,
+	B17);
+output 	O;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	A8;
+input 	A9;
+input 	A10;
+input 	A11;
+input 	A12;
+input 	A13;
+input 	A14;
+input 	A15;
+input 	A16;
+input 	A17;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+input 	B8;
+input 	B9;
+input 	B10;
+input 	B11;
+input 	B12;
+input 	B13;
+input 	B14;
+input 	B15;
+input 	B16;
+input 	B17;
+wire \LessThan0~1 ;
+wire \LessThan0~3 ;
+wire \LessThan0~5 ;
+wire \LessThan0~7 ;
+wire \LessThan0~9 ;
+wire \LessThan0~11 ;
+wire \LessThan0~13 ;
+wire \LessThan0~15 ;
+wire \LessThan0~17 ;
+wire \LessThan0~19 ;
+wire \LessThan0~21 ;
+wire \LessThan0~23 ;
+wire \LessThan0~25 ;
+wire \LessThan0~27 ;
+wire \LessThan0~29 ;
+wire \LessThan0~31 ;
+wire \LessThan0~33 ;
+wire \LessThan0~34 ;
+
+wire \__ALT_INV__LessThan0~34 ;
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+assign \__ALT_INV__LessThan0~34  = ~ \LessThan0~34 ;
+
+cycloneii_lcell_comb \LessThan0~1_I (
+	.dataa(A0),
+	.datab(B0),
+	.datad(vcc),
+	.cout(\LessThan0~1 ));
+defparam \LessThan0~1_I .sum_lutc_input = "cin";
+defparam \LessThan0~1_I .lut_mask = "0044";
+
+cycloneii_lcell_comb \LessThan0~3_I (
+	.dataa(B1),
+	.datab(A1),
+	.datad(vcc),
+	.cin(\LessThan0~1 ),
+	.cout(\LessThan0~3 ));
+defparam \LessThan0~3_I .sum_lutc_input = "cin";
+defparam \LessThan0~3_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~5_I (
+	.dataa(B2),
+	.datab(A2),
+	.datad(vcc),
+	.cin(\LessThan0~3 ),
+	.cout(\LessThan0~5 ));
+defparam \LessThan0~5_I .sum_lutc_input = "cin";
+defparam \LessThan0~5_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~7_I (
+	.dataa(A3),
+	.datab(B3),
+	.datad(vcc),
+	.cin(\LessThan0~5 ),
+	.cout(\LessThan0~7 ));
+defparam \LessThan0~7_I .sum_lutc_input = "cin";
+defparam \LessThan0~7_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~9_I (
+	.dataa(A4),
+	.datab(B4),
+	.datad(vcc),
+	.cin(\LessThan0~7 ),
+	.cout(\LessThan0~9 ));
+defparam \LessThan0~9_I .sum_lutc_input = "cin";
+defparam \LessThan0~9_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~11_I (
+	.dataa(B5),
+	.datab(A5),
+	.datad(vcc),
+	.cin(\LessThan0~9 ),
+	.cout(\LessThan0~11 ));
+defparam \LessThan0~11_I .sum_lutc_input = "cin";
+defparam \LessThan0~11_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~13_I (
+	.dataa(B6),
+	.datab(A6),
+	.datad(vcc),
+	.cin(\LessThan0~11 ),
+	.cout(\LessThan0~13 ));
+defparam \LessThan0~13_I .sum_lutc_input = "cin";
+defparam \LessThan0~13_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~15_I (
+	.dataa(B7),
+	.datab(A7),
+	.datad(vcc),
+	.cin(\LessThan0~13 ),
+	.cout(\LessThan0~15 ));
+defparam \LessThan0~15_I .sum_lutc_input = "cin";
+defparam \LessThan0~15_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~17_I (
+	.dataa(A8),
+	.datab(B8),
+	.datad(vcc),
+	.cin(\LessThan0~15 ),
+	.cout(\LessThan0~17 ));
+defparam \LessThan0~17_I .sum_lutc_input = "cin";
+defparam \LessThan0~17_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~19_I (
+	.dataa(B9),
+	.datab(A9),
+	.datad(vcc),
+	.cin(\LessThan0~17 ),
+	.cout(\LessThan0~19 ));
+defparam \LessThan0~19_I .sum_lutc_input = "cin";
+defparam \LessThan0~19_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~21_I (
+	.dataa(B10),
+	.datab(A10),
+	.datad(vcc),
+	.cin(\LessThan0~19 ),
+	.cout(\LessThan0~21 ));
+defparam \LessThan0~21_I .sum_lutc_input = "cin";
+defparam \LessThan0~21_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~23_I (
+	.dataa(A11),
+	.datab(B11),
+	.datad(vcc),
+	.cin(\LessThan0~21 ),
+	.cout(\LessThan0~23 ));
+defparam \LessThan0~23_I .sum_lutc_input = "cin";
+defparam \LessThan0~23_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~25_I (
+	.dataa(A12),
+	.datab(B12),
+	.datad(vcc),
+	.cin(\LessThan0~23 ),
+	.cout(\LessThan0~25 ));
+defparam \LessThan0~25_I .sum_lutc_input = "cin";
+defparam \LessThan0~25_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~27_I (
+	.dataa(B13),
+	.datab(A13),
+	.datad(vcc),
+	.cin(\LessThan0~25 ),
+	.cout(\LessThan0~27 ));
+defparam \LessThan0~27_I .sum_lutc_input = "cin";
+defparam \LessThan0~27_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \LessThan0~29_I (
+	.dataa(B14),
+	.datab(A14),
+	.datad(vcc),
+	.cin(\LessThan0~27 ),
+	.cout(\LessThan0~29 ));
+defparam \LessThan0~29_I .sum_lutc_input = "cin";
+defparam \LessThan0~29_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~31_I (
+	.dataa(A15),
+	.datab(B15),
+	.datad(vcc),
+	.cin(\LessThan0~29 ),
+	.cout(\LessThan0~31 ));
+defparam \LessThan0~31_I .sum_lutc_input = "cin";
+defparam \LessThan0~31_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~33_I (
+	.dataa(B16),
+	.datab(A16),
+	.datad(vcc),
+	.cin(\LessThan0~31 ),
+	.cout(\LessThan0~33 ));
+defparam \LessThan0~33_I .sum_lutc_input = "cin";
+defparam \LessThan0~33_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \LessThan0~34_I (
+	.dataa(A17),
+	.datad(B17),
+	.cin(\LessThan0~33 ),
+	.combout(\LessThan0~34 ));
+defparam \LessThan0~34_I .sum_lutc_input = "cin";
+defparam \LessThan0~34_I .lut_mask = "F550";
+
+assign O = ~ \LessThan0~34 ;
+
+endmodule

@@ -1,0 +1,142 @@
+
+
+
+module 	AND_8 (
+	O0,
+	O1,
+	O2,
+	O3,
+	O4,
+	O5,
+	O6,
+	O7,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7);
+output 	O0;
+output 	O1;
+output 	O2;
+output 	O3;
+output 	O4;
+output 	O5;
+output 	O6;
+output 	O7;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+wire \mo~0 ;
+wire \mo~1 ;
+wire \mo~2 ;
+wire \mo~3 ;
+wire \mo~4 ;
+wire \mo~5 ;
+wire \mo~6 ;
+wire \mo~7 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \mo~0_I (
+	.datac(A0),
+	.datad(B0),
+	.combout(\mo~0 ));
+defparam \mo~0_I .sum_lutc_input = "datac";
+defparam \mo~0_I .lut_mask = "F000";
+
+cycloneii_lcell_comb \mo~1_I (
+	.datab(A1),
+	.datad(B1),
+	.combout(\mo~1 ));
+defparam \mo~1_I .sum_lutc_input = "datac";
+defparam \mo~1_I .lut_mask = "CC00";
+
+cycloneii_lcell_comb \mo~2_I (
+	.datab(A2),
+	.datad(B2),
+	.combout(\mo~2 ));
+defparam \mo~2_I .sum_lutc_input = "datac";
+defparam \mo~2_I .lut_mask = "CC00";
+
+cycloneii_lcell_comb \mo~3_I (
+	.datab(B3),
+	.datac(A3),
+	.combout(\mo~3 ));
+defparam \mo~3_I .sum_lutc_input = "datac";
+defparam \mo~3_I .lut_mask = "C0C0";
+
+cycloneii_lcell_comb \mo~4_I (
+	.datac(B4),
+	.datad(A4),
+	.combout(\mo~4 ));
+defparam \mo~4_I .sum_lutc_input = "datac";
+defparam \mo~4_I .lut_mask = "F000";
+
+cycloneii_lcell_comb \mo~5_I (
+	.datac(B5),
+	.datad(A5),
+	.combout(\mo~5 ));
+defparam \mo~5_I .sum_lutc_input = "datac";
+defparam \mo~5_I .lut_mask = "F000";
+
+cycloneii_lcell_comb \mo~6_I (
+	.dataa(A6),
+	.datac(B6),
+	.combout(\mo~6 ));
+defparam \mo~6_I .sum_lutc_input = "datac";
+defparam \mo~6_I .lut_mask = "A0A0";
+
+cycloneii_lcell_comb \mo~7_I (
+	.dataa(A7),
+	.datac(B7),
+	.combout(\mo~7 ));
+defparam \mo~7_I .sum_lutc_input = "datac";
+defparam \mo~7_I .lut_mask = "A0A0";
+
+assign O0 = \mo~0 ;
+
+assign O1 = \mo~1 ;
+
+assign O2 = \mo~2 ;
+
+assign O3 = \mo~3 ;
+
+assign O4 = \mo~4 ;
+
+assign O5 = \mo~5 ;
+
+assign O6 = \mo~6 ;
+
+assign O7 = \mo~7 ;
+
+endmodule

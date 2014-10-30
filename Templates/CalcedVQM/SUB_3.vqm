@@ -1,0 +1,70 @@
+
+
+
+module 	SUB_3 (
+	O0,
+	O1,
+	O2,
+	A0,
+	A1,
+	A2,
+	B0,
+	B1,
+	B2);
+output 	O0;
+output 	O1;
+output 	O2;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	B0;
+input 	B1;
+input 	B2;
+wire \Add0~0 ;
+wire \Add0~1 ;
+wire \Add0~2 ;
+wire \Add0~3 ;
+wire \Add0~4 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \Add0~0_I (
+	.dataa(A0),
+	.datab(B0),
+	.datad(vcc),
+	.combout(\Add0~0 ),
+	.cout(\Add0~1 ));
+defparam \Add0~0_I .sum_lutc_input = "datac";
+defparam \Add0~0_I .lut_mask = "66BB";
+
+cycloneii_lcell_comb \Add0~2_I (
+	.dataa(B1),
+	.datab(A1),
+	.datad(vcc),
+	.cin(\Add0~1 ),
+	.combout(\Add0~2 ),
+	.cout(\Add0~3 ));
+defparam \Add0~2_I .sum_lutc_input = "cin";
+defparam \Add0~2_I .lut_mask = "692B";
+
+cycloneii_lcell_comb \Add0~4_I (
+	.dataa(A2),
+	.datad(B2),
+	.cin(\Add0~3 ),
+	.combout(\Add0~4 ));
+defparam \Add0~4_I .sum_lutc_input = "cin";
+defparam \Add0~4_I .lut_mask = "A55A";
+
+assign O0 = \Add0~0 ;
+
+assign O1 = \Add0~2 ;
+
+assign O2 = \Add0~4 ;
+
+endmodule

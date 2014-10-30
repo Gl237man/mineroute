@@ -1,0 +1,790 @@
+
+
+
+module 	MUL_27 (
+	O0,
+	O1,
+	O2,
+	O3,
+	O4,
+	O5,
+	O6,
+	O7,
+	O8,
+	O9,
+	O10,
+	O11,
+	O12,
+	O13,
+	O14,
+	O15,
+	O16,
+	O17,
+	O18,
+	O19,
+	O20,
+	O21,
+	O22,
+	O23,
+	O24,
+	O25,
+	O26,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	A8,
+	A9,
+	A10,
+	A11,
+	A12,
+	A13,
+	A14,
+	A15,
+	A16,
+	A17,
+	A18,
+	A19,
+	A20,
+	A21,
+	A22,
+	A23,
+	A24,
+	A25,
+	A26,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7,
+	B8,
+	B9,
+	B10,
+	B11,
+	B12,
+	B13,
+	B14,
+	B15,
+	B16,
+	B17,
+	B18,
+	B19,
+	B20,
+	B21,
+	B22,
+	B23,
+	B24,
+	B25,
+	B26);
+output 	O0;
+output 	O1;
+output 	O2;
+output 	O3;
+output 	O4;
+output 	O5;
+output 	O6;
+output 	O7;
+output 	O8;
+output 	O9;
+output 	O10;
+output 	O11;
+output 	O12;
+output 	O13;
+output 	O14;
+output 	O15;
+output 	O16;
+output 	O17;
+output 	O18;
+output 	O19;
+output 	O20;
+output 	O21;
+output 	O22;
+output 	O23;
+output 	O24;
+output 	O25;
+output 	O26;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	A8;
+input 	A9;
+input 	A10;
+input 	A11;
+input 	A12;
+input 	A13;
+input 	A14;
+input 	A15;
+input 	A16;
+input 	A17;
+input 	A18;
+input 	A19;
+input 	A20;
+input 	A21;
+input 	A22;
+input 	A23;
+input 	A24;
+input 	A25;
+input 	A26;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+input 	B8;
+input 	B9;
+input 	B10;
+input 	B11;
+input 	B12;
+input 	B13;
+input 	B14;
+input 	B15;
+input 	B16;
+input 	B17;
+input 	B18;
+input 	B19;
+input 	B20;
+input 	B21;
+input 	B22;
+input 	B23;
+input 	B24;
+input 	B25;
+input 	B26;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT27 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT28 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT29 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT30 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT31 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT32 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT33 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT34 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT35 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT17 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT17 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~8 ;
+wire \~GND ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT17 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT27 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT28 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT29 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT30 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT31 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT32 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT33 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT34 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT35 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[0] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[1] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[2] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[3] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[4] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[5] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[6] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[7] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[8] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[9] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[10] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[11] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[12] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[13] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[14] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[15] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[16] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[17] ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT17 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT17 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT18 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT19 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT20 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT21 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~0 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~1 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~2 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT3 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT22 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT4 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT5 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT23 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~9 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT6 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT24 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~11 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT25 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT7 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~13 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT8 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT26 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~15 ;
+wire \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16 ;
+wire [54:0] \lpm_mult:Mult0|mult_s8t:auto_generated|w433w ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_mac_out \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~I (
+	.dataa({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~0 }),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~0 }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~I .dataa_width = 36;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~I .output_clock = "none";
+
+cycloneii_mac_out \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~I (
+	.dataa({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~0 }),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~0 }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~I .dataa_width = 36;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~I .output_clock = "none";
+
+cycloneii_lcell_comb \~GND~I (
+	.combout(\~GND ));
+defparam \~GND~I .sum_lutc_input = "datac";
+defparam \~GND~I .lut_mask = "0000";
+
+cycloneii_mac_mult \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I (
+	.signa(\~GND ),
+	.signb(\~GND ),
+	.dataa({A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0}),
+	.datab({B17,B16,B15,B14,B13,B12,B11,B10,B9,B8,B7,B6,B5,B4,B3,B2,B1,B0}),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT35 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT34 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT33 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT32 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT31 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT30 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT29 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT28 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT27 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT24 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT23 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT20 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT19 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT16 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT15 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT12 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT11 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1 }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .dataa_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .datab_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .dataa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .datab_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .signa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~I .signb_clock = "none";
+
+cycloneii_mac_out \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2 (
+	.dataa({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT35 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT34 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT33 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT32 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT31 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT30 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT29 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT28 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT27 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT24 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT23 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT20 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT19 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT16 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT15 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT12 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT11 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult1 }),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT35 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT34 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT33 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT32 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT31 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT30 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT29 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT28 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT27 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT24 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT23 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT20 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT19 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[17] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[16] ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[15] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[14] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[13] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[12] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[11] ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[10] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[9] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[8] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[7] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[6] ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[5] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[4] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[3] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[2] ,\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[1] ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|w433w[0] }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2 .dataa_width = 36;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2 .output_clock = "none";
+
+cycloneii_mac_mult \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I (
+	.signa(\~GND ),
+	.signb(\~GND ),
+	.dataa({A17,A16,A15,A14,A13,A12,A11,A10,A9,A8,A7,A6,A5,A4,A3,A2,A1,A0}),
+	.datab({B26,B25,B24,B23,B22,B21,B20,B19,B18,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd }),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~0 }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .dataa_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .datab_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .dataa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .datab_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .signa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult3~I .signb_clock = "none";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4 ),
+	.datad(vcc),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~1 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0_I .sum_lutc_input = "datac";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0_I .lut_mask = "6688";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~0 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT18 ),
+	.datad(vcc),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~1 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0_I .sum_lutc_input = "datac";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0_I .lut_mask = "6688";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT1 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT1 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~1 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~3 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT19 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~2 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~1 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~3 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT2 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT2 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~3 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~5 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT20 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~4 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~3 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~5 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4_I .lut_mask = "698E";
+
+cycloneii_mac_mult \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I (
+	.signa(\~GND ),
+	.signb(\~GND ),
+	.dataa({B17,B16,B15,B14,B13,B12,B11,B10,B9,B8,B7,B6,B5,B4,B3,B2,B1,B0}),
+	.datab({A26,A25,A24,A23,A22,A21,A20,A19,A18,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd ,\gnd }),
+	.dataout({\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT26 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT25 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT24 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT23 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT22 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT21 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT20 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT19 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT18 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT17 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT16 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT15 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT14 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT13 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT12 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT11 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT10 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT9 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT8 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT7 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT4 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT3 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~DATAOUT1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~8 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~7 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~6 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~5 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~4 ,
+\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~3 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~2 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~1 ,\lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~0 }));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .dataa_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .datab_width = 18;
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .dataa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .datab_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .signa_clock = "none";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|mac_mult5~I .signb_clock = "none";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT3 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT3 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~5 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~7 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT21 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~6 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~5 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~7 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT4 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT4 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~7 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~9 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT22 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~8 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~7 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~9 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT5 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT5 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~9 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~11 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~10 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT23 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~9 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~11 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT6 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT6 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~11 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~13 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~12 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT24 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~11 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~13 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT7 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT7 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~13 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~15 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT25 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~14 ),
+	.datad(vcc),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~13 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14 ),
+	.cout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~15 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out6~DATAOUT8 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out4~DATAOUT8 ),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~15 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16_I .lut_mask = "6969";
+
+cycloneii_lcell_comb \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16_I (
+	.dataa(\lpm_mult:Mult0|mult_s8t:auto_generated|op_2~16 ),
+	.datab(\lpm_mult:Mult0|mult_s8t:auto_generated|mac_out2~DATAOUT26 ),
+	.cin(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~15 ),
+	.combout(\lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16 ));
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16_I .sum_lutc_input = "cin";
+defparam \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16_I .lut_mask = "6969";
+
+assign O0 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[0] ;
+
+assign O1 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[1] ;
+
+assign O2 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[2] ;
+
+assign O3 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[3] ;
+
+assign O4 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[4] ;
+
+assign O5 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[5] ;
+
+assign O6 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[6] ;
+
+assign O7 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[7] ;
+
+assign O8 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[8] ;
+
+assign O9 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[9] ;
+
+assign O10 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[10] ;
+
+assign O11 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[11] ;
+
+assign O12 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[12] ;
+
+assign O13 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[13] ;
+
+assign O14 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[14] ;
+
+assign O15 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[15] ;
+
+assign O16 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[16] ;
+
+assign O17 = \lpm_mult:Mult0|mult_s8t:auto_generated|w433w[17] ;
+
+assign O18 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~0 ;
+
+assign O19 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~2 ;
+
+assign O20 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~4 ;
+
+assign O21 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~6 ;
+
+assign O22 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~8 ;
+
+assign O23 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~10 ;
+
+assign O24 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~12 ;
+
+assign O25 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~14 ;
+
+assign O26 = \lpm_mult:Mult0|mult_s8t:auto_generated|op_1~16 ;
+
+endmodule

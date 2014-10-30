@@ -1,0 +1,68 @@
+
+
+
+module 	EQ_5 (
+	O,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4);
+output 	O;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+wire \Equal0~0 ;
+wire \Equal0~1 ;
+wire \Equal0~2 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \Equal0~0_I (
+	.dataa(B0),
+	.datab(B1),
+	.datac(A1),
+	.datad(A0),
+	.combout(\Equal0~0 ));
+defparam \Equal0~0_I .sum_lutc_input = "datac";
+defparam \Equal0~0_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~1_I (
+	.dataa(A3),
+	.datab(A2),
+	.datac(B3),
+	.datad(B2),
+	.combout(\Equal0~1 ));
+defparam \Equal0~1_I .sum_lutc_input = "datac";
+defparam \Equal0~1_I .lut_mask = "8421";
+
+cycloneii_lcell_comb \Equal0~2_I (
+	.dataa(A4),
+	.datab(\Equal0~0 ),
+	.datac(B4),
+	.datad(\Equal0~1 ),
+	.combout(\Equal0~2 ));
+defparam \Equal0~2_I .sum_lutc_input = "datac";
+defparam \Equal0~2_I .lut_mask = "8400";
+
+assign O = \Equal0~2 ;
+
+endmodule

@@ -1,0 +1,51 @@
+
+
+
+module 	NOTEQ_3 (
+	O,
+	A0,
+	A1,
+	A2,
+	B0,
+	B1,
+	B2);
+output 	O;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	B0;
+input 	B1;
+input 	B2;
+wire \Equal0~0 ;
+wire \Equal0~1 ;
+
+wire \__ALT_INV__Equal0~1 ;
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+assign \__ALT_INV__Equal0~1  = ~ \Equal0~1 ;
+
+cycloneii_lcell_comb \Equal0~0_I (
+	.dataa(B0),
+	.datab(B1),
+	.datac(A1),
+	.datad(A0),
+	.combout(\Equal0~0 ));
+defparam \Equal0~0_I .sum_lutc_input = "datac";
+defparam \Equal0~0_I .lut_mask = "8241";
+
+cycloneii_lcell_comb \Equal0~1_I (
+	.dataa(B2),
+	.datac(A2),
+	.datad(\Equal0~0 ),
+	.combout(\Equal0~1 ));
+defparam \Equal0~1_I .sum_lutc_input = "datac";
+defparam \Equal0~1_I .lut_mask = "A500";
+
+assign O = ~ \Equal0~1 ;
+
+endmodule

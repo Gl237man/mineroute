@@ -1,0 +1,310 @@
+
+
+
+module 	ADD_15 (
+	O0,
+	O1,
+	O2,
+	O3,
+	O4,
+	O5,
+	O6,
+	O7,
+	O8,
+	O9,
+	O10,
+	O11,
+	O12,
+	O13,
+	O14,
+	A0,
+	A1,
+	A2,
+	A3,
+	A4,
+	A5,
+	A6,
+	A7,
+	A8,
+	A9,
+	A10,
+	A11,
+	A12,
+	A13,
+	A14,
+	B0,
+	B1,
+	B2,
+	B3,
+	B4,
+	B5,
+	B6,
+	B7,
+	B8,
+	B9,
+	B10,
+	B11,
+	B12,
+	B13,
+	B14);
+output 	O0;
+output 	O1;
+output 	O2;
+output 	O3;
+output 	O4;
+output 	O5;
+output 	O6;
+output 	O7;
+output 	O8;
+output 	O9;
+output 	O10;
+output 	O11;
+output 	O12;
+output 	O13;
+output 	O14;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	A3;
+input 	A4;
+input 	A5;
+input 	A6;
+input 	A7;
+input 	A8;
+input 	A9;
+input 	A10;
+input 	A11;
+input 	A12;
+input 	A13;
+input 	A14;
+input 	B0;
+input 	B1;
+input 	B2;
+input 	B3;
+input 	B4;
+input 	B5;
+input 	B6;
+input 	B7;
+input 	B8;
+input 	B9;
+input 	B10;
+input 	B11;
+input 	B12;
+input 	B13;
+input 	B14;
+wire \Add0~0 ;
+wire \Add0~1 ;
+wire \Add0~2 ;
+wire \Add0~3 ;
+wire \Add0~4 ;
+wire \Add0~5 ;
+wire \Add0~6 ;
+wire \Add0~7 ;
+wire \Add0~8 ;
+wire \Add0~9 ;
+wire \Add0~10 ;
+wire \Add0~11 ;
+wire \Add0~12 ;
+wire \Add0~13 ;
+wire \Add0~14 ;
+wire \Add0~15 ;
+wire \Add0~16 ;
+wire \Add0~17 ;
+wire \Add0~18 ;
+wire \Add0~19 ;
+wire \Add0~20 ;
+wire \Add0~21 ;
+wire \Add0~22 ;
+wire \Add0~23 ;
+wire \Add0~24 ;
+wire \Add0~25 ;
+wire \Add0~26 ;
+wire \Add0~27 ;
+wire \Add0~28 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \Add0~0_I (
+	.dataa(B0),
+	.datab(A0),
+	.datad(vcc),
+	.combout(\Add0~0 ),
+	.cout(\Add0~1 ));
+defparam \Add0~0_I .sum_lutc_input = "datac";
+defparam \Add0~0_I .lut_mask = "6688";
+
+cycloneii_lcell_comb \Add0~2_I (
+	.dataa(B1),
+	.datab(A1),
+	.datad(vcc),
+	.cin(\Add0~1 ),
+	.combout(\Add0~2 ),
+	.cout(\Add0~3 ));
+defparam \Add0~2_I .sum_lutc_input = "cin";
+defparam \Add0~2_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~4_I (
+	.dataa(A2),
+	.datab(B2),
+	.datad(vcc),
+	.cin(\Add0~3 ),
+	.combout(\Add0~4 ),
+	.cout(\Add0~5 ));
+defparam \Add0~4_I .sum_lutc_input = "cin";
+defparam \Add0~4_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~6_I (
+	.dataa(A3),
+	.datab(B3),
+	.datad(vcc),
+	.cin(\Add0~5 ),
+	.combout(\Add0~6 ),
+	.cout(\Add0~7 ));
+defparam \Add0~6_I .sum_lutc_input = "cin";
+defparam \Add0~6_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~8_I (
+	.dataa(B4),
+	.datab(A4),
+	.datad(vcc),
+	.cin(\Add0~7 ),
+	.combout(\Add0~8 ),
+	.cout(\Add0~9 ));
+defparam \Add0~8_I .sum_lutc_input = "cin";
+defparam \Add0~8_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~10_I (
+	.dataa(B5),
+	.datab(A5),
+	.datad(vcc),
+	.cin(\Add0~9 ),
+	.combout(\Add0~10 ),
+	.cout(\Add0~11 ));
+defparam \Add0~10_I .sum_lutc_input = "cin";
+defparam \Add0~10_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~12_I (
+	.dataa(A6),
+	.datab(B6),
+	.datad(vcc),
+	.cin(\Add0~11 ),
+	.combout(\Add0~12 ),
+	.cout(\Add0~13 ));
+defparam \Add0~12_I .sum_lutc_input = "cin";
+defparam \Add0~12_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~14_I (
+	.dataa(B7),
+	.datab(A7),
+	.datad(vcc),
+	.cin(\Add0~13 ),
+	.combout(\Add0~14 ),
+	.cout(\Add0~15 ));
+defparam \Add0~14_I .sum_lutc_input = "cin";
+defparam \Add0~14_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~16_I (
+	.dataa(B8),
+	.datab(A8),
+	.datad(vcc),
+	.cin(\Add0~15 ),
+	.combout(\Add0~16 ),
+	.cout(\Add0~17 ));
+defparam \Add0~16_I .sum_lutc_input = "cin";
+defparam \Add0~16_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~18_I (
+	.dataa(B9),
+	.datab(A9),
+	.datad(vcc),
+	.cin(\Add0~17 ),
+	.combout(\Add0~18 ),
+	.cout(\Add0~19 ));
+defparam \Add0~18_I .sum_lutc_input = "cin";
+defparam \Add0~18_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~20_I (
+	.dataa(A10),
+	.datab(B10),
+	.datad(vcc),
+	.cin(\Add0~19 ),
+	.combout(\Add0~20 ),
+	.cout(\Add0~21 ));
+defparam \Add0~20_I .sum_lutc_input = "cin";
+defparam \Add0~20_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~22_I (
+	.dataa(A11),
+	.datab(B11),
+	.datad(vcc),
+	.cin(\Add0~21 ),
+	.combout(\Add0~22 ),
+	.cout(\Add0~23 ));
+defparam \Add0~22_I .sum_lutc_input = "cin";
+defparam \Add0~22_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~24_I (
+	.dataa(A12),
+	.datab(B12),
+	.datad(vcc),
+	.cin(\Add0~23 ),
+	.combout(\Add0~24 ),
+	.cout(\Add0~25 ));
+defparam \Add0~24_I .sum_lutc_input = "cin";
+defparam \Add0~24_I .lut_mask = "698E";
+
+cycloneii_lcell_comb \Add0~26_I (
+	.dataa(B13),
+	.datab(A13),
+	.datad(vcc),
+	.cin(\Add0~25 ),
+	.combout(\Add0~26 ),
+	.cout(\Add0~27 ));
+defparam \Add0~26_I .sum_lutc_input = "cin";
+defparam \Add0~26_I .lut_mask = "9617";
+
+cycloneii_lcell_comb \Add0~28_I (
+	.dataa(B14),
+	.datad(A14),
+	.cin(\Add0~27 ),
+	.combout(\Add0~28 ));
+defparam \Add0~28_I .sum_lutc_input = "cin";
+defparam \Add0~28_I .lut_mask = "5AA5";
+
+assign O0 = \Add0~0 ;
+
+assign O1 = \Add0~2 ;
+
+assign O2 = \Add0~4 ;
+
+assign O3 = \Add0~6 ;
+
+assign O4 = \Add0~8 ;
+
+assign O5 = \Add0~10 ;
+
+assign O6 = \Add0~12 ;
+
+assign O7 = \Add0~14 ;
+
+assign O8 = \Add0~16 ;
+
+assign O9 = \Add0~18 ;
+
+assign O10 = \Add0~20 ;
+
+assign O11 = \Add0~22 ;
+
+assign O12 = \Add0~24 ;
+
+assign O13 = \Add0~26 ;
+
+assign O14 = \Add0~28 ;
+
+endmodule

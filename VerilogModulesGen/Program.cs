@@ -64,7 +64,7 @@ namespace VerilogModulesGen
                 {
                     builder.AppendLine(@"input B" + q + ";");
                 }
-
+                builder.AppendLine(@"output reg O;");
                 builder.AppendLine(@"always @(" + ostr2 + ")");
                 builder.AppendLine(@"begin");
                 builder.AppendLine(@"   reg [" + (i - 1) + ":0]ma;");

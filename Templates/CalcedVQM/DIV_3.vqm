@@ -1,0 +1,135 @@
+
+
+
+module 	DIV_3 (
+	O0,
+	O1,
+	O2,
+	A0,
+	A1,
+	A2,
+	B0,
+	B1,
+	B2);
+output 	O0;
+output 	O1;
+output 	O2;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	B0;
+input 	B1;
+input 	B2;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2 ;
+
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__add_sub_2_result_int[3]~6 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__selnose[4]~1 ;
+wire \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__selnose[0]~2 ;
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+assign \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__add_sub_2_result_int[3]~6  = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6 ;
+assign \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__selnose[4]~1  = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1 ;
+assign \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|__ALT_INV__selnose[0]~2  = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2 ;
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0_I (
+	.dataa(B1),
+	.datab(B0),
+	.datac(A1),
+	.datad(B2),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0_I .lut_mask = "FF19";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1_I (
+	.datab(A2),
+	.datac(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~0 ),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1_I .lut_mask = "C0C0";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2_I (
+	.dataa(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0 ),
+	.datab(B0),
+	.datad(A1),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2_I .lut_mask = "7700";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1_I (
+	.dataa(A0),
+	.datab(B0),
+	.datad(vcc),
+	.cout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1_I .lut_mask = "00BB";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3_I (
+	.dataa(B1),
+	.datab(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[3]~2 ),
+	.datad(vcc),
+	.cin(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[0]~1 ),
+	.cout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3_I .sum_lutc_input = "cin";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3_I .lut_mask = "002B";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5_I (
+	.dataa(B2),
+	.datab(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|StageOut[4]~1 ),
+	.datad(vcc),
+	.cin(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[1]~3 ),
+	.cout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5_I .sum_lutc_input = "cin";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5_I .lut_mask = "004D";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6_I (
+	.cin(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[2]~5 ),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6_I .sum_lutc_input = "cin";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6_I .lut_mask = "0F0F";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0_I (
+	.dataa(B2),
+	.datab(A2),
+	.datad(B1),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0_I .lut_mask = "4455";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1_I (
+	.dataa(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~0 ),
+	.datab(B0),
+	.datad(A1),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1_I .lut_mask = "55DD";
+
+cycloneii_lcell_comb \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2_I (
+	.dataa(B1),
+	.datab(B0),
+	.datac(B2),
+	.datad(A2),
+	.combout(\lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2 ));
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2_I .sum_lutc_input = "datac";
+defparam \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2_I .lut_mask = "FAFE";
+
+assign O0 = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|add_sub_2_result_int[3]~6 ;
+
+assign O1 = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[4]~1 ;
+
+assign O2 = ~ \lpm_divide:Div0|lpm_divide_rcm:auto_generated|sign_div_unsign_5kh:divider|alt_u_div_cve:divider|selnose[0]~2 ;
+
+endmodule

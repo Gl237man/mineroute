@@ -1,0 +1,62 @@
+
+
+
+module 	OR_3 (
+	O0,
+	O1,
+	O2,
+	A0,
+	A1,
+	A2,
+	B0,
+	B1,
+	B2);
+output 	O0;
+output 	O1;
+output 	O2;
+input 	A0;
+input 	A1;
+input 	A2;
+input 	B0;
+input 	B1;
+input 	B2;
+wire \mo~0 ;
+wire \mo~1 ;
+wire \mo~2 ;
+
+
+wire gnd;
+wire vcc;
+
+assign gnd = 1'b0;
+assign vcc = 1'b1;
+
+
+cycloneii_lcell_comb \mo~0_I (
+	.dataa(B0),
+	.datad(A0),
+	.combout(\mo~0 ));
+defparam \mo~0_I .sum_lutc_input = "datac";
+defparam \mo~0_I .lut_mask = "FFAA";
+
+cycloneii_lcell_comb \mo~1_I (
+	.dataa(A1),
+	.datad(B1),
+	.combout(\mo~1 ));
+defparam \mo~1_I .sum_lutc_input = "datac";
+defparam \mo~1_I .lut_mask = "FFAA";
+
+cycloneii_lcell_comb \mo~2_I (
+	.datab(B2),
+	.datad(A2),
+	.combout(\mo~2 ));
+defparam \mo~2_I .sum_lutc_input = "datac";
+defparam \mo~2_I .lut_mask = "FFCC";
+
+assign O0 = \mo~0 ;
+
+assign O1 = \mo~1 ;
+
+assign O2 = \mo~2 ;
+
+endmodule
