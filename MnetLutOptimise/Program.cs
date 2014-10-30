@@ -14,7 +14,7 @@ namespace MnetLutOptimise
         {
             
             //string file = args.Length == 0 ? "lut_0100_D" : args[0];
-            string file = args.Length == 0 ? "test_D" : args[0];
+            string file = args.Length == 0 ? "DIV_3_D" : args[0];
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
 
