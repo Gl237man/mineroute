@@ -34,8 +34,8 @@ namespace Mnetsynt3
             {
                 DrawAstar = true;
             }
-            string file = "test_D_O";
-            //string file = "lut_0096_D_O";
+            //string file = "test_D_O";
+            string file = "ADD_21_D_O";
             //string file = "lut_00BB_D_O";
             //string file = "lut_00AB_D_O";
 
@@ -48,6 +48,15 @@ namespace Mnetsynt3
             var mainNetwork = new Mnet();
             mainNetwork.ReadMnetFile(file + @".MNET");
             
+            //Удаление GNDS
+
+            var gnds = mainNetwork.nodes.Where(t => t.NodeType == "GND").ToList();
+            foreach (var node in gnds)
+            {
+                var wires = mainNetwork.wires.Where(t => t.SrcName == node.NodeName).ToList();
+                foreach (var wire in wires) mainNetwork.wires.Remove(wire);
+                mainNetwork.nodes.Remove(node);
+            }
 
             mainNetwork.wireGroups = new List<WireGroup>();
             
@@ -686,6 +695,10 @@ namespace Mnetsynt3
 
             //Разместить порты
             var ports = mainNetwork.nodes.Where(t => t.NodeType.Contains("Port"));
+            if (BaseSize < ports.Count() * 5)
+            {
+                BaseSize = ports.Count()*5 + 60;
+            }
             int lastxcoord = 1;
             foreach (var port in ports)
             {
