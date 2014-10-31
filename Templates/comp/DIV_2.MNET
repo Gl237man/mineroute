@@ -18,8 +18,8 @@ WIRE:RDUP_2-O0:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh
 WIRE:RDUP_0-O1:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]~I-dataa
 WIRE:RDUP_1-O1:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]~I-datab
 WIRE:RDUP_2-O1:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]~I-datad
-WIRE:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]~I-combout:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]-I0
 WIRE:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|add_sub_mkc_add_sub_1|carry_eqn[1]~0_I-combout:O0-I0
+WIRE:lpm_divide_Div0|lpm_divide_pcm_auto_generated|sign_div_unsign_3kh_divider|alt_u_div_8ve_divider|selnose[0]~I-combout:O1-I0
 WIRE:B1-O0:RDUP_0-I0
 WIRE:B0-O0:RDUP_1-I0
 WIRE:A1-O0:RDUP_2-I0

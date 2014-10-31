@@ -20,6 +20,6 @@ WIRE:A2-O0:LessThan0~1_I-dataa
 WIRE:B2-O0:LessThan0~1_I-datab
 WIRE:A3-O0:LessThan0~2_I-dataa
 WIRE:B3-O0:LessThan0~2_I-datac
-WIRE:LessThan0~2_I-combout:LessThan0~2-I0
 WIRE:LessThan0~0_I-combout:LessThan0~1_I-datad
 WIRE:LessThan0~1_I-combout:LessThan0~2_I-datad
+WIRE:LessThan0~2_I-combout:O-I0

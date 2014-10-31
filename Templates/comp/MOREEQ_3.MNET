@@ -15,5 +15,5 @@ WIRE:B1-O0:LessThan0~0_I-datac
 WIRE:B0-O0:LessThan0~0_I-datad
 WIRE:A2-O0:LessThan0~1_I-dataa
 WIRE:B2-O0:LessThan0~1_I-datab
-WIRE:LessThan0~1_I-combout:LessThan0~1-I0
 WIRE:LessThan0~0_I-combout:LessThan0~1_I-datad
+WIRE:LessThan0~1_I-combout:O-I0

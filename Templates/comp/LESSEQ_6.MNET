@@ -37,10 +37,10 @@ WIRE:A4-O0:LessThan0~9_I-datab
 WIRE:vcc-O4:LessThan0~9_I-datad
 WIRE:A5-O0:LessThan0~10_I-datab
 WIRE:B5-O0:LessThan0~10_I-datad
-WIRE:LessThan0~10_I-combout:LessThan0~10-I0
 WIRE:LessThan0~1_I-cout:LessThan0~3_I-cin
 WIRE:LessThan0~3_I-cout:LessThan0~5_I-cin
 WIRE:LessThan0~5_I-cout:LessThan0~7_I-cin
 WIRE:LessThan0~7_I-cout:LessThan0~9_I-cin
 WIRE:LessThan0~9_I-cout:LessThan0~10_I-cin
+WIRE:LessThan0~10_I-combout:O-I0
 WIRE:Const1-O0:vcc-I0

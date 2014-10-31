@@ -43,11 +43,11 @@ WIRE:A5-O0:LessThan0~11_I-datab
 WIRE:vcc-O5:LessThan0~11_I-datad
 WIRE:B6-O0:LessThan0~12_I-dataa
 WIRE:A6-O0:LessThan0~12_I-datad
-WIRE:LessThan0~12_I-combout:LessThan0~12-I0
 WIRE:LessThan0~1_I-cout:LessThan0~3_I-cin
 WIRE:LessThan0~3_I-cout:LessThan0~5_I-cin
 WIRE:LessThan0~5_I-cout:LessThan0~7_I-cin
 WIRE:LessThan0~7_I-cout:LessThan0~9_I-cin
 WIRE:LessThan0~9_I-cout:LessThan0~11_I-cin
 WIRE:LessThan0~11_I-cout:LessThan0~12_I-cin
+WIRE:LessThan0~12_I-combout:O-I0
 WIRE:Const1-O0:vcc-I0

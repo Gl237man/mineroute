@@ -35,7 +35,7 @@ namespace Mnetsynt3
                 DrawAstar = true;
             }
             //string file = "test_D_O";
-            string file = "ADD_21_D_O";
+            string file = "SUB_10_D";
             //string file = "lut_00BB_D_O";
             //string file = "lut_00AB_D_O";
 

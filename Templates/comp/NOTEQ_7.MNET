@@ -34,8 +34,8 @@ WIRE:A2-O0:Equal0~1_I-dataa
 WIRE:B2-O0:Equal0~1_I-datab
 WIRE:A3-O0:Equal0~1_I-datac
 WIRE:B3-O0:Equal0~1_I-datad
-WIRE:Equal0~4_I-combout:Equal0~4-I0
 WIRE:Equal0~2_I-combout:Equal0~4_I-dataa
 WIRE:Equal0~3_I-combout:Equal0~4_I-datab
 WIRE:Equal0~0_I-combout:Equal0~4_I-datac
 WIRE:Equal0~1_I-combout:Equal0~4_I-datad
+WIRE:Equal0~4_I-combout:O-I0

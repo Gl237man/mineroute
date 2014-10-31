@@ -29,7 +29,7 @@ WIRE:A5-O0:Equal0~2_I-dataa
 WIRE:B5-O0:Equal0~2_I-datab
 WIRE:A4-O0:Equal0~2_I-datac
 WIRE:B4-O0:Equal0~2_I-datad
-WIRE:Equal0~3_I-combout:Equal0~3-I0
 WIRE:Equal0~1_I-combout:Equal0~3_I-datab
 WIRE:Equal0~0_I-combout:Equal0~3_I-datac
 WIRE:Equal0~2_I-combout:Equal0~3_I-datad
+WIRE:Equal0~3_I-combout:O-I0

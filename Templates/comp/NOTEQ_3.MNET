@@ -15,5 +15,5 @@ WIRE:A1-O0:Equal0~0_I-datac
 WIRE:A0-O0:Equal0~0_I-datad
 WIRE:B2-O0:Equal0~1_I-dataa
 WIRE:A2-O0:Equal0~1_I-datac
-WIRE:Equal0~1_I-combout:Equal0~1-I0
 WIRE:Equal0~0_I-combout:Equal0~1_I-datad
+WIRE:Equal0~1_I-combout:O-I0

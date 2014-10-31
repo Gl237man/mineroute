@@ -683,7 +683,7 @@ namespace vqm2MNET
                         {
                             if (ts1.Substring(j, 1) == ";")
                             {
-                                CleanList.Add(tstr.Replace("\t", "").Replace("\\", "").Replace(":","_"));
+                                CleanList.Add(tstr.Replace("\t", "").Replace("\\", "").Replace(":","_").Replace(" ~ "," "));
                                 tstr = "";
                             }
                             else

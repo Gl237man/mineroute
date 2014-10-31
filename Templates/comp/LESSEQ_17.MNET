@@ -103,7 +103,6 @@ WIRE:B15-O0:LessThan0~31_I-datab
 WIRE:vcc-O15:LessThan0~31_I-datad
 WIRE:A16-O0:LessThan0~32_I-datab
 WIRE:B16-O0:LessThan0~32_I-datad
-WIRE:LessThan0~32_I-combout:LessThan0~32-I0
 WIRE:LessThan0~1_I-cout:LessThan0~3_I-cin
 WIRE:LessThan0~3_I-cout:LessThan0~5_I-cin
 WIRE:LessThan0~5_I-cout:LessThan0~7_I-cin
@@ -120,4 +119,5 @@ WIRE:LessThan0~25_I-cout:LessThan0~27_I-cin
 WIRE:LessThan0~27_I-cout:LessThan0~29_I-cin
 WIRE:LessThan0~29_I-cout:LessThan0~31_I-cin
 WIRE:LessThan0~31_I-cout:LessThan0~32_I-cin
+WIRE:LessThan0~32_I-combout:O-I0
 WIRE:Const1-O0:vcc-I0

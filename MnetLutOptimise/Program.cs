@@ -15,6 +15,7 @@ namespace MnetLutOptimise
             
             //string file = args.Length == 0 ? "lut_0100_D" : args[0];
             string file = args.Length == 0 ? "DIV_3_D" : args[0];
+            //string file = args.Length == 0 ? "ADD_21_D" : args[0];
             _mainNet = new Mnet();
             _mainNet.ReadMnetFile(file + @".MNET");
 
@@ -139,6 +140,44 @@ namespace MnetLutOptimise
 
             Console.WriteLine("После Оптимизации " + _mainNet.Nodes.Count(t => t.NodeType.Contains("NOT")));
 
+            //Удаление нодов без исходящих соеденений
+            var optneed = true;
+            while (optneed)
+            {
+                optneed = false;
+                var nodetodell = new List<Node>();
+                var wiretodell = new List<Wire>();
+                foreach (var node in _mainNet.Nodes)
+                {
+                    //Удаление нодов без исходящих соеденений
+                    if (!node.NodeType.Contains("Port"))
+                    {
+                        var outWires = _mainNet.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                        if (outWires.Count < 1)
+                        {
+                            optneed = true;
+                            nodetodell.Add(node);
+                            wiretodell.AddRange(_mainNet.Wires.Where(t => t.DistName == node.NodeName).ToList());
+                        }
+                    }
+                    //Удаление нодов без вхожящих соеденений
+                    /*
+                    if (!node.NodeType.Contains("Port") && !node.NodeType.Contains("GND") && !node.NodeType.Contains("VCC"))
+                    {
+                        var outWires = _mainNet.Wires.Where(t => t.DistName == node.NodeName).ToList();
+                        if (outWires.Count < 1)
+                        {
+                            optneed = true;
+                            nodetodell.Add(node);
+                            wiretodell.AddRange(_mainNet.Wires.Where(t => t.SrcName == node.NodeName).ToList());
+                        }
+                    }
+                     */
+                }
+                foreach(var node in nodetodell) _mainNet.Nodes.Remove(node);
+                foreach(var wire in wiretodell) _mainNet.Wires.Remove(wire);
+            }
+
             Console.WriteLine("Соеденений после оптимизации " + _mainNet.Wires.Count);
             System.IO.File.WriteAllText(file + @"_O.MNET" ,_mainNet.GetSting());
         }
@@ -230,7 +269,7 @@ namespace MnetLutOptimise
                 //Поиск 2х связаных AND
                 Wire andConnection = _mainNet.Wires.FirstOrDefault(t =>
                     allAnd.FirstOrDefault(al => al.NodeName == t.DistName) != null &&
-                    allAnd.FirstOrDefault(al => al.NodeName == t.SrcName) != null);
+                    allAnd.FirstOrDefault(al => al.NodeName == t.SrcName) != null && allAnd.FirstOrDefault(al => al.NodeName == t.SrcName).Marked == false);
                 if (andConnection != null)
                 {
                     Node andBase = allAnd.First(al => al.NodeName == andConnection.DistName);
@@ -238,27 +277,39 @@ namespace MnetLutOptimise
                     var connectedWires = _mainNet.Wires.Where(t => (t.DistName == andBase.NodeName
                                                                    || t.DistName == andConnected.NodeName) && t != andConnection).ToArray();
                     //Создание нового нода
-                    var newAnd = new Node { NodeName = "OPT" + elementName + _lineCount, NodeType = elementName + connectedWires.Count() };
-                    _lineCount++;
-                    //Перенос соеденений
-                    List<Wire> connectionWireList = connectedWires.ToList();
-                    for (int i = 0; i < connectionWireList.Count; i++)
+                    if (connectedWires.Count() < 5)
                     {
-                        connectionWireList[i].DistName = newAnd.NodeName;
-                        connectionWireList[i].DistPort = "I" + i;
+                        var newAnd = new Node { NodeName = "OPT" + elementName + _lineCount, NodeType = elementName + connectedWires.Count() };
+                        _lineCount++;
+                        //Перенос соеденений
+                        List<Wire> connectionWireList = connectedWires.ToList();
+                        for (int i = 0; i < connectionWireList.Count; i++)
+                        {
+                            connectionWireList[i].DistName = newAnd.NodeName;
+                            connectionWireList[i].DistPort = "I" + i;
+                        }
+                        //Перенос исходящего соеденения
+                        Wire outConn = _mainNet.Wires.FirstOrDefault(t => t.SrcName == andBase.NodeName);
+                        if (outConn != null)
+                        {
+                            outConn.SrcName = newAnd.NodeName;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Warning {0} не имеет исходящих соеденений", andBase.NodeName);
+                        }
+                        //Удалене старых нодов
+                        _mainNet.Nodes.Remove(andBase);
+                        _mainNet.Nodes.Remove(andConnected);
+                        //Удаление лишнего соеденения
+                        _mainNet.Wires.Remove(andConnection);
+                        //Добовление нового нода
+                        _mainNet.Nodes.Add(newAnd);
                     }
-                    //Перенос исходящего соеденения
-                    Wire outConn = _mainNet.Wires.First(t => t.SrcName == andBase.NodeName);
-                    outConn.SrcName = newAnd.NodeName;
-                    //Удалене старых нодов
-                    _mainNet.Nodes.Remove(andBase);
-                    _mainNet.Nodes.Remove(andConnected);
-                    //Удаление лишнего соеденения
-                    _mainNet.Wires.Remove(andConnection);
-                    //Добовление нового нода
-                    _mainNet.Nodes.Add(newAnd);
-                    
-
+                    else
+                    {
+                        andConnected.Marked = true;
+                    }
                 }
                 else
                 {

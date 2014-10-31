@@ -25,7 +25,7 @@ WIRE:B3-O0:LessThan0~2_I-dataa
 WIRE:A3-O0:LessThan0~2_I-datab
 WIRE:B4-O0:LessThan0~3_I-dataa
 WIRE:A4-O0:LessThan0~3_I-datac
-WIRE:LessThan0~3_I-combout:LessThan0~3-I0
 WIRE:LessThan0~0_I-combout:LessThan0~1_I-datad
 WIRE:LessThan0~1_I-combout:LessThan0~2_I-datad
 WIRE:LessThan0~2_I-combout:LessThan0~3_I-datad
+WIRE:LessThan0~3_I-combout:O-I0

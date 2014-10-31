@@ -16,7 +16,7 @@ WIRE:A1-O0:Add0~1_I-dataa
 WIRE:B1-O0:Add0~1_I-datab
 WIRE:RDUP_0-O1:Add0~1_I-datac
 WIRE:RDUP_1-O1:Add0~1_I-datad
-WIRE:Add0~1_I-combout:Add0~1-I0
 WIRE:Add0~0_I-combout:O0-I0
+WIRE:Add0~1_I-combout:O1-I0
 WIRE:A0-O0:RDUP_0-I0
 WIRE:B0-O0:RDUP_1-I0

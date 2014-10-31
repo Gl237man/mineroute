@@ -2,6 +2,7 @@
 {
     public class Node
     {
+        public bool Marked = false;
         public bool HaveCout;
         public string NodeType;
         public string NodeName;

@@ -20,6 +20,6 @@ WIRE:A3-O0:Equal0~1_I-dataa
 WIRE:A2-O0:Equal0~1_I-datab
 WIRE:B2-O0:Equal0~1_I-datac
 WIRE:B3-O0:Equal0~1_I-datad
-WIRE:Equal0~2_I-combout:Equal0~2-I0
 WIRE:Equal0~0_I-combout:Equal0~2_I-datab
 WIRE:Equal0~1_I-combout:Equal0~2_I-datad
+WIRE:Equal0~2_I-combout:O-I0

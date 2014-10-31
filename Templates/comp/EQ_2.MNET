@@ -10,4 +10,4 @@ WIRE:B1-O0:Equal0~0_I-dataa
 WIRE:A1-O0:Equal0~0_I-datab
 WIRE:A0-O0:Equal0~0_I-datac
 WIRE:B0-O0:Equal0~0_I-datad
-WIRE:Equal0~0_I-combout:Equal0~0-I0
+WIRE:Equal0~0_I-combout:O-I0

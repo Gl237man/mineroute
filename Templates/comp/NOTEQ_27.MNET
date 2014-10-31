@@ -127,7 +127,6 @@ WIRE:B4-O0:Equal0~2_I-datac
 WIRE:B5-O0:Equal0~2_I-datad
 WIRE:A26-O0:Equal0~16_I-datac
 WIRE:B26-O0:Equal0~16_I-datad
-WIRE:Equal0~17_I-combout:Equal0~17-I0
 WIRE:Equal0~1_I-combout:Equal0~4_I-dataa
 WIRE:Equal0~6_I-combout:Equal0~9_I-dataa
 WIRE:Equal0~12_I-combout:Equal0~14_I-dataa
@@ -145,3 +144,4 @@ WIRE:Equal0~0_I-combout:Equal0~4_I-datac
 WIRE:Equal0~2_I-combout:Equal0~4_I-datad
 WIRE:Equal0~4_I-combout:Equal0~17_I-datac
 WIRE:Equal0~16_I-combout:Equal0~17_I-datad
+WIRE:Equal0~17_I-combout:O-I0
