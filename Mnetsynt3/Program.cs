@@ -84,6 +84,45 @@ namespace Mnetsynt3
             }
             var orList = mainNetwork.nodes.Where(t => t.NodeType.Contains("OR")).ToList();
             dupList = mainNetwork.nodes.Where(t => t.NodeType.Contains("DUP")).ToList();
+
+            //Обьеденение OR
+            var opt = true;
+            while (opt)
+            {
+                opt = false;
+                var OrToOrWires = new List<Wire>();
+                foreach (var node in orList)
+                {
+                    foreach (var node2 in orList)
+                    {
+                        OrToOrWires.AddRange(mainNetwork.wires.Where(t => t.SrcName == node.NodeName && node2.NodeName == t.DistName));
+                    }
+                }
+                if (OrToOrWires.Count > 0)
+                {
+                    opt = true;
+                    foreach (var wire in OrToOrWires)
+                    {
+                        var fromor = mainNetwork.nodes.First(t => t.NodeName == wire.SrcName);
+                        var toor = mainNetwork.nodes.First(t => t.NodeName == wire.DistName);
+                        var wires = new List<Wire>();
+                        wires.AddRange(mainNetwork.wires.Where(t => t.DistName == fromor.NodeName));
+                        wires.AddRange(mainNetwork.wires.Where(t => t.DistName == toor.NodeName));
+                        wires.Remove(wire);
+                        foreach (var w in wires)
+                        {
+                            w.DistName = wire.DistName;
+                        }
+                        mainNetwork.wires.Remove(wire);
+                        mainNetwork.nodes.Remove(fromor);
+                    }
+
+                }
+                else
+                {
+
+                }
+            }
             //Создание Dummy обьектов
             //Поиск соеденений подходящих под DUMMY
             var dupToOrWires = new List<Wire>();
