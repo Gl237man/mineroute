@@ -276,14 +276,13 @@ namespace LLC
                 foreach (var node in outports)
                 {
                     int len = Convert.ToInt32(node.NodeType.Replace("OUTPort", ""));
-                    var outwares = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                    var outwares = mainNetwork.Wires.Where(t => t.DistName == node.NodeName).ToList();
                     var newNodes = new List<NetUtils.Node>();
                     for (int i = 0; i < len; i++)
                     {
                         var newNode = new NetUtils.Node { NodeName = node.NodeName + "_" + i, NodeType = "OUTPort" };
                         newNodes.Add(newNode);
                         mainNetwork.Nodes.Add(newNode);
-
                     }
                     //Ремапинг соеденений
                     foreach (var wire in outwares)
@@ -294,8 +293,110 @@ namespace LLC
                     mainNetwork.Nodes.Remove(node);
                 }
                 //Декомпозиция из файлов MNET
+                //Получение списка доступных темплейтов
+                int nodeindex = 0;
+                var tpnames = System.IO.Directory.GetFiles(@".\comp\");
+                var templatesNames = new List<string>();
+                var nodeToAdd = new List<NetUtils.Node>();
+                var nodeToRemove = new List<NetUtils.Node>();
+                var wireToAdd = new List<NetUtils.Wire>();
+                foreach (var tp in tpnames) templatesNames.Add(tp.Replace(@".\comp\","").Replace(".MNET",""));
+                foreach (var node in mainNetwork.Nodes)
+                {
+                    if (templatesNames.Contains(node.NodeType))
+                    {
+                        //замена нода на темплейт
+                        //Загрузка темплаейта 
+                        var template = new NetUtils.Mnet();
+                        template.ReadMnetFile(@".\comp\" + node.NodeType + ".MNET");
+                        //Переименование нодов
+                        var nodeToRename = template.Nodes.Where(t => !t.NodeType.Contains("Port"));
 
+                        foreach (var tnode in nodeToRename)
+                        {
+                            string newNodeName = "Node_" + nodeindex;
+                            nodeindex++;
+                            var wireto = template.Wires.Where(t => t.DistName == tnode.NodeName).ToList();
+                            var wirefrom = template.Wires.Where(t => t.SrcName == tnode.NodeName).ToList();
+                            foreach (var wire in wireto) wire.DistName = newNodeName;
+                            foreach (var wire in wirefrom) wire.SrcName = newNodeName;
+                            tnode.NodeName = newNodeName;
+                        }
+                        //Перенос соеденение
+                        var wireToTemplate = mainNetwork.Wires.Where(t => t.DistName == node.NodeName).ToList();
+                        var wireFromTemplate = mainNetwork.Wires.Where(t => t.SrcName == node.NodeName).ToList();
+                        foreach (var wire in wireToTemplate)
+                        {
+                            var port = template.Nodes.First(t => t.NodeName == wire.DistPort);
+                            var rmwire = template.Wires.First(t => t.SrcName == port.NodeName);
+
+                            wire.DistPort = rmwire.DistPort;
+                            wire.DistName = rmwire.DistName;
+
+                            template.Wires.Remove(rmwire);
+                            template.Nodes.Remove(port);
+                        }
+
+                        foreach (var wire in wireFromTemplate)
+                        {
+                            var port = template.Nodes.First(t => t.NodeName == wire.SrcPort);
+                            var rmwire = template.Wires.First(t => t.DistName == port.NodeName);
+
+                            wire.SrcPort = rmwire.SrcPort;
+                            wire.SrcName = rmwire.SrcName;
+
+                            template.Wires.Remove(rmwire);
+                            template.Nodes.Remove(port);
+                        }
+                        //Перенос нодов и соеденений
+                        nodeToAdd.AddRange(template.Nodes);
+                        wireToAdd.AddRange(template.Wires);
+                        nodeToRemove.Add(node);
+                    }
+                    
+                }
+                foreach (var node in nodeToRemove) mainNetwork.Nodes.Remove(node);
+                mainNetwork.Nodes.AddRange(nodeToAdd);
+                mainNetwork.Wires.AddRange(wireToAdd);
                 //Пересоздание DUP
+                bool work = true;
+                while (work)
+                {
+                    work = false;
+                    List<NetUtils.Wire> wg = null;
+                    foreach (var wire in mainNetwork.Wires)
+                    {
+                        wg = mainNetwork.Wires.Where(t => t.SrcName == wire.SrcName && t.SrcPort == wire.SrcPort).ToList();
+                        if (wg.Count > 1)
+                        {
+                            break;    
+                        }
+                    }
+                    if (wg != null)
+                    {
+                        if (wg.Count > 1)
+                        {
+                            work = true;
+                            //Добовляем DUP
+                            var dup = new NetUtils.Node { NodeName = "DUP" + nodeindex, NodeType = "DUP" + wg.Count };
+                            nodeindex++;
+                            var wireToDup = new NetUtils.Wire { SrcPort = wg.First().SrcPort, SrcName = wg.First().SrcName, DistName = dup.NodeName, DistPort = "I0" };
+                            int port = 0;
+                            foreach (var wire in wg)
+                            {
+                                wire.SrcName = dup.NodeName;
+                                wire.SrcPort = "O" + port;
+                                port++;
+                            }
+                            mainNetwork.Wires.Add(wireToDup);
+                            mainNetwork.Nodes.Add(dup);
+                        }
+                    }
+                }
+
+                //Выгрузка
+                string s = mainNetwork.GetSting();
+                System.IO.File.WriteAllText(filename + ".MNET", s);
             }
         }
 

@@ -146,10 +146,10 @@ const int // types
 		optype = "";
 		if (la.kind == 6) {
 			Get();
-			optype = "MUL";
+			optype = "MUL_";
 		} else if (la.kind == 7) {
 			Get();
-			optype = "DIV";
+			optype = "DIV_";
 		} else SynErr(35);
 	}
 
@@ -157,10 +157,10 @@ const int // types
 		optype = "";
 		if (la.kind == 8) {
 			Get();
-			optype = "ADD";
+			optype = "ADD_";
 		} else if (la.kind == 9) {
 			Get();
-			optype = "SUB";
+			optype = "SUB_";
 		} else SynErr(36);
 	}
 
@@ -169,32 +169,32 @@ const int // types
 		switch (la.kind) {
 		case 10: {
 			Get();
-			optype = "EQ";
+			optype = "EQ_";
 			break;
 		}
 		case 11: {
 			Get();
-			optype = "NOTEQ";
+			optype = "NOTEQ_";
 			break;
 		}
 		case 12: {
 			Get();
-			optype = "MORE";
+			optype = "MORE_";
 			break;
 		}
 		case 13: {
 			Get();
-			optype = "LESS";
+			optype = "LESS_";
 			break;
 		}
 		case 14: {
 			Get();
-			optype = "LESSEQ";
+			optype = "LESSEQ_";
 			break;
 		}
 		case 15: {
 			Get();
-			optype = "MOREEQ";
+			optype = "MOREEQ_";
 			break;
 		}
 		default: SynErr(37); break;
@@ -205,13 +205,13 @@ const int // types
 		optype = "";
 		if (la.kind == 16) {
 			Get();
-			optype = "AND";
+			optype = "AND_";
 		} else if (la.kind == 17) {
 			Get();
-			optype = "OR";
+			optype = "OR_";
 		} else if (la.kind == 18) {
 			Get();
-			optype = "XOR";
+			optype = "XOR_";
 		} else SynErr(38);
 	}
 

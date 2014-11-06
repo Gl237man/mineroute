@@ -35,7 +35,7 @@ namespace Mnetsynt3
                 DrawAstar = true;
             }
             //string file = "test_D_O";
-            string file = "SUB_10_D";
+            string file = "test_D_O";
             //string file = "lut_00BB_D_O";
             //string file = "lut_00AB_D_O";
 
@@ -50,7 +50,7 @@ namespace Mnetsynt3
             
             //Удаление GNDS
 
-            var gnds = mainNetwork.nodes.Where(t => t.NodeType == "GND").ToList();
+            var gnds = mainNetwork.nodes.Where(t => t.NodeType == "GND" && !mainNetwork.wires.Any(t2=>t2.SrcName == t.NodeName)).ToList();
             foreach (var node in gnds)
             {
                 var wires = mainNetwork.wires.Where(t => t.SrcName == node.NodeName).ToList();

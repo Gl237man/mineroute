@@ -53,34 +53,34 @@ Expresion<out string ID>												(. ID = "";
  // MultOpType -------------------------------------------------------------------------//
 MultOpType <out string optype>	    	(. optype = "";.)
  = (									
-	 '*'								(. optype = "MUL";.)
-	|'/'								(. optype = "DIV";.)
+	 '*'								(. optype = "MUL_";.)
+	|'/'								(. optype = "DIV_";.)
    ).
  
 // SumOpType ---------------------------------------------------------------------------//
 SumOpType <out string optype>	    	(. optype = "";.)
  = (									
-	 '+'								(. optype = "ADD";.)
-	|'-'								(. optype = "SUB";.)
+	 '+'								(. optype = "ADD_";.)
+	|'-'								(. optype = "SUB_";.)
    ).
 
 // CompareOpType -----------------------------------------------------------------------//
 CompareOpType <out string optype>	  	(. optype = "";.)
  = (									
-	 "=="								(. optype = "EQ";.)
-	|"!="								(. optype = "NOTEQ";.)
-	|">"								(. optype = "MORE";.)
-	|"<"								(. optype = "LESS";.)
-	|"<="								(. optype = "LESSEQ";.)
-	|">="								(. optype = "MOREEQ";.)
+	 "=="								(. optype = "EQ_";.)
+	|"!="								(. optype = "NOTEQ_";.)
+	|">"								(. optype = "MORE_";.)
+	|"<"								(. optype = "LESS_";.)
+	|"<="								(. optype = "LESSEQ_";.)
+	|">="								(. optype = "MOREEQ_";.)
    ).
 
 // LogicOpType -------------------------------------------------------------------------//
 LogicOpType <out string optype>	    	(. optype = "";.)
  = (									
-	 '&'								(. optype = "AND";.)
-	|'|'								(. optype = "OR";.)
-	|'^'								(. optype = "XOR";.)
+	 '&'								(. optype = "AND_";.)
+	|'|'								(. optype = "OR_";.)
+	|'^'								(. optype = "XOR_";.)
    ).
 
 // LogicOp -----------------------------------------------------------------------------//
