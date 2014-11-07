@@ -11,7 +11,7 @@ public class Parser {
 	public const int _number = 2;
 	public const int _bits = 3;
 	public const int _hex = 4;
-	public const int maxT = 33;
+	public const int maxT = 38;
 
 	const bool T = true;
 	const bool x = false;
@@ -113,7 +113,7 @@ const int // types
 		} else if (la.kind == 4) {
 			Get();
 			tval = tab.hexConv(t.val);
-		} else SynErr(34);
+		} else SynErr(39);
 		ID = tab.newConst(wide,tval);
 	}
 
@@ -150,7 +150,7 @@ const int // types
 		} else if (la.kind == 7) {
 			Get();
 			optype = "DIV_";
-		} else SynErr(35);
+		} else SynErr(40);
 	}
 
 	void SumOpType(out string optype) {
@@ -161,7 +161,7 @@ const int // types
 		} else if (la.kind == 9) {
 			Get();
 			optype = "SUB_";
-		} else SynErr(36);
+		} else SynErr(41);
 	}
 
 	void CompareOpType(out string optype) {
@@ -197,7 +197,7 @@ const int // types
 			optype = "MOREEQ_";
 			break;
 		}
-		default: SynErr(37); break;
+		default: SynErr(42); break;
 		}
 	}
 
@@ -212,7 +212,27 @@ const int // types
 		} else if (la.kind == 18) {
 			Get();
 			optype = "XOR_";
-		} else SynErr(38);
+		} else SynErr(43);
+	}
+
+	void UnOpType(out string optype) {
+		optype = "";
+		if (la.kind == 19) {
+			Get();
+			optype = "NOT_";
+		} else if (la.kind == 20) {
+			Get();
+			optype = "LL_";
+		} else if (la.kind == 21) {
+			Get();
+			optype = "RR_";
+		} else if (la.kind == 22) {
+			Get();
+			optype = "RRC_";
+		} else if (la.kind == 23) {
+			Get();
+			optype = "LLC_";
+		} else SynErr(44);
 	}
 
 	void CompareOp(out string ID) {
@@ -276,12 +296,27 @@ const int // types
 			Const(out cID);
 		} else if (la.kind == 1) {
 			Ident(out cID);
-		} else if (la.kind == 19) {
+		} else if (la.kind == 24) {
 			Get();
 			Expresion(out cID);
-			Expect(20);
-		} else SynErr(39);
+			Expect(25);
+		} else if (StartOf(2)) {
+			UNOp(out cID);
+		} else SynErr(45);
 		ID = cID;
+	}
+
+	void UNOp(out string ID) {
+		ID = "";
+		string LID = "";
+		string OP ="";
+		UnOpType(out OP);
+		Term(out LID);
+		ID = LID;
+		if (OP !="")
+		{   
+		ID = tab.NewBOP(OP);
+		tab.NewWire(LID,ID,"O","I");} 
 	}
 
 	void Assign() {
@@ -289,10 +324,10 @@ const int // types
 		string ID;
 		Ident(out name);
 		string wto = name; 
-		Expect(21);
+		Expect(26);
 		Expresion(out ID);
 		string wfrom = ID;
-		Expect(22);
+		Expect(27);
 		tab.NewWire(wfrom,wto,"O","I"); 
 	}
 
@@ -300,63 +335,63 @@ const int // types
 		int wide = 1;
 		string name;
 		string type = "NAN";
-		Expect(23);
-		if (la.kind == 24) {
+		Expect(28);
+		if (la.kind == 29) {
 			Get();
 			type = "IN";
-		} else if (la.kind == 25) {
+		} else if (la.kind == 30) {
 			Get();
 			type = "OUT";
-		} else SynErr(40);
+		} else SynErr(46);
 		Ident(out name);
-		while (la.kind == 26) {
+		while (la.kind == 31) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(27);
+			Expect(32);
 		}
-		Expect(22);
+		Expect(27);
 		tab.NewPort(name,type,wide); 
 	}
 
 	void TrigDecl() {
 		int wide = 1;
 		string name;
-		Expect(28);
+		Expect(33);
 		Ident(out name);
-		while (la.kind == 26) {
+		while (la.kind == 31) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(27);
+			Expect(32);
 		}
-		Expect(22);
+		Expect(27);
 		tab.NewTrig(name,wide); 
 	}
 
 	void WireDecl() {
 		int wide = 1;
 		string name;
-		Expect(29);
+		Expect(34);
 		Ident(out name);
-		while (la.kind == 26) {
+		while (la.kind == 31) {
 			Get();
 			Expect(2);
 			wide = Convert.ToInt32(t.val); 
-			Expect(27);
+			Expect(32);
 		}
-		Expect(22);
+		Expect(27);
 		tab.NewWire(name,wide); 
 	}
 
 	void llc() {
-		Expect(30);
-		Expect(31);
+		Expect(35);
+		Expect(36);
 		tab.OpenScope(); 
-		while (StartOf(2)) {
-			if (la.kind == 29) {
+		while (StartOf(3)) {
+			if (la.kind == 34) {
 				WireDecl();
-			} else if (la.kind == 23) {
+			} else if (la.kind == 28) {
 				PortDecl();
 			} else if (la.kind == 1) {
 				Assign();
@@ -364,7 +399,7 @@ const int // types
 				TrigDecl();
 			}
 		}
-		Expect(32);
+		Expect(37);
 		tab.CloseScope(); 
 	}
 
@@ -380,9 +415,10 @@ const int // types
 	}
 	
 	static readonly bool[,] set = {
-		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x},
-		{x,x,x,x, x,x,x,x, x,x,T,T, T,T,T,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x},
-		{x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,T, x,x,x,x, T,T,x,x, x,x,x}
+		{T,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x},
+		{x,x,x,x, x,x,x,x, x,x,T,T, T,T,T,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x},
+		{x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,T, T,T,T,T, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x},
+		{x,T,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, x,x,x,x, T,x,x,x, x,T,T,x, x,x,x,x}
 
 	};
 } // end Parser
@@ -415,28 +451,34 @@ public class Errors {
 			case 16: s = "\"&\" expected"; break;
 			case 17: s = "\"|\" expected"; break;
 			case 18: s = "\"^\" expected"; break;
-			case 19: s = "\"(\" expected"; break;
-			case 20: s = "\")\" expected"; break;
-			case 21: s = "\"=\" expected"; break;
-			case 22: s = "\";\" expected"; break;
-			case 23: s = "\"PORT\" expected"; break;
-			case 24: s = "\"IN\" expected"; break;
-			case 25: s = "\"OUT\" expected"; break;
-			case 26: s = "\"[\" expected"; break;
-			case 27: s = "\"]\" expected"; break;
-			case 28: s = "\"TRIG\" expected"; break;
-			case 29: s = "\"WIRE\" expected"; break;
-			case 30: s = "\"main\" expected"; break;
-			case 31: s = "\"{\" expected"; break;
-			case 32: s = "\"}\" expected"; break;
-			case 33: s = "??? expected"; break;
-			case 34: s = "invalid Const"; break;
-			case 35: s = "invalid MultOpType"; break;
-			case 36: s = "invalid SumOpType"; break;
-			case 37: s = "invalid CompareOpType"; break;
-			case 38: s = "invalid LogicOpType"; break;
-			case 39: s = "invalid Term"; break;
-			case 40: s = "invalid PortDecl"; break;
+			case 19: s = "\"!\" expected"; break;
+			case 20: s = "\"LL\" expected"; break;
+			case 21: s = "\"RR\" expected"; break;
+			case 22: s = "\"RRC\" expected"; break;
+			case 23: s = "\"LLC\" expected"; break;
+			case 24: s = "\"(\" expected"; break;
+			case 25: s = "\")\" expected"; break;
+			case 26: s = "\"=\" expected"; break;
+			case 27: s = "\";\" expected"; break;
+			case 28: s = "\"PORT\" expected"; break;
+			case 29: s = "\"IN\" expected"; break;
+			case 30: s = "\"OUT\" expected"; break;
+			case 31: s = "\"[\" expected"; break;
+			case 32: s = "\"]\" expected"; break;
+			case 33: s = "\"TRIG\" expected"; break;
+			case 34: s = "\"WIRE\" expected"; break;
+			case 35: s = "\"main\" expected"; break;
+			case 36: s = "\"{\" expected"; break;
+			case 37: s = "\"}\" expected"; break;
+			case 38: s = "??? expected"; break;
+			case 39: s = "invalid Const"; break;
+			case 40: s = "invalid MultOpType"; break;
+			case 41: s = "invalid SumOpType"; break;
+			case 42: s = "invalid CompareOpType"; break;
+			case 43: s = "invalid LogicOpType"; break;
+			case 44: s = "invalid UnOpType"; break;
+			case 45: s = "invalid Term"; break;
+			case 46: s = "invalid PortDecl"; break;
 
 			default: s = "error " + n; break;
 		}

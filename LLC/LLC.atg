@@ -83,6 +83,16 @@ LogicOpType <out string optype>	    	(. optype = "";.)
 	|'^'								(. optype = "XOR_";.)
    ).
 
+// UnOpType -------------------------------------------------------------------------//
+UnOpType <out string optype>	    	(. optype = "";.)
+ = (									
+	 "!"								(. optype = "NOT_";.)
+	|"LL"								(. optype = "LL_";.)
+	|"RR"								(. optype = "RR_";.)
+	|"RRC"								(. optype = "RRC_";.)
+	|"LLC"								(. optype = "LLC_";.)
+   ).
+
 // LogicOp -----------------------------------------------------------------------------//
 LogicOp<out string ID>												    (. ID = "";
 																		   string RID = "";
@@ -131,11 +141,19 @@ MultOp<out string ID>													(. ID = "";
 																			ID = tab.NewBOP(OP);
 																			tab.NewWire(LID,ID,"O","A");
 																			tab.NewWire(RID,ID,"O","B");} .).
-
+// UNop --------------------------------------------------------------------------------//
+UNOp<out string ID>													    (. ID = "";
+																		   string LID = "";
+																		   string OP ="";.)
+ = UnOpType<out OP> Term<out LID>										(. ID = LID;.)
+                                    									(. if (OP !="")
+																		{   
+																		    ID = tab.NewBOP(OP);
+																			tab.NewWire(LID,ID,"O","I");} .).
 // Term --------------------------------------------------------------------------------//
- Term<out string ID>                                                    (. ID = "";
-																		   string cID = "";.)
-  = (Const<out cID> | Ident<out cID> | '(' Expresion <out cID> ')')     (. ID = cID;.).
+ Term<out string ID>					                                                (. ID = "";
+																						string cID = "";.)
+  = (Const<out cID> | Ident<out cID> | '(' Expresion <out cID> ')' | UNOp<out cID>)     (. ID = cID;.).
 
 // Assign ------------------------------------------------------------------------------//
 Assign									(. string name;

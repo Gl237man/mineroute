@@ -9,6 +9,6 @@
 	w01 = single;
 	w02 = 5#i15;
 	w03 = 5#i15;
-	wirem = w01 - (5#i15 + (w03 - w02));
+	wirem = w01 - (5#i15 + (w03 - LL ! w02));
 	duble = wirem;
 }
