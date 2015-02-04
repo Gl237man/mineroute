@@ -73,6 +73,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteTestGen", "RouteTestGe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UopGen", "UopGen\UopGen.csproj", "{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C5280D99-CCD8-429C-AF6C-111A6BEEE14E}"
+	ProjectSection(SolutionItems) = preProject
+		ToDo.txt = ToDo.txt
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
