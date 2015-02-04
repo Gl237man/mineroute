@@ -71,6 +71,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VerilogModulesGen", "Verilo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RouteTestGen", "RouteTestGen\RouteTestGen.csproj", "{3CFA70C8-ED85-4C04-9AF6-35291F0645DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UopGen", "UopGen\UopGen.csproj", "{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -363,6 +365,16 @@ Global
 		{3CFA70C8-ED85-4C04-9AF6-35291F0645DF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{3CFA70C8-ED85-4C04-9AF6-35291F0645DF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3CFA70C8-ED85-4C04-9AF6-35291F0645DF}.Release|x86.ActiveCfg = Release|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -390,6 +402,7 @@ Global
 		{6E2CA08B-B358-4EB8-B445-F3B7A25905F4} = {3E1BAF3C-A0F1-46D4-9456-EE06A613E035}
 		{C06E1EBD-1FE1-472B-9681-3E7F150E27B2} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 		{3CFA70C8-ED85-4C04-9AF6-35291F0645DF} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
+		{CF66288B-E8E4-4C18-AB45-27FAE9273F3C} = {684A5321-98FE-4A82-8CC5-AE3F23CD9332}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = vqm2MNET\vqm2MNET.csproj
