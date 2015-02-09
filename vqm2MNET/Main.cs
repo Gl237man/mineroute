@@ -24,7 +24,7 @@ namespace vqm2MNET
 
         static void Main(string[] args)
         {
-            string InFile = "ADD_2";
+            string InFile = "test";
             if (args.Length == 1)
             {
                 InFile = args[0];
@@ -624,7 +624,8 @@ namespace vqm2MNET
                     if (Params[1].StartsWith("[") && Params[1].EndsWith("]"))
                     {
                         Params[1] = Params[1].Replace("[", "").Replace("]", "");
-                        string[] SubDat = Params[1].Split(':');
+                        //Тест использования _ вместо :
+                        string[] SubDat = Params[1].Split('_');
                         int SFrom = Convert.ToInt32(SubDat[1]);
                         int STo = Convert.ToInt32(SubDat[0]);
                         for (int i = SFrom; i <= STo; i++)
