@@ -58,12 +58,21 @@ namespace UopGen
             {
                 ostr += "NODE:OUTPort:O" + i.ToString() + "\r\n";
             }
-            
+            //Gen NODES
+            for (int i = 0; i < wide-1; i++)
+            {
+                ostr += "NODE:DUMMY:GL_DUMMY_" + i.ToString() + "\r\n";
+            }
+            ostr += "NODE:NOPT:GL_NOPT_0" + "\r\n";
+            ostr += "NODE:GND:GL_GND_0" + "\r\n";
             //Gen WIRES
             for (int i = 0; i < wide-1; i++)
             {
-                ostr += "WIRE:I" + i.ToString() + "-O0" + ":O" + (i+1).ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:I" + i.ToString() + "-O0" + ":GL_DUMMY_" + i.ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:GL_DUMMY_" + i.ToString() + "-O0" + ":O" + (i + 1).ToString() + "-I0" + "\r\n";
             }
+            ostr += "WIRE:I" + (wide - 1).ToString() + "-O0" + ":GL_NOPT_0-I0" + "\r\n";
+            ostr += "WIRE:GL_GND_0-O0:O" + (0).ToString() + "-I0" + "\r\n";
             Console.WriteLine("LL_" + wide);
             System.IO.File.WriteAllText("LL_" + wide + ".MNET", ostr);
         }
@@ -79,12 +88,21 @@ namespace UopGen
             {
                 ostr += "NODE:OUTPort:O" + i.ToString() + "\r\n";
             }
-
+            //Gen NODES
+            for (int i = 1; i < wide; i++)
+            {
+                ostr += "NODE:DUMMY:GL_DUMMY_" + i.ToString() + "\r\n";
+            }
+            ostr += "NODE:NOPT:GL_NOPT_0" + "\r\n";
+            ostr += "NODE:GND:GL_GND_0" + "\r\n";
             //Gen WIRES
             for (int i = 1; i < wide; i++)
             {
-                ostr += "WIRE:I" + (i).ToString() + "-O0" + ":O" + (i-1).ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:I" + i.ToString() + "-O0" + ":GL_DUMMY_" + i.ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:GL_DUMMY_" + (i).ToString() + "-O0" + ":O" + (i - 1).ToString() + "-I0" + "\r\n";
             }
+            ostr += "WIRE:I" + (0).ToString() + "-O0" + ":GL_NOPT_0-I0" + "\r\n";
+            ostr += "WIRE:GL_GND_0-O0:O" + (wide-1).ToString() + "-I0" + "\r\n";
             Console.WriteLine("RR_" + wide);
             System.IO.File.WriteAllText("RR_" + wide + ".MNET", ostr);
         }
@@ -100,11 +118,16 @@ namespace UopGen
             {
                 ostr += "NODE:OUTPort:O" + i.ToString() + "\r\n";
             }
-
+            //Gen NODES
+            for (int i = 0; i < wide; i++)
+            {
+                ostr += "NODE:DUMMY:GL_DUMMY_" + i.ToString() + "\r\n";
+            }
             //Gen WIRES
             for (int i = 0; i < wide - 1; i++)
             {
-                ostr += "WIRE:I" + i.ToString() + "-O0" + ":O" + (i + 1).ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:I" + i.ToString() + "-O0" + ":GL_DUMMY_" + i.ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:GL_DUMMY_" + i.ToString() + "-O0" + ":O" + (i + 1).ToString() + "-I0" + "\r\n";
             }
             ostr += "WIRE:I" + (wide-1).ToString() + "-O0" + ":O" + "0" + "-I0" + "\r\n";
             Console.WriteLine("LLC_" + wide);
@@ -122,11 +145,16 @@ namespace UopGen
             {
                 ostr += "NODE:OUTPort:O" + i.ToString() + "\r\n";
             }
-
+            //Gen NODES
+            for (int i = 0; i < wide; i++)
+            {
+                ostr += "NODE:DUMMY:GL_DUMMY_" + i.ToString() + "\r\n";
+            }
             //Gen WIRES
             for (int i = 1; i < wide; i++)
             {
-                ostr += "WIRE:I" + (i).ToString() + "-O0" + i.ToString() + ":O" + (i - 1).ToString() + "-I0" + i.ToString() + "\r\n";
+                ostr += "WIRE:I" + i.ToString() + "-O0" + ":GL_DUMMY_" + i.ToString() + "-I0" + "\r\n";
+                ostr += "WIRE:GL_DUMMY_" + (i).ToString() + "-O0" + i.ToString() + ":O" + (i - 1).ToString() + "-I0" + i.ToString() + "\r\n";
             }
             ostr += "WIRE:I" + "0" + "-O0" + ":O" + (wide - 1).ToString() + "-I0" + "\r\n";
             Console.WriteLine("RRC_" + wide);
