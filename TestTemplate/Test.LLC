@@ -1,0 +1,14 @@
+﻿main
+{
+	WIRE w01[5];
+	WIRE w02[5];
+	WIRE w03[5];
+	TRIG wirem[5];
+	PORT IN single[5];
+	PORT OUT duble[5];
+	w01 = single;
+	w02 = 5#i15;
+	w03 = 5#i15;
+	wirem = w01 - (5#i15 + (w03 - LL ! w02));
+	duble = wirem;
+}

@@ -17,10 +17,10 @@ namespace LLC
             }
             else
             {
-                filename = "Test.LLC";
+                filename = "Test";
             }
 
-            Scanner scanner = new Scanner(filename);
+            Scanner scanner = new Scanner(filename + ".LLC");
             Parser parser = new Parser(scanner);
             parser.tab = new SymbolTable(parser);
             parser.gen = new CodeGenerator();
