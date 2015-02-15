@@ -10,7 +10,6 @@ namespace ResultToBinLib
 
             for (int i = 0; i <= 0xFF; i++)
             {
-                //OptCo_
                 string fileName = string.Format("OptCo_{0}.txt", i.ToString("X2"));
                 string fullName = string.Format(@"Result\OptCo\{0}", fileName);
                 string[] s = System.IO.File.ReadAllLines(fullName);

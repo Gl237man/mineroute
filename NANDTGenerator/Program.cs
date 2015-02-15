@@ -1,49 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace NANDTGenerator
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
-            //GenerateNandT2
-            //string node = "";
-            GenNANDT2();
-            GenNANDT3();
-            GenNANDT4();
-            GenNANDT5();
-            GenNANDT6();
-            GenNANDT7();
-            GenNANDT8();
+            GenNandt2();
+            GenNandt3();
+            GenNandt4();
         }
 
-        private static void GenNANDT8()
-        {
-        }
 
-        private static void GenNANDT7()
-        {
-        }
-
-        private static void GenNANDT6()
-        {
-        }
-
-        private static void GenNANDT5()
-        {
-        }
-
-        private static void GenNANDT4()
+        private static void GenNandt4()
         {
             for (int val = 0; val < Power(4); val++)
             {
                 var bits = GetBits(val);
                 string name = "NANDT4_" + val.ToString("X2");
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 builder.AppendLine("Name:" + name);
                 builder.AppendLine("in:4");
                 builder.AppendLine("out:1");
@@ -144,13 +120,13 @@ namespace NANDTGenerator
             }
         }
 
-        private static void GenNANDT3()
+        private static void GenNandt3()
         {
             for (int val = 0; val < Power(3); val++)
             {
                 var bits = GetBits(val);
                 string name = "NANDT3_" + val.ToString("X2");
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 builder.AppendLine("Name:" + name);
                 builder.AppendLine("in:3");
                 builder.AppendLine("out:1");
@@ -249,13 +225,13 @@ namespace NANDTGenerator
             }
         }
 
-        private static void GenNANDT2()
+        private static void GenNandt2()
         {
             for (int val = 0; val < Power(2); val++)
             {
                 var bits = GetBits(val);
                 string name = "NANDT2_" + val.ToString("X2");
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 builder.AppendLine("Name:" + name);
                 builder.AppendLine("in:2");
                 builder.AppendLine("out:1");
