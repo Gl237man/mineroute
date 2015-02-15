@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace VerilogModulesGen
 {
-    class Program
+    static class Program
     {
-        private static List<string> snames = new List<string>();
-        private static List<string> cmd = new List<string>();
-        static void Main(string[] args)
+        private static readonly List<string> Snames = new List<string>();
+        private static readonly List<string> Cmd = new List<string>();
+        static void Main()
         {
             Generate("MUL_", "*");
             Generate("DIV_", "/");
@@ -27,8 +25,8 @@ namespace VerilogModulesGen
 	        GenerateL("LESSEQ_", "<=");
             GenerateL("MOREEQ_", ">=");
 
-            System.IO.File.WriteAllLines("mdir.cmd",cmd.ToArray());
-            System.IO.File.WriteAllLines("list.txt", snames.ToArray());
+            System.IO.File.WriteAllLines("mdir.cmd",Cmd.ToArray());
+            System.IO.File.WriteAllLines("list.txt", Snames.ToArray());
         }
 
         private static void GenerateL(string type, string formula)
@@ -36,10 +34,9 @@ namespace VerilogModulesGen
 
             for (int i = 1; i <= 32; i++)
             {
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
 
                 string ostr = "";
-                string ostr2 = "";
                 for (int q = 0; q < i; q++)
                 {
                     ostr += "A" + q;
@@ -50,7 +47,7 @@ namespace VerilogModulesGen
                     ostr += "B" + q;
                     ostr += ",";
                 }
-                ostr2 = ostr.Substring(0, ostr.Length - 1);
+                string ostr2 = ostr.Substring(0, ostr.Length - 1);
                 ostr += "O";
                 ostr += ",";
                
@@ -88,9 +85,9 @@ namespace VerilogModulesGen
 
                 System.IO.File.WriteAllText(type + i + ".v", result);
                 Console.WriteLine(type + i + ".v");
-                snames.Add(type + i);
-                cmd.Add("mkdir " + type + i);
-                cmd.Add("copy " + type + i + @".v .\" + type + i);
+                Snames.Add(type + i);
+                Cmd.Add("mkdir " + type + i);
+                Cmd.Add("copy " + type + i + @".v .\" + type + i);
             }
         }
 
@@ -99,10 +96,9 @@ namespace VerilogModulesGen
 
             for (int i = 1; i <= 32; i++)
             {
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
 
                 string ostr = "";
-                string ostr2 = "";
                 for (int q = 0; q < i; q++)
                 {
                     ostr += "A" + q;
@@ -113,7 +109,7 @@ namespace VerilogModulesGen
                     ostr += "B" + q;
                     ostr += ",";
                 }
-                ostr2 = ostr.Substring(0, ostr.Length - 1);
+                string ostr2 = ostr.Substring(0, ostr.Length - 1);
                 for (int q = 0; q < i; q++)
                 {
                     ostr += "O" + q;
@@ -161,9 +157,9 @@ namespace VerilogModulesGen
 
                 System.IO.File.WriteAllText(type + i + ".v", result);
                 Console.WriteLine(type + i + ".v");
-                snames.Add(type + i);
-                cmd.Add("mkdir " + type + i);
-                cmd.Add("copy " + type + i + @".v .\" + type + i);
+                Snames.Add(type + i);
+                Cmd.Add("mkdir " + type + i);
+                Cmd.Add("copy " + type + i + @".v .\" + type + i);
             }
         }
     }

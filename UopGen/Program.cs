@@ -1,41 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UopGen
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             for (int i = 1; i <= 32; i++)
             {
-                GenNOT(i);
-                GenLL(i);
-                GenRR(i);
-                GenLLC(i);
-                GenRRC(i);
+                GenNot(i);
+                GenLl(i);
+                GenRr(i);
+                GenLlc(i);
+                GenRrc(i);
             }
         }
 
-        private static void GenNOT(int wide)
+        private static void GenNot(int wide)
         {
             //Gen ports
             string ostr = "";
             for (int i=0;i<wide;i++)
             {
-                ostr += string.Format("NODE:INPort:I{0}\r\n", i.ToString());
+                ostr += string.Format("NODE:INPort:I{0}\r\n", i);
             }
             for (int i=0;i<wide;i++)
             {
-                ostr += string.Format("NODE:OUTPort:O{0}\r\n", i.ToString());
+                ostr += string.Format("NODE:OUTPort:O{0}\r\n", i);
             }
             //Gen NODES
             for (int i = 0; i < wide; i++)
             {
-                ostr += string.Format("NODE:NOT:GL_NOT_{0}\r\n", i.ToString());
+                ostr += string.Format("NODE:NOT:GL_NOT_{0}\r\n", i);
             }
             //Gen WIRES
             for (int i = 0; i < wide; i++)
@@ -46,7 +42,7 @@ namespace UopGen
             Console.WriteLine("NOT_{0}", wide);
             System.IO.File.WriteAllText("NOT_" + wide + ".MNET",ostr);
         }
-        private static void GenLL(int wide)
+        private static void GenLl(int wide)
         {
             //Gen ports
             string ostr = "";
@@ -76,7 +72,7 @@ namespace UopGen
             Console.WriteLine("LL_{0}", wide);
             System.IO.File.WriteAllText("LL_" + wide + ".MNET", ostr);
         }
-        private static void GenRR(int wide)
+        private static void GenRr(int wide)
         {
             //Gen ports
             string ostr = "";
@@ -106,7 +102,7 @@ namespace UopGen
             Console.WriteLine("RR_" + wide);
             System.IO.File.WriteAllText("RR_" + wide + ".MNET", ostr);
         }
-        private static void GenLLC(int wide)
+        private static void GenLlc(int wide)
         {
             //Gen ports
             string ostr = "";
@@ -133,7 +129,7 @@ namespace UopGen
             Console.WriteLine("LLC_" + wide);
             System.IO.File.WriteAllText("LLC_" + wide + ".MNET", ostr);
         }
-        private static void GenRRC(int wide)
+        private static void GenRrc(int wide)
         {
             //Gen ports
             string ostr = "";

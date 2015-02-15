@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace RouteTestGen
 {
-    class Program
+    static class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             string[] files = System.IO.Directory.GetFiles(@".\",@"*.MNET");
 
-            StringBuilder bilder = new StringBuilder();
+            var bilder = new StringBuilder();
             foreach (var file in files)
             {
                 var filen= file.Replace(@"./", "").Replace(".MNET", "");
