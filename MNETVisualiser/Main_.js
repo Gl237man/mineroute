@@ -162,15 +162,7 @@ graphics.link(function(link){
 
 // Finally we add something to the graph:
 /*graph.addNode('Алиса', 'Алиса');
-graph.addNode('Алла', 'Алла');
-graph.addNode('Альбина', 'Альбина');
-graph.addNode('Альфред', 'Альфред');
-graph.addNode('Анастасия', 'Анастасия');
-graph.addLink('Алиса', 'Алла');
-graph.addLink('Алиса', 'Альбина');
-graph.addLink('Алиса', 'Альфред');
-graph.addLink('Алиса', 'Анастасия');
-*/
+
 /***REPLACE***/
 
 var layout = Viva.Graph.Layout.forceDirected(graph, {
