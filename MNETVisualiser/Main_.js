@@ -161,15 +161,15 @@ graphics.link(function(link){
 });
 
 // Finally we add something to the graph:
-/*graph.addNode('Алиса', 'Алиса');
 
 /***REPLACE***/
 
 var layout = Viva.Graph.Layout.forceDirected(graph, {
-    springLength : 200,
-    springCoeff : 0.0008,
-    dragCoeff : 0.02,
-    gravity : -1.2
+        springLength : 100,
+        springCoeff : 0.00001,
+        dragCoeff : 0.01,
+        theta : 0.8,
+        gravity : -5.2
 });
 
 // All is ready. Render the graph:
