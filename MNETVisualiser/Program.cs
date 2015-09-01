@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace MNETVisualiser
 {
-    class Program
+    static class Program
     {
         static void Main(string[] args)
         {
@@ -20,12 +16,12 @@ namespace MNETVisualiser
 
             foreach (var node in net.Nodes)
             {
-                sb.AppendLine(string.Format("graph.addNode('{0}', '{1}');",node.NodeName,node.NodeType));
+                sb.AppendLine($"graph.addNode('{node.NodeName}', '{node.NodeType}');");
             }
 
             foreach (var wire in net.Wires)
             {
-                sb.AppendLine(string.Format("graph.addLink('{0}', '{1}');", wire.SrcName, wire.DistName));
+                sb.AppendLine($"graph.addLink('{wire.SrcName}', '{wire.DistName}');");
             }
 
             string mainFile = System.IO.File.ReadAllText("Main_.js");
