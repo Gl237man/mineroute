@@ -1,7 +1,7 @@
 mineroute
 =========
 
-Synthesis minecraft redstone schemes from verilog and ALTERA quartus IDE for Simulation only
+Synthesis minecraft redstone schemes from verilog for Simulation only
 
 Синтез схем из  редстоуна в маинкрафте из Verilog
 
